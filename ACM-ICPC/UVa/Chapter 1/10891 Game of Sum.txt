@@ -1,0 +1,28 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+const int maxn=100+10;
+int s[maxn],A[maxn],d[maxn][maxn],f[maxn][maxn],g[maxn][maxn],n;
+int main(){
+   while(scanf("%d",&n)==1&&n){
+       s[0]=0;
+       for(int i=1;i<=n;i++){
+           scanf("%d",&A[i]);
+           s[i]=s[i-1]+A[i];
+       }
+       for(int i=1;i<=n;i++) f[i][i]=g[i][i]=d[i][i]=A[i];
+       for(int L=1;L<n;L++)
+          for(int i=1;i+L<=n;i++){
+             int j=i+L;
+             int m=0;
+             m=min(m,f[i+1][j]);
+             m=min(m,g[i][j-1]);
+             d[i][j]=s[j]-s[i-1]-m;
+             f[i][j]=min(d[i][j],f[i+1][j]);
+             g[i][j]=min(d[i][j],g[i][j-1]);
+          }
+        printf("%d\n",2*d[1][n]-s[n]);
+    }
+   return 0;
+}

@@ -1,0 +1,70 @@
+#include <cstdio>
+#include <algorithm>
+#include <cstring>
+using namespace std;
+int w,h,i,j,k,num=0;
+char a[60][60];
+int Count[60];
+void init(void)
+{
+    for(i=0;i<h;i++)
+    {
+        for(j=0;j<w;j++)
+        {
+            scanf("%c",&a[i][j]);
+        }
+        getchar();
+    }
+}
+void search(int x,int y)
+{
+    if(a[x][y]=='X')
+      a[x][y]='.';
+    else return;
+    search(x,y-1);
+    search(x,y+1);
+    search(x-1,y);
+    search(x+1,y);
+}
+void dfs(int x,int y)
+{
+    if(a[x][y]!='*'&&a[x][y]!='X') return;
+    if(a[x][y]=='X')
+    {
+        Count[k]++;
+        search(x,y);
+    }
+    if(a[x][y]=='*')
+        a[x][y]='.';
+    dfs(x,y-1);
+    dfs(x,y+1);
+    dfs(x-1,y);
+    dfs(x+1,y);
+    return;
+}
+int main(void)
+{
+    while(scanf("%d%d\n",&w,&h)==2)
+    {
+        if(w==0&&h==0) break;
+        memset(a,'\0',sizeof(a));
+        memset(Count,0,sizeof(Count));
+        k=0;num++;
+        init();
+        for(i=0;i<h;i++)
+          for(j=0;j<w;j++)
+             if(a[i][j]=='*')
+             {
+                dfs(i,j);
+                k++;
+             }
+        sort(Count,Count+k);
+        printf("Throw %d\n",num);
+        for(i=0;i<k;i++)
+           if(i!=k-1)
+             printf("%d ",Count[i]);
+           else
+             printf("%d\n\n",Count[i]);
+    }
+    return 0;
+}

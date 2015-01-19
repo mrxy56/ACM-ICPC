@@ -1,0 +1,44 @@
+/*
+ID:mrxy564
+PROG:friday
+LANG:C++
+*/
+#include <cstdio>
+#include <cstring>
+using namespace std;
+int mon[13]={0,31,28,31,30,31,30,31,31,30,31,30,31};
+int weekday[8]={0};
+bool is_leap_year(int i){
+    if(i%100==0&&i%400==0) return true;
+    if(i%100!=0&&i%4==0) return true;
+    return false;
+}
+int main()
+{
+    freopen("friday.in","r",stdin);
+    freopen("friday.out","w",stdout);
+    int N,count;
+    while(scanf("%d",&N)==1){
+        memset(weekday,0,sizeof(weekday));
+        count=3;
+        for(int i=1;i<=N;i++){
+           if(is_leap_year(1900+i-1))
+               mon[2]=29;
+           else mon[2]=28;
+           for(int j=1;j<=12;j++)
+              for(int k=1;k<=mon[j];k++){
+                  if(k==13){
+                    weekday[count]++;
+                  }
+                  if(count==7) count=1;
+                    else count++;
+              }
+        }
+        for(int i=1;i<=7;i++)
+          if(i!=7)
+            printf("%d ",weekday[i]);
+          else
+            printf("%d\n",weekday[i]);
+     }
+    return 0;
+}

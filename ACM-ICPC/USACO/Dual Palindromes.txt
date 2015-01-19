@@ -1,0 +1,36 @@
+/*
+ID:mrxy564
+PROG:dualpal
+LANG:C++
+*/
+#include <cstdio>
+using namespace std;
+bool is_pal(int *a,int cnt){
+    for(int i=0;i<cnt/2;i++)
+        if(a[i]!=a[cnt-1-i]) return false;
+    return true;
+}
+int main()
+{
+    freopen("dualpal.in","r",stdin);
+    freopen("dualpal.out","w",stdout);
+    int n,s,a[20],cnt,cnt2,temp;
+    while(scanf("%d%d",&n,&s)==2){
+       for(int i=s+1;;i++){
+         if(n==0) break;
+         cnt2=0;
+         for(int base=2;base<=10;base++){
+              cnt=0;temp=i;
+              while(temp){
+                 a[cnt++]=temp%base;
+                 temp/=base;
+              }
+              if(is_pal(a,cnt)) cnt2++;
+              if(cnt2==2) {n--;printf("%d\n",i);break;}
+         }
+       }
+    }
+    return 0;
+}
+
+

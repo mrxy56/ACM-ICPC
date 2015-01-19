@@ -1,0 +1,44 @@
+#include <cstdio>
+using namespace std;
+const int INF=2147483647;
+int gcd(int a,int b){
+    return b==0?a:gcd(b,a%b);
+}
+int lcm(int a,int b){
+    return a/gcd(a,b)*b;
+}
+int main()
+{
+    int n,t,maxd[15],mine[15];
+    int a[55],b[15],d[15],e[15];
+    while(scanf("%d%d",&n,&t)==2){
+        if(!n&&!t) break;
+       for(int i=0;i<n;i++)
+         scanf("%d",&a[i]);
+       for(int i=0;i<t;i++)
+         scanf("%d",&b[i]);
+       for(int i=0;i<t;i++){
+           maxd[i]=-INF;
+           mine[i]=INF;
+       }
+       for(int i=0;i<n;i++)
+         for(int j=i+1;j<n;j++)
+           for(int k=j+1;k<n;k++)
+              for(int p=k+1;p<n;p++){
+                  int temp=lcm(lcm(lcm(a[i],a[j]),a[k]),a[p]);
+                  for(int i=0;i<t;i++){
+                      int ans=temp;
+                      while(ans<=b[i])
+                         ans+=temp;
+                      ans-=temp;
+                      if(ans>maxd[i]) maxd[i]=ans;
+                      if(ans<b[i]) ans+=temp;
+                      if(ans<mine[i]) mine[i]=ans;
+                  }
+              }
+
+       for(int i=0;i<t;i++)
+          printf("%d %d\n",maxd[i],mine[i]);
+    }
+    return 0;
+}

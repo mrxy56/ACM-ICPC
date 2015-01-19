@@ -1,0 +1,31 @@
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+long long s[100010],p[100010],Min[100010],temp,ans,num;
+long long INF;
+int main(){ 
+	int T,n,m;
+    scanf("%d",&T);
+	INF=1;
+	for(int i=1;i<=18;i++)
+		INF*=10;
+	INF+=1;
+	while(T--){ 
+	    scanf("%d%d",&n,&m);
+        for(int i=0;i<n;i++){
+			scanf("%I64d%I64d",&s[i],&p[i]);
+		}
+		s[n]=INF;
+		Min[n]=INF;
+		for(int i=n-1;i>=0;i--)
+			Min[i]=min(Min[i+1],s[i]*p[i]);
+		for(int i=0;i<m;i++){
+			scanf("%I64d",&num);
+            temp=upper_bound(s,s+n+1,num)-s;
+			temp--;
+			ans=min(Min[temp+1],num*p[temp]);
+			printf("%I64d\n",ans);
+		}
+	}
+	return 0;
+}

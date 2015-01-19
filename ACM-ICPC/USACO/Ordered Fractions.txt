@@ -1,0 +1,56 @@
+/*
+ID:mrxy564
+PROG:frac1
+LANG:C++
+*/
+
+#include<cstdio>
+#include<vector>
+#include<cstring>
+using namespace std;
+struct node{ 
+    int x,y;
+	double v;
+	node(int _x,int _y,double _v):x(_x),y(_y),v(_v){}
+};
+vector<node> a[165];
+int p[165];
+int gcd(int x,int y){ 
+    if(y==0) return x;
+	return gcd(y,x%y);
+}
+using namespace std;
+int main(){
+	freopen("frac1.in","r",stdin);
+	freopen("frac1.out","w",stdout);
+	int n;
+    scanf("%d",&n);
+    for(int i=1;i<=n;i++){
+		for(int j=1;j<i;j++){ 
+		    if(gcd(i,j)==1){ 
+			   a[i].push_back(node(i,j,(double)j/i));
+			}
+		}
+	}
+	memset(p,0,sizeof(p));
+    printf("0/1\n");
+	int mini;
+	bool flag=true;
+	while(flag){
+	   flag=false;
+	   double min=1;
+	   for(int i=2;i<=n;i++){ 
+	     if(p[i]<a[i].size()&&a[i][p[i]].v<min){ 
+		    min=a[i][p[i]].v;
+			mini=i;
+			flag=true;
+		  }
+    	}
+	    if(flag){
+	      printf("%d/%d\n",a[mini][p[mini]].y,a[mini][p[mini]].x);
+		  p[mini]++;
+		}
+	}
+	printf("1/1\n");
+	return 0;		
+}

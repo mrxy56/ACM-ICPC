@@ -1,0 +1,68 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+long long mat[15][110];
+long long d[15][110];
+long long answer;
+int fa[15][110];
+int m,n;
+long long dp(int a,int b){
+    long long &ans=d[a][b];
+    if(b==n-1) return ans=mat[a][b];
+    if(ans!=(1<<31)-1) return ans;
+    if(ans>dp((a-1+m)%m,b+1)+mat[a][b]){
+         ans=d[(a-1+m)%m][b+1]+mat[a][b];
+         fa[a][b]=(a-1+m)%m;
+    }
+    if(ans==d[(a-1+m)%m][b+1]+mat[a][b])
+       if((a-1+m)%m<fa[a][b])
+         fa[a][b]=(a-1+m)%m;
+    if(ans>dp(a,b+1)+mat[a][b]){
+         ans=d[a][b+1]+mat[a][b];
+         fa[a][b]=a;
+    }
+    if(ans==d[a][b+1]+mat[a][b])
+       if(a<fa[a][b])
+         fa[a][b]=a;
+    if(ans>dp((a+1+m)%m,b+1)+mat[a][b]){
+         ans=d[(a+1+m)%m][b+1]+mat[a][b];
+         fa[a][b]=(a+1+m)%m;
+    }
+    if(ans==d[(a+1+m)%m][b+1]+mat[a][b])
+       if((a+1+m)%m<fa[a][b])
+         fa[a][b]=(a+1+m)%m;
+    return ans;
+}
+void init(){
+     for(int i=0;i<m;i++)
+           for(int j=0;j<n;j++)
+              scanf("%lld",&mat[i][j]);
+        answer=(1<<31)-1;
+     for(int i=0;i<m;i++)
+      for(int j=0;j<n;j++)
+         d[i][j]=(1<<31)-1;
+       memset(fa,-1,sizeof(fa));
+    return;
+}
+int main(){
+   //freopen("a.txt","r",stdin);
+   int father;
+   while(scanf("%d%d",&m,&n)==2){
+   init();
+   for(int i=0;i<m;i++)
+       if(answer>dp(i,0)){
+          answer=d[i][0];
+          father=i;
+       }
+   printf("%d",father+1);
+   for(int i=0;i<n-1;i++){
+      printf(" %d",fa[father][i]+1);
+      father=fa[father][i];
+   }
+   printf("\n");
+   printf("%lld\n",answer);
+   }
+   return 0;
+}
+

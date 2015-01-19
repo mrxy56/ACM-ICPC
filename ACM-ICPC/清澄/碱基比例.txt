@@ -1,0 +1,17 @@
+#include<cstdio>
+#include<string>
+#include<iostream>
+using namespace std;
+int main(){ 
+    string s;
+    cin>>s;
+	int cnt=0;
+	for(int i=0;i<s.length();i++)
+		if(s[i]=='C'||s[i]=='G')
+			cnt++;
+	double temp=(double)cnt/s.length();
+	temp*=100;
+	int ans=(int)(temp+0.5);
+	cout<<ans<<endl;
+	return 0;
+}

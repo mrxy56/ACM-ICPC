@@ -1,0 +1,233 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+typedef struct
+{
+    char team[40];
+    int win;
+    int tie;
+    int lose;
+    int scored;
+    int against;
+}Data;
+void compare(int s,int t);
+void win_cmp(int s,int t);
+void diff_cmp(int s,int t);
+void goal_cmp(int s,int t);
+void game_cmp(int s,int t);
+void name_cmp(int s,int t);
+void change(int s,int t);
+int n,t,g,i,j;
+int points[40]={0},difference[40]={0},games[40]={0};
+Data data[40]={{"",0,0,0,0,0}};
+char s[110]={""};
+int main(void)
+{
+    freopen("a.txt","r",stdin);
+    scanf("%d",&n);getchar();
+    while(n--)
+    {
+        fgets(s,110,stdin);
+        printf("%s",s);
+        scanf("%d",&t);getchar();
+        for(j=0;j<t;j++)
+        {
+            int k=0;
+            fgets(data[j].team,40,stdin);
+            while(data[j].team[k]) k++;
+            data[j].team[k-1]='\0';
+        }
+        scanf("%d",&g);getchar();
+        while(g--)
+        {
+            char s1[40]="",s2[40]="";
+            int g1,g2;
+            fgets(s,110,stdin);
+            sscanf(s,"%[^#]#%d@%d#%[^\n]",s1,&g1,&g2,s2);
+            for(i=0;i<t;i++)
+                  if(strcmp(data[i].team,s1)==0)
+                    {
+                        data[i].scored+=g1;
+                        data[i].against+=g2;
+                        if(g1==g2)
+                                data[i].tie++;
+                        else if(g1>g2)
+                                data[i].win++;
+                        else data[i].lose++;
+                        break;
+                    }
+            for(i=0;i<t;i++)
+                  if(strcmp(data[i].team,s2)==0)
+                    {
+                        data[i].scored+=g2;
+                        data[i].against+=g1;
+                        if(g1==g2)
+                                data[i].tie++;
+                        else if(g1>g2)
+                                data[i].lose++;
+                        else data[i].win++;
+                        break;
+                    }
+         }
+         for(i=0;i<t;i++)
+         {
+              points[i]=3*data[i].win+1*data[i].tie;
+              difference[i]=data[i].scored-data[i].against;
+              games[i]=data[i].win+data[i].tie+data[i].lose;
+         }
+         compare(0,t-1);
+         for(i=0;i<t;i++)
+               printf("%d) %s %dp, %dg (%d-%d-%d), %dgd (%d-%d)\n",i+1,data[i].team,points[i],games[i],data[i].win,data[i].tie,data[i].lose,difference[i],data[i].scored,data[i].against);
+        if(n>0)
+             printf("\n");
+         for(i=0;i<t;i++)
+         {
+             memset(data[i].team,'\0',sizeof(data[i].team));
+             data[i].win=0;data[i].tie=0;data[i].lose=0;data[i].scored=0;data[i].against=0;
+         }
+         memset(points,0,sizeof(points));
+         memset(difference,0,sizeof(difference));
+         memset(games,0,sizeof(games));
+    }
+    return 0;
+}
+void compare(int s,int t)
+{
+    int i,j;
+    for(i=s;i<t;i++)
+       for(j=i+1;j<=t;j++)
+           if(points[i]<points[j])
+                change(i,j);
+    for(i=s;i<t;i++)
+    {
+        if(points[i]==points[i+1])
+        {
+            j=i+1;
+            while(points[j]==points[j+1]&&j<t) j++;
+                 win_cmp(i,j);
+            i=j;
+        }
+    }
+}
+void win_cmp(int s,int t)
+{
+     int i,j;
+    for(i=s;i<t;i++)
+       for(j=i+1;j<=t;j++)
+           if(data[i].win<data[j].win)
+                change(i,j);
+    for(i=s;i<t;i++)
+    {
+        if(data[i].win==data[i+1].win)
+        {
+            j=i+1;
+            while(data[j].win==data[j+1].win&&j<t) j++;
+                 diff_cmp(i,j);
+            i=j;
+        }
+    }
+}
+void diff_cmp(int s,int t)
+{
+     int i,j;
+    for(i=s;i<t;i++)
+       for(j=i+1;j<=t;j++)
+           if(difference[i]<difference[j])
+                change(i,j);
+    for(i=s;i<t;i++)
+    {
+        if(difference[i]==difference[i+1])
+        {
+            j=i+1;
+            while(difference[j]==difference[j+1]&&j<t) j++;
+                 goal_cmp(i,j);
+            i=j;
+        }
+    }
+}
+void goal_cmp(int s,int t)
+{
+     int i,j;
+    for(i=s;i<t;i++)
+       for(j=i+1;j<=t;j++)
+           if(data[i].scored<data[j].scored)
+                change(i,j);
+    for(i=s;i<t;i++)
+    {
+        if(data[i].scored==data[i+1].scored)
+        {
+            j=i+1;
+            while(data[j].scored==data[j+1].scored&&j<t) j++;
+                 game_cmp(i,j);
+            i=j;
+        }
+    }
+}
+void game_cmp(int s,int t)
+{
+     int i,j;
+    for(i=s;i<t;i++)
+       for(j=i+1;j<=t;j++)
+           if(games[i]>games[j])
+                change(i,j);
+    for(i=s;i<t;i++)
+    {
+        if(games[i]==games[i+1])
+        {
+            j=i+1;
+            while(games[j]==games[j+1]&&j<t) j++;
+                 name_cmp(i,j);
+            i=j;
+        }
+    }
+}
+void name_cmp(int s,int t)
+{
+    int i,j;
+    char tolow[40][40]={""};
+    for(i=s;i<=t;i++)
+    {
+        j=0;
+        while(data[i].team[j])
+        {
+          tolow[i][j]=tolower(data[i].team[j]);
+          j++;
+        }
+    }
+    for(i=s;i<t;i++)
+       for(j=i+1;j<=t;j++)
+           if(strcmp(tolow[i],tolow[j])>0)
+                change(i,j);
+}
+void change(int s,int t)
+{
+    int temp;
+    char temps[40]="";
+    strcpy(temps,data[s].team);
+    strcpy(data[s].team,data[t].team);
+    strcpy(data[t].team,temps);
+    temp=data[s].win;
+    data[s].win=data[t].win;
+    data[t].win=temp;
+    temp=data[s].tie;
+    data[s].tie=data[t].tie;
+    data[t].tie=temp;
+    temp=data[s].lose;
+    data[s].lose=data[t].lose;
+    data[t].lose=temp;
+    temp=data[s].scored;
+    data[s].scored=data[t].scored;
+    data[t].scored=temp;
+    temp=data[s].against;
+    data[s].against=data[t].against;
+    data[t].against=temp;
+    temp=points[s];
+    points[s]=points[t];
+    points[t]=temp;
+    temp=difference[s];
+    difference[s]=difference[t];
+    difference[t]=temp;
+    temp=games[s];
+    games[s]=games[t];
+    games[t]=temp;
+}

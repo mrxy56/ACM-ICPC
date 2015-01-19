@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <stdlib.h>
+int main(void)
+{
+    int n,i,count=0;
+    int a[60]={0};
+    while(scanf("%d",&n)==1)
+    {
+        int sum=0,ave,move=0,temp;
+        count++;
+        if(n==0) break;
+        for(i=0;i<n;i++)
+        {
+            scanf("%d",&a[i]);
+            sum+=a[i];
+        }
+        ave=sum/n;
+        for(i=0;i<n;i++)
+        {
+            if(a[i]>ave)
+                move+=a[i]-ave;
+        }
+        printf("Set #%d\nThe minimum number of moves is %d.\n\n",count,move);
+        memset(a,0,sizeof(a));
+    }
+    return 0;
+}

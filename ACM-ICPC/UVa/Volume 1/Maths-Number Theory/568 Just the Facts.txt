@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <stdlib.h>
+int main(void)
+{
+    int count=0,n,num2=0,num5=0,temp,f=1,i;
+    while(scanf("%d",&n)==1)
+    {
+        num2=0;num5=0;f=1;
+           for(i=n;i>=1;i--)
+           {
+               temp=i;
+               while(temp%2==0)
+               {
+                    num2++;
+                    temp/=2;
+               }
+               while(temp%5==0)
+               {
+                   num5++;
+                   temp/=5;
+               }
+               f*=temp;
+               f%=10;
+           }
+           if(num2>num5)
+               while(num2>num5)
+               {
+                   f*=2;
+                   num2--;
+                   f%=10;
+               }
+           if(num2<num5)
+               while(num2<num5)
+               {
+                   f*=5;
+                   num5--;
+                   f%=10;
+               }
+            printf("%5d -> %d\n",n,f);
+    }
+    return 0;
+}

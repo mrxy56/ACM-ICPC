@@ -1,0 +1,138 @@
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+using namespace std;
+int a[1010][1010];
+int group[1000010],have[1000010],in_list[1010],list[1010];
+int count=0,t,n;
+typedef struct Tnode
+{
+    int v;
+    struct Tnode*left,*right;
+}Node;
+Node* newnode(void)
+{
+    Node*u=(Node*)malloc(sizeof(Node));
+    if(u!=NULL)
+    {
+      u->v=-1;
+      u->left=NULL;
+      u->right=NULL;
+    }
+    return u;
+}
+void init(void)
+{
+    int i,j;
+    memset(a,0,sizeof(a));
+    memset(group,0,sizeof(group));
+    memset(in_list,0,sizeof(in_list));
+    memset(list,0,sizeof(list));
+    memset(have,0,sizeof(have));
+    count++;
+    printf("Scenario #%d\n",count);
+    for(i=1;i<=t;i++)
+    {
+        scanf("%d",&n);
+        for(j=1;j<=n;j++)
+        {
+            scanf("%d",&a[i][j]);
+            a[i][0]++;
+            group[a[i][j]]=i;
+            have[a[i][j]]++;
+        }
+    }
+}
+int main(void)
+{
+    //freopen("a.txt","r",stdin);
+    int num;
+    char s[50];
+    bool yes;
+    Node*front[1010],*rear[1010],*list_front,*list_rear,*u,*temp;
+    while(scanf("%d",&t)==1)
+    {
+        if(t==0)break;
+        init();
+        memset(s,'\0',sizeof(s));
+        yes=true;
+        while(fgets(s,50,stdin)!=NULL)
+        {
+            if(yes)
+            {
+                list_front=NULL;
+                list_rear=NULL;
+                memset(front,NULL,sizeof(front));
+                memset(rear,NULL,sizeof(rear));
+                yes=false;
+            }
+            if(s[0]=='E')
+            {
+                sscanf(s+7,"%d",&num);
+                u=newnode();u->v=num;
+                if(have[num])
+                {
+                if(list_front==NULL&&list_rear==NULL)
+                {
+                    list_front=u;list_rear=u;in_list[group[num]]=1;
+                    front[group[num]]=u;rear[group[num]]=u;
+                }
+                else
+                {
+                    if(in_list[group[num]])
+                    {
+                        if((rear[group[num]]->right)!=NULL)
+                        {
+                            rear[group[num]]->right->left=u;
+                            u->right=rear[group[num]]->right;
+                        }
+                        rear[group[num]]->right=u;
+                        u->left=rear[group[num]];
+                    }
+                    else
+                    {
+                        list_rear->right=u;
+                        u->left=list_rear;
+                        list_rear=u;
+                        in_list[group[num]]=1;
+                        front[group[num]]=u;
+                    }
+                    if(list_rear==rear[group[num]]) list_rear=u;
+                    rear[group[num]]=u;
+                 }
+                list[group[num]]++;have[num]--;
+                }
+            }
+            if(s[0]=='D')
+            {
+               if(list_front==NULL) continue;
+               temp=list_front->right;
+               printf("%d\n",list_front->v);
+               list[group[list_front->v]]--;have[list_front->v]++;
+               if(list[group[list_front->v]]==0)
+                {
+                    front[group[list_front->v]]=NULL;
+                    rear[group[list_front->v]]=NULL;
+                    in_list[group[list_front->v]]=0;
+                }
+                if(temp!=NULL)
+               {
+                   list_front=temp;
+               }
+               else
+               {
+                   list_front=NULL;
+                   list_rear=NULL;
+               }
+            }
+            if(s[0]=='S')
+               {
+                   memset(s,'\0',sizeof(s));
+                   break;
+               }
+            memset(s,'\0',sizeof(s));
+        }
+        printf("\n");
+    }
+    return 0;
+}

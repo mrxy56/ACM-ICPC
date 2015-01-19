@@ -1,0 +1,29 @@
+/*
+ID:mrxy564
+PROG:kimbits
+LANG:C++
+*/
+#include<cstdio>
+using namespace std;
+int f[35][35];
+int main(){
+	freopen("kimbits.in","r",stdin);
+	freopen("kimbits.out","w",stdout);
+    int N,L;
+	unsigned int I;
+	scanf("%d%d%u",&N,&L,&I);
+	for(int k=0;k<=L;k++)
+	     f[0][k]=1;
+	for(int k=0;k<=N;k++)
+		 f[k][0]=1;
+	for(int i=1;i<=N;i++)
+	   for(int j=1;j<=L;j++)
+         f[i][j]=f[i-1][j]+f[i-1][j-1];
+	while(N){
+	   if(I<=f[N-1][L]) printf("0");
+	   else {printf("1");I-=f[N-1][L];L--;}
+	   N--;
+	}
+    printf("\n");
+	return 0;
+}

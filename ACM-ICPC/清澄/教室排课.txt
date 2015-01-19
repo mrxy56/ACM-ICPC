@@ -1,0 +1,31 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+int a[8]={120,40,85,50,100,140,70,100};
+int b[4],c[4];
+bool vis[8],flag=false;
+void dfs(int depth){ 
+    if(depth==4){
+		flag=true;
+		printf("%d",c[0]);
+		for(int i=1;i<4;i++)
+			printf(" %d",c[i]);
+	    printf("\n");
+		return;
+	}
+	for(int i=0;i<8;i++){
+		if(b[depth]<=a[i]&&!vis[i]){
+			c[depth]=i+1;
+			vis[i]=true;
+	        dfs(depth+1);
+			vis[i]=false;
+		}
+	}
+}
+int main(){
+	for(int i=0;i<4;i++) scanf("%d",&b[i]);
+	memset(vis,0,sizeof(vis));
+    dfs(0);
+	if(!flag) printf("-1\n");
+	return 0;
+}

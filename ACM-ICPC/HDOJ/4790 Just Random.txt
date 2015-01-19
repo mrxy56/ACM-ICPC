@@ -1,0 +1,74 @@
+#include<cstdio>
+#include<algorithm>
+#include<cstring>
+using namespace std;
+struct{ 
+    int index;
+	int num;
+}x[10];
+long long gcd(long long a,long long b){ 
+    if(b==0) return a;
+	return gcd(b,a%b);
+}
+int main(){ 
+    int T,kase=0;
+	long long a,b,c,d,p,m,mod,minus,tot;
+	scanf("%d",&T);
+	while(T--){ 
+		memset(x,0,sizeof(x));
+	    scanf("%I64d%I64d%I64d%I64d%I64d%I64d",&a,&b,&c,&d,&p,&m); 
+		    if(d-c<b-a) {swap(a,c);swap(b,d);}
+			x[0].index=0;x[0].num=1;
+			x[1].index=b-a;x[1].num=b-a+1;
+			x[2].index=d-c;x[2].num=b-a+1;
+			x[3].index=b+d-a-c;x[3].num=1;
+			for(int i=0;i<=2;i++){ 
+			    mod=(a+c)%p;
+				mod=(mod+x[i].index)%p;
+				if(m>mod){
+				   minus=m-mod;
+				}else{ 
+				   minus=m-mod+p;
+				}
+			    x[i+4].index=x[i].index+minus;
+				if(i==0) x[i+4].num=x[i].num+minus;
+				if(i==1) x[i+4].num=x[i].num;
+				if(i==2) x[i+4].num=x[i].num-minus;
+			}
+			for(int i=1;i<=3;i++){ 
+			    mod=(a+c)%p;
+				mod=(mod+x[i].index)%p;
+				if(m<mod){
+					minus=mod-m;
+                }else{
+				    minus=p-m+mod;
+				}
+                x[i+6].index=x[i].index-minus;
+				if(i==1) x[i+6].num=x[i].num-minus;
+				if(i==2) x[i+6].num=x[i].num;
+				if(i==3) x[i+6].num=x[i].num+minus;
+			}
+			long long ans=0,temp;
+			temp=(x[7].index-x[4].index)/p+1;
+			if(temp<0) temp=0;
+			if(x[7].index<=x[0].index||x[4].index>=x[1].index) temp=0;
+			ans+=(x[4].num+x[7].num)*temp/2;
+			temp=(x[8].index-x[5].index)/p+1;
+			if(temp<0) temp=0;
+			if(x[8].index<=x[1].index||x[5].index>=x[2].index) temp=0;
+			ans+=(b-a+1)*temp;
+			temp=(x[9].index-x[6].index)/p+1;
+			if(temp<0) temp=0;
+			if(x[9].index<=x[2].index||x[6].index>=x[3].index) temp=0;
+			ans+=(x[6].num+x[9].num)*temp/2;
+	        tot=(b-a+1)*(d-c+1);
+		    temp=(a+c)%p;
+			for(int i=0;i<=3;i++)
+				if((i==0||x[i].index>x[i-1].index)&&(temp+x[i].index)%p==m) 
+					ans+=x[i].num;
+			long long g=gcd(tot,ans);
+            ans/=g;tot/=g;
+			printf("Case #%d: %I64d/%I64d\n",++kase,ans,tot);
+	}
+	return 0;
+}

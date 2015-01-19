@@ -1,0 +1,50 @@
+/*
+ID:mrxy564
+PROG:runround
+LANG:C++
+*/
+#include<cstdio>
+#include<cstring>
+using namespace std;
+int main(){ 
+	freopen("runround.in","r",stdin);
+	freopen("runround.out","w",stdout);
+    int n,len,temp,now,map[10];
+	bool flag[20],vis[20];
+	char s[20];
+	scanf("%d",&n);
+	for(int i=n+1;;i++){ 
+	    sprintf(s,"%d",i);
+        len=strlen(s);
+		now=0;
+		bool find=true;
+		int last=-1;
+		memset(vis,false,sizeof(vis));
+		memset(flag,false,sizeof(flag));
+		for(int j=0;j<len;j++){
+			if(flag[now]){
+				find=false;
+		        break;
+			}
+			if(vis[s[now]-'0']){ 
+			    find=false;
+				break;
+			}
+		    temp=s[now]-'0';
+			if(temp==last){
+				find=false;
+				break;
+			}
+			vis[temp]=true;
+			last=temp;
+			flag[now]=true;
+			now=(now+temp)%len;
+ 
+		}
+		if(find && 0==now && s[now]-'0'!=last){
+			printf("%d\n",i);
+		    break;
+		}
+	}
+	return 0;
+}

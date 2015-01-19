@@ -1,0 +1,71 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+struct node{
+    int v[3];
+    int liter;
+};
+int vis[210][210];
+int cap[3];
+int d,front,rear,min;
+bool flag;
+node q[45000];
+node pour(int i,int j,const node &now){
+     node next=now;
+     if(next.v[i]<=cap[j]-now.v[j]){
+          next.liter+=now.v[i];
+          next.v[j]+=now.v[i];
+          next.v[i]=0;
+     }else{
+          next.liter+=cap[j]-now.v[j];
+          next.v[i]-=cap[j]-now.v[j];
+          next.v[j]=cap[j];
+     }
+     return next;
+}
+void bfs(){
+    q[0].v[0]=0;q[0].v[1]=0;q[0].v[2]=cap[2];q[0].liter=0;
+    vis[0][0]=1;
+    front=0;rear=1;
+    while(front<rear){
+        node &n=q[front];
+        for(int i=0;i<3;i++)
+           for(int j=0;j<3;j++)
+               if(i!=j){
+                  node& t=q[rear];
+                  node temp=pour(i,j,q[front]);
+                  if(!vis[temp.v[0]][temp.v[1]]){
+                      t=temp;
+                      rear++;
+                      vis[temp.v[0]][temp.v[1]]=1;
+                  }
+               }
+        front++;
+    }
+    return;
+}
+int main(){
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        flag=false;
+        memset(vis,0,sizeof(vis));
+        for(int i=0;i<3;i++)
+           scanf("%d",&cap[i]);
+        scanf("%d",&d);
+        bfs();
+        int i,j;
+        for(i=d;i>=0;i--){
+            min=2147483647;
+            for(j=0;j<rear;j++){
+                    if(q[j].v[0]==i||q[j].v[1]==i||q[j].v[2]==i){
+                           flag=true;
+                           if(q[j].liter<min) min=q[j].liter;
+                    }
+            }
+            if(flag) break;
+        }
+        printf("%d %d\n",min,i);
+    }
+    return 0;
+}

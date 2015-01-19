@@ -1,0 +1,171 @@
+#include <cstdio>
+#include <cstring>
+#include <cctype>
+#include <cstdlib>
+#define Max 2147483647
+using namespace std;
+typedef struct Tnode
+{
+    int v;
+    struct Tnode *left,*right;
+    bool left_saw;
+}Node;
+bool flag,judge;
+char ch;
+char s[10000];
+int stack[10000],ans,p,top,topc;
+Node* chart[10000];
+Node* root;
+void init(void)
+{
+    int count1=0,count2=0;
+    while(ch=getchar())
+    {
+        if(ch=='(')
+        {
+            count1++;
+            flag=true;
+            s[p++]='(';
+        }
+        if(ch=='-'||isdigit(ch))
+        {
+            s[p++]=ch;
+        }
+        if(ch==')')
+        {
+            count2++;
+            s[p++]=')';
+        }
+        if(count1==count2&&flag)
+            break;
+    }
+    return;
+}
+Node* newnode(void)
+{
+    Node*u=(Node*)malloc(sizeof(Node));
+    if(u!=NULL)
+    {
+        u->left=u->right=NULL;
+        u->left_saw=false;
+    }
+    return u;
+}
+void addnode(void)
+{
+    int i=0,num;
+    Node*u=newnode();
+    chart[0]=u;
+    while(s[i])
+    {
+        if(s[i]=='(')
+        {
+            top++;
+            stack[top]=-Max;
+        }
+        if(s[i]=='-'||isdigit(s[i]))
+        {
+            sscanf(&s[i],"%d",&num);
+            u=newnode();
+            u->v=num;
+            topc++;top++;
+            chart[topc]=u;stack[top]=topc;
+            while(s[i]!='(') i++;
+            i--;
+        }
+        if(s[i]==')')
+        {
+            if(stack[top]==-Max)
+            {
+                  if(chart[topc]->left_saw==false)
+                      chart[topc]->left=NULL;
+                  else
+                      chart[topc]->right=NULL;
+                  top--;
+            }
+            else
+            {
+                if(stack[top]>0)
+                {
+                if(chart[stack[top]-1]->left_saw==false)
+                {
+                   chart[stack[top]-1]->left=chart[stack[top]];
+                   chart[stack[top]-1]->left_saw=true;
+                }
+                else
+                   chart[stack[top]-1]->right=chart[stack[top]];
+                top-=2;topc--;
+                }
+            }
+        }
+         i++;
+    }
+    root=chart[topc];
+    return;
+}
+int bfs(void)
+{
+    int front=0,rear=1;
+    judge=false;
+    Node*q[10000];
+    int sum[10000];
+    memset(sum,0,sizeof(sum));
+    q[0]=root;sum[0]=root->v;
+    while(front<rear)
+    {
+        Node*u=q[front++];
+        if(u->left!=NULL)
+        {
+             q[rear++]=u->left;
+             sum[rear-1]=sum[front-1]+q[rear-1]->v;
+        }
+        if(sum[rear-1]==ans&&q[rear-1]->left==NULL&&q[rear-1]->right==NULL)
+        {
+            judge=true;
+            break;
+        }
+        if(u->right!=NULL)
+        {
+             q[rear++]=u->right;
+             sum[rear-1]=sum[front-1]+q[rear-1]->v;
+        }
+        if(sum[rear-1]==ans&&q[rear-1]->left==NULL&&q[rear-1]->right==NULL)
+        {
+            judge=true;
+            break;
+        }
+    }
+    if(!judge)
+        printf("no\n");
+    else
+        printf("yes\n");
+    return 0;
+}
+void remove_tree(Node*u)
+{
+    if(u->left==NULL&&u->right==NULL) {free(u);return;}
+    if(u->left!=NULL)
+    remove_tree(u->left);
+    if(u->right!=NULL)
+    remove_tree(u->right);
+}
+int main(void)
+{
+    while(scanf("%d",&ans)==1)
+    {
+        flag=false;p=0;top=topc=-1;
+        memset(s,'\0',sizeof(s));
+        memset(stack,0,sizeof(stack));
+        memset(chart,NULL,sizeof(chart));
+        init();
+        if(s[0]=='('&&s[1]==')'&&s[2]=='\0')
+           {
+               printf("no\n");
+               continue;
+           }
+        addnode();
+        bfs();
+        remove_tree(root);
+    }
+    return 0;
+}

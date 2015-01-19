@@ -1,0 +1,125 @@
+#include<cstdio>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const double eps=1e-6;
+int dcmp(double x){
+  if(fabs(x)<eps) return 0; else return x<0?-1:1;
+}
+const double PI=acos(-1);
+struct Point{
+   double x,y;
+   Point(double x=0,double y=0):x(x),y(y){}
+};
+typedef Point Vector;
+Vector operator + (Vector A, Vector B) {return Vector(A.x+B.x, A.y+B.y); }
+Vector operator - (Point A, Point B) {return Vector(A.x-B.x, A.y-B.y); }
+Vector operator * (Vector A, double p) {return Vector(A.x*p, A.y*p); }
+Vector operator / (Vector A, double p) {return Vector(A.x/p, A.y/p); }
+bool operator < (const Point& a, const Point& b) {
+  return (dcmp(a.x-b.x)<0||dcmp(a.x-b.x)==0&&dcmp(a.y-b.y)<0);
+}
+bool operator == (const Point& a, const Point &b) {
+  return dcmp(a.x-b.x) == 0 && dcmp(a.y-b.y) == 0;
+}
+double Dot(Vector A, Vector B) { return A.x*B.x + A.y*B.y; }
+double Length(Vector A) { return sqrt(Dot(A, A)); }
+double Angle(Vector A, Vector B) {return acos(Dot(A, B)/Length(A)/Length(B));}
+double Cross(Vector A, Vector B) {return A.x*B.y - A.y*B.x;}
+Vector Rotate(Vector A, double rad) {
+  return Vector(A.x*cos(rad)-A.y*sin(rad), A.x*sin(rad)+A.y*cos(rad));
+}
+Vector Normal(Vector A){
+  double L = Length(A);
+  return Vector(-A.y/L, A.x/L);
+}
+Point GetLineIntersection(Point P, Point v, Point Q, Point w) {
+  Vector u = P-Q;
+  double t = Cross(w, u) / Cross(v, w);
+  return P+v*t;
+}
+Point GetLineProjection(Point P, Point A, Point B) {
+  Vector v = B-A;
+  return A+v*(Dot(v, P-A) / Dot(v, v));
+}
+double DistanceToLine(Point P, Point A, Point B) {
+  Vector v1 = B - A, v2 = P - A;
+  return fabs(Cross(v1, v2)) / Length(v1);
+}
+struct Line{
+  Point p;
+  Vector v;
+  Line(Point p, Vector v):p(p),v(v){}
+  Point point(double t){
+    return p + v*t;
+  }
+  Line move(double d){
+    return Line(p + Normal(v)*d, v);
+  }
+};
+struct Circle{
+   Point c;
+   double r;
+   //Circle(Point c,double r):c(c),r(r){}
+   Point point(double a){
+       return Point(c.x+cos(a)*r,c.y+sin(a)*r);
+   }
+};
+double angle(Vector v){
+  return atan2(v.y,v.x);
+}
+Point a[5],b[5];
+int getTangents(Circle A,Circle B,Point*a,Point*b){
+    int cnt=0;
+    if(A.r<B.r) {swap(A,B);swap(a,b);}
+    int d2=(A.c.x-B.c.x)*(A.c.x-B.c.x)+(A.c.y-B.c.y)*(A.c.y-B.c.y);
+    int rdiff=A.r-B.r;
+    int rsum=A.r+B.r;
+    if(d2<rdiff*rdiff) return 0;
+    double base=atan2(B.c.y-A.c.y,B.c.x-A.c.x);
+    if(d2==0&&A.r==B.r) return -1;
+    if(d2==rdiff*rdiff){
+        a[cnt]=A.point(base);b[cnt]=B.point(base);cnt++;
+        return 1;
+    }
+    double ang=acos((A.r-B.r)/sqrt(d2));
+    a[cnt]=A.point(base+ang);b[cnt]=B.point(base+ang);cnt++;
+    a[cnt]=A.point(base-ang);b[cnt]=B.point(base-ang);cnt++;
+    if(d2==rsum*rsum){
+        a[cnt]=A.point(base);b[cnt]=B.point(base+PI);cnt++;
+    }
+    else if(d2>rsum*rsum){
+        double ang=acos((A.r+B.r)/sqrt(d2));
+        a[cnt]=A.point(base+ang);b[cnt]=B.point(base+ang+PI);cnt++;
+        a[cnt]=A.point(base-ang);b[cnt]=B.point(base-ang+PI);cnt++;
+    }
+    return cnt;
+}
+int main(){
+    int x1,y1,r1,x2,y2,r2,num;
+    Circle A,B;
+    Vector C;
+    while(scanf("%d%d%d%d%d%d",&x1,&y1,&r1,&x2,&y2,&r2)==6){
+          if(x1==0&&y1==0&&r1==0&&x2==0&&y2==0&&r2==0) break;
+          A.c.x=x1;A.c.y=y1;A.r=r1;
+          B.c.x=x2;B.c.y=y2;B.r=r2;
+          num=getTangents(A,B,a,b);
+          printf("%d\n",num);
+          for(int i=0;i<num-1;i++)
+             for(int j=i+1;j<num;j++){
+                 if(!(dcmp(a[i].x-a[j].x)<0||dcmp(a[i].x-a[j].x)==0&&dcmp(a[i].y-a[j].y)<0)){
+                       swap(a[i].x,a[j].x);
+                       swap(a[i].y,a[j].y);
+                       swap(b[i].x,b[j].x);
+                       swap(b[i].y,b[j].y);
+                 }
+             }
+          for(int i=0;i<num;i++){
+              C.x=b[i].x-a[i].x;C.y=b[i].y-a[i].y;
+              printf("%.5lf %.5lf %.5lf %.5lf %.5lf\n",a[i].x,a[i].y,b[i].x,b[i].y,Length(C));
+          }
+    }
+    return 0;
+}
+
+

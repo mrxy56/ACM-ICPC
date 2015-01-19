@@ -1,0 +1,103 @@
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <string>
+#include <cstdlib>
+using namespace std;
+int p[30][30]={0},r[30]={0},c[30]={0},len[30]={0},n,i,a,b,j,num,temp1,temp2,temp3;
+char s[30]="",cmd1[6]="",cmd2[6]="";
+void mov(int num,int a,int b)
+{
+     p[b][len[b]+1]=num;
+     len[b]++;
+     len[a]--;
+     r[num]=b;
+     c[num]=len[b];
+}
+int main(void)
+{
+    scanf("%d\n",&n);
+    for(i=0;i<n;i++)
+    {
+       p[i][1]=i;
+       len[i]++;
+       r[i]=i;
+       c[i]=len[i];
+    }
+    while(fgets(s,20,stdin)!=NULL)
+    {
+        if(strcmp(s,"quit\n")==0) break;
+        sscanf(s,"%[^ ]%d %[^ ]%d",cmd1,&a,cmd2,&b);
+        if(strcmp(cmd1,"move")==0&&r[a]!=r[b]&&a!=b)
+        {
+            if(strcmp(cmd2,"onto")==0)
+            {
+                if(len[r[a]]>c[a])
+                     for(j=len[r[a]];j>=c[a]+1;j--)
+                     {
+                          num=p[r[a]][j];
+                          mov(num,r[a],num);
+                     }
+                if(len[r[b]]>c[b])
+                     for(j=len[r[b]];j>=c[b]+1;j--)
+                     {
+                          num=p[r[b]][j];
+                          mov(num,r[b],num);
+                     }
+                mov(a,r[a],r[b]);
+            }
+            if(strcmp(cmd2,"over")==0)
+            {
+                if(len[r[a]]>c[a])
+                     for(j=len[r[a]];j>=c[a]+1;j--)
+                     {
+                          num=p[r[a]][j];
+                          mov(num,r[a],num);
+                     }
+                mov(a,r[a],r[b]);
+            }
+        }
+        if(strcmp(cmd1,"pile")==0&&r[a]!=r[b]&&a!=b)
+        {
+            if(strcmp(cmd2,"onto")==0)
+            {
+                temp1=r[a];
+                temp2=c[a];
+                temp3=len[temp1];
+                if(len[r[b]]>c[b])
+                     for(j=len[r[b]];j>=c[b]+1;j--)
+                     {
+                          num=p[r[b]][j];
+                          mov(num,r[b],num);
+                     }
+                if(temp3>=temp2)
+                     for(j=temp2;j<=temp3;j++)
+                     {
+                          num=p[temp1][j];
+                          mov(num,temp1,r[b]);
+                     }
+            }
+            if(strcmp(cmd2,"over")==0)
+            {
+                temp1=r[a];
+                temp2=c[a];
+                temp3=len[temp1];
+                 if(temp3>=temp2)
+                     for(j=temp2;j<=temp3;j++)
+                     {
+                          num=p[temp1][j];
+                          mov(num,temp1,r[b]);
+                     }
+            }
+        }
+    }
+    for(i=0;i<n;i++)
+    {
+       printf("%d:",i);
+       if(len[i]>0)
+          for(j=1;j<=len[i];j++)
+             printf(" %d",p[i][j]);
+        printf("\n");
+    }
+    return 0;
+}

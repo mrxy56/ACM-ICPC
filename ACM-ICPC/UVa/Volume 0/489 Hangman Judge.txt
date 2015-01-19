@@ -1,0 +1,34 @@
+#include<stdio.h>
+#include<string.h>
+int main(void)
+{
+    int n,i,j;
+    while(scanf("%d",&n)==1&&n!=-1)
+    {
+        char s1[100]="",s2[100]="";
+        int time=0,len1,len2;
+        scanf("%s",s1);  scanf("%s",s2);
+        len1=strlen(s1);len2=strlen(s2);
+        for(i=0;i<len2;i++)
+        {
+            int flag=0, judge=0;
+                for(j=0;j<len1;j++)
+                {
+                    if(s1[j]&&s1[j]==s2[i])   {s1[j]='\0'; judge=1;}
+                    if(s1[j]) flag=1;
+                }
+            if(!judge) time++;
+            if(time==7&&flag) {printf("Round %d\nYou lose.\n",n);break;}
+            if(!flag&&time<7) {printf("Round %d\nYou win.\n",n);break;}
+            if(i==len2-1) {printf("Round %d\nYou chickened out.\n",n);break;}
+      }
+    }
+     return 0;
+}
+
+
+
+
+
+
+

@@ -1,0 +1,105 @@
+#include<cstdio>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+using namespace std;
+#define FOR(i,s,t) for(int i=(s);i<(t);i++)
+const double eps=1e-8;
+const int maxn=110;
+int n;
+int cmp(double x){
+	if(fabs(x)<eps) return 0;
+	if(x>0) return 1;
+	return -1;
+}
+int gcd(int a,int b){
+	if(b==0) return a;
+	else return gcd(b,a%b);
+}
+const double pi=acos(-1.0);
+inline double sqr(double x){
+	return x*x;
+}
+struct point{
+	double x,y;
+	point(){}
+	point(double a,double b):x(a),y(b){}
+	void input(){
+		scanf("%lf%lf",&x,&y);
+	}
+	friend point operator + (const point &a,const point &b){
+		return point(a.x+b.x,a.y+b.y);
+	}
+	friend point operator - (const point &a,const point &b){
+		return point(a.x-b.x,a.y-b.y);
+	}
+	friend bool operator == (const point &a,const point &b){
+		return cmp(a.x-b.x)==0 && cmp(a.y-b.y)==0;
+	}
+	friend point operator * (const point &a,const double &b){
+		return point(a.x*b,a.y*b);
+	}
+	friend point operator / (const point &a,const double &b){
+		return point(a.x/b,a.y/b);
+	}
+	double norm(){
+		return sqrt(sqr(x)+sqr(y));
+	}
+};
+double det(const point &a,const point &b){
+	return a.x*b.y-a.y*b.x;
+}
+double dot(const point &a,const point &b){
+	return a.x*b.x+a.y*b.y;
+}
+double dist(const point &a,const point &b){
+	return (a-b).norm();
+}
+double dis_point_segment(const point p,const point s,const point t){
+    if(cmp(dot(p-s,t-s))<0) return (p-s).norm();
+	if(cmp(dot(p-t,s-t))<0) return (p-t).norm();
+	return fabs(det(s-p,t-p)/dist(s,t));
+}
+bool PointOnSegment(point p,point s,point t){
+	return cmp(det(p-s,t-s))==0 && cmp(dot(p-s,p-t))<=0;
+}
+struct polygon{
+	int n;
+	point a[maxn];
+	polygon(){}
+	double area(){
+		double sum=0;
+		a[n]=a[0];
+		for(int i=0;i<n;i++) sum+=det(a[i+1],a[i]);
+		return sum/2;
+	}
+	int Border_Int_Point_Num(){
+		int num=0;
+		a[n]=a[0];
+		for(int i=0;i<n;i++)
+			num+=gcd(abs(int(a[i+1].x-a[i].x)),abs(int(a[i+1].y-a[i].y)));
+		return num;
+	}
+	int Inside_Int_Point_Num(){
+		return abs(int(area()))+1-Border_Int_Point_Num()/2;
+	}
+}poly;
+int main(){
+	int T,n;
+	scanf("%d",&T);
+    for(int kase=1;kase<=T;kase++){
+		scanf("%d",&n);
+        poly.n=n;
+		int tempx=0,tempy=0;
+		for(int i=0;i<n;i++){
+			scanf("%lf%lf",&poly.a[i].x,&poly.a[i].y);
+			poly.a[i].x+=tempx;
+			poly.a[i].y+=tempy;
+			tempx=poly.a[i].x;
+			tempy=poly.a[i].y;
+		}
+        printf("Scenario #%d:\n",kase);
+		printf("%d %d %.1f\n\n",poly.Inside_Int_Point_Num(),poly.Border_Int_Point_Num(),abs(poly.area()));
+	}
+    return 0;
+}

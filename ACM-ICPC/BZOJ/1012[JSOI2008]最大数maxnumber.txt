@@ -1,0 +1,67 @@
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+int num[200010],a[200010];
+int main(){ 
+   int x,len=0,m,mod,last=0,size=0;
+   char op[5];
+   scanf("%d%d",&m,&mod);
+   while(m--){ 
+        scanf("%s%d",op,&x);
+		if(op[0]=='A'){ 
+		    x=(x+last)%mod;
+			num[++len]=x;
+			while(size&&num[a[size]]<=x) size--;
+			a[++size]=len;
+		}
+		else{ 
+		   int pos=lower_bound(a+1,a+size+1,len-x+1)-a;
+		   printf("%d\n",last=num[a[pos]]);
+		}
+   }
+   return 0;
+}
+
+
+//Ïß¶ÎÊ÷Ð´·¨
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+int maxv[4*200010],n,mod,last=0,x,len=0,p,v,ql,qr;
+char cmd[5];
+void update(int o,int L,int R){ 
+    int M=L+(R-L)/2;
+	if(L==R) maxv[o]=v;
+	else{ 
+	    if(p<=M) update(o*2,L,M);
+		else update(o*2+1,M+1,R);
+		maxv[o]=max(maxv[o*2],maxv[o*2+1]);
+	}
+}
+int query(int o,int L,int R){ 
+    int M=L+(R-L)/2,ans=-1;
+	if(ql<=L&&R<=qr) return maxv[o];
+	if(ql<=M) ans=max(ans,query(o*2,L,M));
+	if(M<qr) ans=max(ans,query(o*2+1,M+1,R));
+	return ans;
+}
+int main(){ 
+    scanf("%d%d",&n,&mod);
+	int maxnum=n;
+	memset(maxv,-1,sizeof(maxv));
+	while(n--){ 
+	    scanf("%s%d",cmd,&x);
+		if(cmd[0]=='A'){ 
+		    p=++len;
+			v=(x+last)%mod;
+            update(1,1,maxnum);
+		}
+		else{ 
+		   ql=len-x+1;
+		   qr=len;
+		   printf("%d\n",last=query(1,1,maxnum));
+		}
+	}
+	return 0;
+}

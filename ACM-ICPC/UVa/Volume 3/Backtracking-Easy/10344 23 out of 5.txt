@@ -1,0 +1,41 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+int a[6],vis[6];
+bool dfs(int num,int depth){
+    if(num==23&&depth==5){
+         return true;
+    }
+    if(depth==0){
+        for(int i=1;i<=5;i++){
+           vis[i]=1;
+           if(dfs(a[i],depth+1)) return true;
+           vis[i]=0;
+        }
+    }
+    else{
+        for(int i=1;i<=5;i++)
+           if(!vis[i]){
+               vis[i]=1;
+               if(dfs(num+a[i],depth+1)) return true;
+               if(dfs(num-a[i],depth+1)) return true;
+               if(dfs(num*a[i],depth+1)) return true;
+               vis[i]=0;
+           }
+    }
+    return false;
+}
+int main(){
+    //freopen("a.txt","r",stdin);
+    while(1){
+       for(int i=1;i<=5;i++)
+          scanf("%d",&a[i]);
+       if(a[1]==0)break;
+       memset(vis,0,sizeof(vis));
+       if(dfs(0,0))
+           printf("Possible\n");
+       else
+           printf("Impossible\n");
+    }
+  return 0;
+}

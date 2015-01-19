@@ -1,0 +1,113 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+int g[110][310],from[310],vis[310];
+bool match(int x){ 
+    for(int i=1;i<=g[x][0];i++)
+		if(!vis[g[x][i]]){ 
+		     vis[g[x][i]]=1;
+			 if(from[g[x][i]]==-1||match(from[g[x][i]])){
+				 from[g[x][i]]=x;
+			     return true;
+			 }
+		}
+	return false;
+}
+int main(){ 
+    int T,p,n,num;
+	scanf("%d",&T);
+	while(T--){ 
+	    scanf("%d%d",&p,&n);
+		for(int i=1;i<=p;i++){ 
+		    scanf("%d",&g[i][0]);
+			num=g[i][0];
+			for(int j=1;j<=num;j++)
+				scanf("%d",&g[i][j]);
+		}
+		int ans=0;
+		memset(from,-1,sizeof(from));
+		for(int i=1;i<=p;i++){
+			memset(vis,0,sizeof(vis));
+			if(match(i)) ans++;
+		}
+		if(ans==p) printf("YES\n");
+		else printf("NO\n");
+	}
+	return 0;
+}
+
+
+#include<cstdio>
+#include<vector>
+#include<queue>
+#include<cstring>
+using namespace std;
+const int maxn=300;
+int n1,n2;
+vector<int> g[maxn+10];
+int mx[maxn+10],my[maxn+10];
+queue<int> que;
+int dx[maxn+10],dy[maxn+10];
+bool vis[maxn+10];
+bool find(int u){
+	for(int i=0;i<g[u].size();i++)
+		if(!vis[g[u][i]] && dy[g[u][i]]==dx[u]+1){
+			vis[g[u][i]]=true;
+			if(!my[g[u][i]] || find(my[g[u][i]])){
+				mx[u]=g[u][i];
+				my[g[u][i]]=u;
+				return true;
+			}
+		}
+	return false;
+}
+int matching(){
+	memset(mx,0,sizeof(mx));
+	memset(my,0,sizeof(my));
+	int ans=0;
+	while(1){
+		bool flag=false;
+		while(!que.empty()) que.pop();
+		memset(dx,0,sizeof(dx));
+		memset(dy,0,sizeof(dy));
+		for(int i=1;i<=n1;i++)
+			if(!mx[i]) que.push(i);
+		while(!que.empty()){
+			int u=que.front();
+			que.pop();
+			for(int i=0;i<g[u].size();i++)
+				if(!dy[g[u][i]]){
+					dy[g[u][i]]=dx[u]+1;
+					if(my[g[u][i]]){
+						dx[my[g[u][i]]]=dy[g[u][i]]+1;
+						que.push(my[g[u][i]]);
+					}else flag=true;
+				}
+		}
+		if(!flag) break;
+		memset(vis,0,sizeof(vis));
+		for(int i=1;i<=n1;i++)
+			if(!mx[i] && find(i)) ans++;
+	}
+	return ans;
+}  
+int main(){
+	int T;
+	scanf("%d",&T);
+	while(T--){
+		scanf("%d%d",&n1,&n2);
+		int num,temp;
+		for(int i=1;i<=n1;i++){
+			scanf("%d",&num);
+			g[i].clear();
+			for(int j=1;j<=num;j++){
+				 scanf("%d",&temp);
+                 g[i].push_back(temp);
+			}
+		}
+		int ans=matching();
+		if(ans==n1) printf("YES\n");
+		else printf("NO\n");
+	}
+	return 0;
+}

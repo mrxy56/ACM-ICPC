@@ -1,0 +1,24 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+int a[15],n,m;
+bool state[1000010];
+int main(){
+   while(scanf("%d%d",&n,&m)==2){
+       for(int i=0;i<m;i++)
+          scanf("%d",&a[i]);
+       memset(state,false,sizeof(state));
+       for(int i=0;i<=n;i++){
+          for(int j=0;j<m;j++)
+             if(i>=a[j]&&!state[i-a[j]]){
+                state[i]=true;
+                break;
+             }
+       }
+       if(state[n])
+          printf("Stan wins\n");
+       else
+          printf("Ollie wins\n");
+   }
+   return 0;
+}

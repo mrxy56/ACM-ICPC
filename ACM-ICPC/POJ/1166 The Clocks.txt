@@ -1,0 +1,61 @@
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+int t[9],x[9],ans[1000];
+int a[9][10]={
+    {1,1,0,1,0,0,0,0,0,0},
+    {1,1,1,0,1,0,0,0,0,0},
+    {0,1,1,0,0,1,0,0,0,0},
+    {1,0,0,1,1,0,1,0,0,0},
+    {1,0,1,0,1,0,1,0,1,0},
+    {0,0,1,0,1,1,0,0,1,0},
+    {0,0,0,1,0,0,1,1,0,0},
+    {0,0,0,0,1,0,1,1,1,0},
+    {0,0,0,0,0,1,0,1,1,0}
+};
+int gcd(int a,int b){
+    return b==0?a:gcd(b,a%b);
+}
+int lcm(int a,int b){
+    return b/gcd(a,b)*a;
+}
+int main(){
+    for(int i=0;i<9;i++){
+ scanf("%d",&t[i]);
+ t[i]=(4-t[i])%4;
+ a[i][9]=t[i];
+    }
+    for(int i=0;i<9;i++){
+ for(int j=i;j<9;j++){
+     if(a[j][i]!=0){
+  for(int t=0;t<10;t++) 
+      swap(a[i][t],a[j][t]);
+  break;
+     }
+ }
+        for(int j=0;j<9;j++){
+            if(j!=i && a[j][i]!=0){
+                int temp=lcm(a[j][i],a[i][i]);
+                int ta=temp/a[i][i],tb=temp/a[j][i];
+  for(int k=0;k<10;k++){
+      int res=a[j][k]*tb-a[i][k]*ta;
+      a[j][k]=(res%4+4)%4;
+  }
+            }
+ }
+    }
+    for(int i=0;i<9;i++){
+ while(a[i][9]%a[i][i]) a[i][9]+=4;
+ x[i]=(a[i][9]/a[i][i])%4;
+    }
+    int cnt=0;
+    for(int i=0;i<9;i++){
+ for(int j=0;j<x[i];j++){
+           ans[cnt++]=i+1;
+ }
+    }
+    for(int i=0;i<cnt;i++)
+ printf("%d%c",ans[i],i==cnt-1?'\n':' ');
+    return 0;
+}
+

@@ -1,0 +1,58 @@
+#include<cstdio>
+#include<cstring>
+#include<cctype>
+using namespace std;
+typedef struct Type_mat
+{
+    char name;
+    int row;
+    int col;
+}mattype;
+int main(void)
+{
+    int n,i,p,p1,p2,sum;
+    char s[100],stack2[100];
+    mattype mat[30],stack1[30];
+    bool flag;
+    scanf("%d\n",&n);
+    for(i=0;i<n;i++)
+        scanf("%c%d%d\n",&mat[i].name,&mat[i].row,&mat[i].col);
+    memset(s,'\0',sizeof(s));
+    memset(stack2,'\0',sizeof(stack2));
+    while(fgets(s,100,stdin)!=NULL)
+    {
+        p=p1=p2=0;
+        sum=0;
+        flag=true;
+        while(s[p]!='\n')
+        {
+            if(isalpha(s[p]))
+               stack1[p1++]=mat[s[p]-'A'];
+            if(s[p]=='(')
+               stack2[p2++]=s[p];
+            if(s[p]==')')
+            {
+               stack2[--p2]='\0';
+               p1--;
+               if(stack1[p1].row!=stack1[p1-1].col)
+               {
+                   flag=false;
+                   break;
+               }
+               else
+               {
+                   sum+=stack1[p1-1].row*stack1[p1].row*stack1[p1].col;
+                   stack1[p1-1].col=stack1[p1].col;
+               }
+            }
+            p++;
+        }
+        if(!flag)
+            printf("error\n");
+        else
+            printf("%d\n",sum);
+        memset(s,'\0',sizeof(s));
+        memset(stack2,'\0',sizeof(stack2));
+    }
+    return 0;
+}

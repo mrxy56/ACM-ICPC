@@ -1,0 +1,36 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<iostream>
+using namespace std;
+int main()
+{
+int n;char ch[100][100],h;int value[100]={0};
+while(scanf("%d",&n) && n!= 0)
+{
+     scanf("%c",&h);
+for(int i=1;i<=n;++i)
+gets(ch[i]);
+for(int i=1;i<=n;++i)
+{
+                value[i]=0;
+for(int j=1;j<=25;j++)
+{
+if(ch[i][j]=='X') value[i]++;
+}
+        }
+int m=0,blank=0;
+for(int i=1;i<=n;++i)
+{
+if(m<value[i])
+m=value[i];
+}
+for(int i=1;i<=n;++i)
+{
+blank+=m-value[i];
+}
+printf("%d\n",blank);
+}
+return 0;
+
+
+}

@@ -1,0 +1,33 @@
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+long long d[30010][12];
+int v[11]={10000,5000,2000,1000,500,200,100,50,20,10,5};
+long long dp(int num,int pre){
+    if(num<5) return -1<<63;
+    long long &ans=d[num][pre];
+    if(ans>0) return ans;
+    for(int i=pre;i<11;i++){
+       if(num>v[i]&&dp(num-v[i],i))
+          ans+=d[num-v[i]][i];
+       if(num==v[i])
+          ans+=1;
+    }
+    if(ans>0)
+    return ans;
+    else return 0;
+}
+int main()
+{
+    int num;
+    double temp;
+    memset(d,0,sizeof(d));
+    while(scanf("%lf",&temp)==1){
+        num=(int)(temp*100+0.5);
+        if(num==0) break;
+        else if(num<5) printf("%6.2lf%17d\n",temp,0);
+        else {printf("%6.2lf%17lld\n",temp,dp(num,0)>0?d[num][0]:0);}
+    }
+    return 0;
+}

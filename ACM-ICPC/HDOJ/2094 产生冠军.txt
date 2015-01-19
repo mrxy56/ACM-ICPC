@@ -1,0 +1,36 @@
+#include<iostream>
+#include<cstdio>
+#include<string>
+#include<set>
+using namespace std;
+string s1,s2;
+set<string>x;
+set<string>y;
+int n,ans,cnt;
+string a[1000];
+int main(){ 
+    while(scanf("%d",&n)==1&&n){
+		ans=cnt=0;
+		for(int i=0;i<n;i++){
+	      cin>>s1>>s2;
+		  if(!x.count(s1)){ 
+		    a[cnt++]=s1;
+		    x.insert(s1);
+		  }
+		  if(!x.count(s2)){ 
+		    a[cnt++]=s2;
+		    x.insert(s2);
+		  }
+		  if(!y.count(s2))
+		    y.insert(s2);
+		}
+	    for(int i=0;i<cnt;i++)
+		   if(!y.count(a[i]))
+			   ans++;
+		if(ans==1) printf("Yes\n");
+		else printf("No\n");
+                x.clear();
+		y.clear();
+	}
+	return 0;
+}

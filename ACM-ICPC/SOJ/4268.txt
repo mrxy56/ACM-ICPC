@@ -1,0 +1,38 @@
+#include <cstdio>
+#include <cmath>
+using namespace std;
+const double PI=4.0*atan(1.0);
+int main(void)
+{
+    double x1,x2,x3,y1,y2,y3,a1,b1,a2,b2,cos,angle;
+    int flag,n;
+    scanf("%d",&n);
+    while(n--)
+    {
+    scanf("%lf%lf%lf%lf%lf%lf",&x1,&y1,&x2,&y2,&x3,&y3);
+    flag=1;
+    a1=x2-x1;b1=y2-y1;
+    a2=x3-x2;b2=y3-y2;
+    cos=fabs((a1*a2+b1*b2)/((sqrt(a1*a1+b1*b1))*(sqrt(a2*a2+b2*b2))));
+    angle=acos(cos);
+    angle=(angle*180.0/PI);
+    if(fabs(angle)>25.0) flag=0;
+    if(x1>x2&&y1<y2)
+        if(x2-x3>50.0||y3-y2>50.0||x3>x2||y3<y2)
+           flag=0;
+    if(x1>x2&&y1>y2)
+        if(x2-x3>50.0||y2-y3>50.0||x3>x2||y3>y2)
+           flag=0;
+    if(x1<x2&&y1<y2)
+       if(x3-x2>50.0||y3-y2>50.0||x3<x2||y3<y2)
+           flag=0;
+    if(x1<x2&&y1>y2)
+       if(x3-x2>50.0||y2-y3>50.0||x3<x2||y3>y2)
+           flag=0;
+    if(flag)
+        printf("YES\n");
+    else
+        printf("NO\n");
+    }
+    return 0;
+}

@@ -1,0 +1,53 @@
+#include<cstdio>
+#include<cmath>
+#include<iostream>
+#define Abs(x) (x)<0?-(x):(x)
+using namespace std;
+long long gcd(long long a,long long b){
+	return b==0?a:gcd(b,a%b);
+}
+long long judge(long long x){
+	long long num=0;
+	while(x){
+		x/=10;
+		num++;
+	}
+	return num;
+}
+struct Fraction{
+	long long num,den;
+	Fraction(long long num=0,long long den=1){
+		if(den<0){
+			num=-num;
+			den=-den;
+		}
+		long long g=gcd(Abs(num),den);
+		this->num=num/g;
+		this->den=den/g;
+	}
+	Fraction operator + (const Fraction &o) const{
+		return Fraction(num*o.den+den*o.num,den*o.den);
+	}
+};
+int main(){
+	int n;
+	while(scanf("%d",&n)==1){
+         Fraction ans=Fraction(0,1);
+		 for(int i=1;i<=n;i++)
+			 ans=ans+Fraction(n,i);
+		 if(ans.den==1) cout<<ans.num<<endl;
+		 else{
+			 long long left=ans.num/ans.den,up=ans.num-left*ans.den;
+			 int len1=judge(up),len2=judge(ans.den),len3=judge(left);
+			 int len=max(len1,len2);
+			 for(int i=0;i<=len3;i++) printf(" ");
+			 cout<<up<<endl;
+			 cout<<left<<" ";
+			 for(int i=1;i<=len;i++) printf("-");
+			 cout<<endl;
+			 for(int i=0;i<=len3;i++) printf(" ");
+			 cout<<ans.den<<endl;
+		  }
+	}
+	return 0;
+}

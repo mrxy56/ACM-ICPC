@@ -1,0 +1,32 @@
+#include <stdio.h>
+int main(void)
+{
+    double p,x,h,u,d,f,temp,down;
+    int day;
+    while(scanf("%lf%lf%lf%lf",&h,&u,&d,&f)==4)
+    {
+        if(h==0) break;
+        day=1;
+        down=u*(((double)f)/100);
+        x=0.0;
+        while(1)
+        {
+            x+=u;
+            if(x>h)
+            {
+                printf("success on day %d\n",day);
+                break;
+            }
+            x-=d;
+            if(x<0.0)
+            {
+                printf("failure on day %d\n",day);
+                break;
+            }
+            u-=down;
+            if(u<0.0) u=0.0;
+            day++;
+        }
+    }
+    return 0;
+}

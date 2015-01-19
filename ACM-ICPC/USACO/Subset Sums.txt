@@ -1,0 +1,28 @@
+/*
+ID:mrxy564
+PROG:subset
+LANG:C++
+*/
+#include<cstdio>
+using namespace std;
+int n,all;
+long long dp[800];
+int main(){ 
+	freopen("subset.in","r",stdin);
+	freopen("subset.out","w",stdout);
+	scanf("%d",&n);
+    all=n*(n+1)/2;
+	if(all&1){ 
+	   printf("0\n");
+	   return 0;
+	}
+	else{ 
+	   all/=2;
+	   dp[0]=1;
+	   for(int i=1;i<=n;i++)
+           for(int j=all;j>=i;j--)
+		       dp[j]+=dp[j-i];
+	   printf("%lld\n",dp[all]/2);
+	}
+	return 0;
+}

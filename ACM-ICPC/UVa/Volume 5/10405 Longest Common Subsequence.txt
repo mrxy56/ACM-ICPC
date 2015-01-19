@@ -1,0 +1,33 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+int d[1010][1010];
+char a[1010],b[1010];
+int dp(int i,int j){
+    if(i<0||j<0) return 0;
+    int &ans=d[i][j];
+    if(ans>0)return ans;//需要斟酌，是>=0还是>0.
+    if(a[i]==b[j])
+    {
+        ans=max(ans,dp(i-1,j-1)+1);
+    }
+    else ans=max(ans,max(dp(i,j-1),dp(i-1,j)));
+    return ans;
+}
+int main(){
+    int len1,len2;
+    memset(a,'\0',sizeof(a));
+    memset(b,'\0',sizeof(b));
+    while(fgets(a,1010,stdin)!=NULL){
+        fgets(b,1010,stdin);
+        if(a[0]=='\n') {printf("0\n");continue;}
+        memset(d,0,sizeof(d));//赋值为-1是否更好？
+        len1=strlen(a);
+        len2=strlen(b);
+        printf("%d\n",dp(len1-2,len2-2));
+        memset(a,'\0',sizeof(a));
+        memset(b,'\0',sizeof(b));
+    }
+    return 0;
+}

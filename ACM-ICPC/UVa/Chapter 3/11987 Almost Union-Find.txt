@@ -1,0 +1,62 @@
+#include<cstdio>
+using namespace std;
+int n,m,cmd,p,q,pointer;
+int fa[200010],now[100010],num[100010],sum[100010];
+int find(int x){
+    return fa[x]==x?x:fa[x]=find(fa[x]);
+}
+void Union(int p,int q){
+    int fp,fq;
+    fp=find(now[p]);
+    fq=find(now[q]);
+    if(fp==fq) return;
+    else{
+       num[fp]+=num[fq];
+       sum[fp]+=sum[fq];
+       fa[fq]=fp;
+    }
+}
+void Move(int p,int q){
+    int fp,fq;
+    fp=find(now[p]);
+    fq=find(now[q]);
+    if(fp==fq) return;
+    else{
+       num[fp]-=1;
+       sum[fp]-=p;
+       num[fq]+=1;
+       sum[fq]+=p;
+       now[p]=++pointer;
+       fa[pointer]=fq;
+    }
+}
+void Print(int p){
+    printf("%d %d\n",num[find(now[p])],sum[find(now[p])]);
+}
+int main(){
+    while(scanf("%d%d",&n,&m)==2){
+        for(int i=1;i<=n;i++){
+            now[i]=fa[i]=sum[i]=i;
+            num[i]=1;
+        }
+        pointer=n;
+        for(int i=0;i<m;i++){
+            scanf("%d",&cmd);
+            switch(cmd){
+                case 1:
+                   scanf("%d%d",&p,&q);
+                   Union(p,q);
+                break;
+                case 2:
+                   scanf("%d%d",&p,&q);
+                   Move(p,q);
+                break;
+                case 3:
+                   scanf("%d",&p);
+                   Print(p);
+                break;
+            }
+        }
+    }
+    return 0;
+}

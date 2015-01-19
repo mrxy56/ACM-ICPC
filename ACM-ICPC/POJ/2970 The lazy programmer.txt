@@ -1,0 +1,64 @@
+#include<cstdio>
+#include<utility>
+#include<queue>
+#include<algorithm>
+#include<cmath>
+using namespace std;
+const double EPS=1e-7;
+int dcmp(double a,double b){ 
+    if(abs(a-b)<EPS) return 0;
+	if(a>b) return 1;
+	else return -1;
+}
+struct Dat{ 
+    int a,b,d;
+    double c;
+    bool operator <(const Dat&rhs) const{
+         return a<rhs.a;
+    }
+    Dat(){c=0;}
+	Dat(int x,int y,int z){ 
+	    a=x;b=y;d=z;c=0;
+	}
+};
+bool cmp(const Dat&a,const Dat&b){
+     return a.d<b.d;
+}
+priority_queue<Dat> que;
+int n;
+Dat t[150000];
+int main(){ 
+    while(scanf("%d",&n)==1){
+	    while(!que.empty()) que.pop();
+	    for(int i=0;i<n;i++){
+	         scanf("%d%d%d",&t[i].a,&t[i].b,&t[i].d);
+                 t[i].c=0;
+            }
+            sort(t,t+n,cmp); 
+			double sum=0;
+			double T=0;
+            for(int i=0;i<n;i++){
+				 que.push(t[i]);
+                 T+=(double)t[i].b;
+                 while(dcmp(T,(double)t[i].d)>0){ 
+			    Dat pt=que.top();
+                            que.pop();
+                            double x=(T-(double)t[i].d)/(double)pt.a;
+				 if(dcmp((double)pt.b/(double)pt.a,pt.c+x)>0){ 
+				          pt.c+=x;
+					  sum+=x;
+					  T-=x*(double)pt.a;
+					  que.push(pt);
+					  break;
+				 }else{ 
+                                       x=(double)pt.b/(double)pt.a-pt.c;
+                                       pt.c+=x;
+                                       sum+=x;
+									   T-=x*(double)pt.a;
+				 }
+			}
+		}
+		printf("%.2f\n",sum);
+	}
+	return 0;
+}

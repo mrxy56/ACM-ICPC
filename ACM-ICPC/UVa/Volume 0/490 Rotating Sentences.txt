@@ -1,0 +1,24 @@
+#include<stdio.h>
+#include<string.h>
+ char s[200][200]={""};
+
+int main(void)
+{
+   
+	int i=0,j,k,max=0;
+	while(gets(s[i++]));
+	for(j=0;j<i;j++)
+		if(strlen(s[j])>max)
+			max=strlen(s[j]);
+	for(k=0;k<max;k++)
+	{
+	   for(j=i-2;j>=0;j--)
+		   if(s[j][k]=='\0')
+			   printf(" ");//\0是非法的，虽然输出看不出来，但与space毕竟不同。
+		   else
+		   printf("%c",s[j][k]);
+	   printf("\n");
+	}
+	return 0;
+}
+			

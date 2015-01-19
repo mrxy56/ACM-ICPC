@@ -1,0 +1,15 @@
+#include<cstdio>
+using namespace std;
+void generate(int n){
+	if(n==1) {printf("A");return;}
+    generate(n-1);
+	printf("%c",'A'+n-1);
+	generate(n-1);
+}
+int main(){
+	int n;
+	scanf("%d",&n);
+	generate(n);
+    printf("\n");
+	return 0;
+}

@@ -1,0 +1,30 @@
+#include<cstdio>
+#include<cstring>
+int flag[1000000];
+int main(){
+   int a,b;
+   bool judge;
+   for(int i=0;i<=1000000;i++){
+          judge=true;
+          int x = i; 
+          while (x){
+            if ((x % 10 == 4) || (x % 100 == 62))
+            {
+                flag[i]=i==0?1:flag[i-1];
+                judge=false;
+                break;
+            }
+            x /= 10;
+          }
+          if(judge)
+             flag[i]=i==0?1:flag[i-1]+1;
+   }
+   while(scanf("%d%d",&a,&b)==2){
+       if(a==0&&b==0) break;
+	   if(a>0)
+              printf("%d\n",flag[b]-flag[a-1]);
+	   else 
+	      printf("%d\n",flag[b]);
+   }
+   return 0;
+}   

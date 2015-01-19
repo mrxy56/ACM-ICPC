@@ -1,0 +1,32 @@
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+int x1,y1,x2,y2,T,d,temp,ans;
+struct point{
+   int x,y;
+   bool operator < (const point &obj) const{
+       return (x-x1)*(x-x1)+(y-y1)*(y-y1)<(obj.x-x1)*(obj.x-x1)+(obj.y-y1)*(obj.y-y1);
+   }
+};
+point a[100010];
+int main(){
+    freopen("missile.in","r",stdin);
+    freopen("missile.out","w",stdout);
+    while(scanf("%d%d%d%d",&x1,&y1,&x2,&y2)==4){
+        scanf("%d",&T);
+        for(int i=1;i<=T;i++){
+            scanf("%d%d",&a[i].x,&a[i].y);
+        }
+        sort(a+1,a+1+T);
+        a[0].x=x1;a[0].y=y1;
+        temp=0;
+        ans=(a[T].x-x1)*(a[T].x-x1)+(a[T].y-y1)*(a[T].y-y1);
+        for(int i=T;i>0;i--){
+             d=(a[i-1].x-x1)*(a[i-1].x-x1)+(a[i-1].y-y1)*(a[i-1].y-y1);
+             temp=max(temp,(a[i].x-x2)*(a[i].x-x2)+(a[i].y-y2)*(a[i].y-y2));
+             ans=min(ans,temp+d);
+        }
+        printf("%d\n",ans);
+    }
+    return 0;
+}

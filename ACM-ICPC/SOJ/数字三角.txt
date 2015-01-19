@@ -1,0 +1,41 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+int a[105][105],d[105][105],ans[105][105];
+int n;
+int dp(int i,int j){ 
+    int &answer=d[i][j];
+	if(answer>=0) return answer;
+	if(i<n-1){ 
+       if(dp(i+1,j)>=dp(i+1,j+1)){
+		   answer=d[i+1][j]+a[i][j];
+		   ans[i][j]=j;
+	   }
+	   else{
+		   answer=d[i+1][j+1]+a[i][j];
+		   ans[i][j]=j+1;
+	   }
+	}
+	else
+	   answer=a[i][j];
+	return answer;
+}
+int main(){ 
+   while(scanf("%d",&n)==1){ 
+       for(int i=0;i<n;i++)
+		   for(int j=0;j<=i;j++)
+			   scanf("%d",&a[i][j]);
+	   memset(d,-1,sizeof(d));
+	   printf("%d\n",dp(0,0));
+	   printf("%d",a[0][0]);
+	   int temp=0;
+	   for(int i=0;i<n-1;i++){
+		   int j=ans[i][temp];
+		   printf(" %d",a[i+1][j]);
+		   temp=j;
+		}
+	   printf("\n");
+   }
+   return 0;
+}

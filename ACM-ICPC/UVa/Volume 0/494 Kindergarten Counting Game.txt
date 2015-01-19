@@ -1,0 +1,24 @@
+#include<stdio.h>
+#include<string.h>
+#include<ctype.h>
+int main(void)
+{
+	int ch,sum=0,len,i,flag=1;
+	while((ch=getchar())!=EOF)
+	{
+		if(ch=='\n')
+		{
+			printf("%d\n",sum);
+			sum=0;
+		}
+        if(isalpha(ch)&&flag)
+		{
+			sum++;
+			flag=0;
+		}
+		if(!isalpha(ch))
+			flag=1;
+	}
+	return 0;
+
+}

@@ -1,0 +1,43 @@
+#include<cstdio>
+#include<queue>
+#include<algorithm>
+using namespace std;
+const int maxn=760;
+int A[maxn],B[maxn];
+struct Item{
+   int s,b;
+   Item(int s,int b):s(s),b(b){}
+   bool operator<(const Item& rhs) const{
+       return s>rhs.s;
+   }
+};
+void merge(int *A,int *B,int *C,int n){
+   priority_queue<Item> q;
+   for(int i=0;i<n;i++)
+      q.push(Item(A[i]+B[0],0));
+   for(int i=0;i<n;i++){
+       Item item=q.top();q.pop();
+       C[i]=item.s;
+       int b=item.b;
+       if(b+1<n) q.push(Item(item.s-B[b]+B[b+1],b+1));
+   }
+}
+int main(){
+   int n;
+   while(scanf("%d",&n)==1){
+       for(int j=0;j<n;j++)
+           scanf("%d",&A[j]);
+       sort(A,A+n);
+       for(int i=1;i<n;i++){
+       for(int j=0;j<n;j++)
+           scanf("%d",&B[j]);
+          sort(B,B+n);
+          merge(A,B,A,n);
+       }
+        printf("%d",A[0]);
+       for(int i=1;i<n;i++)
+        printf(" %d",A[i]);
+       printf("\n");
+   }
+   return 0;
+}

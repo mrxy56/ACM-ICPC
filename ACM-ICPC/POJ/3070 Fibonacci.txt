@@ -1,0 +1,77 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+const int MAXN=2;
+const int MAXM=2;
+struct Matrix{ 
+    int n,m;
+	int a[MAXN][MAXM];
+	void clear(){
+		n=m=0;
+		memset(a,0,sizeof(a));
+	}
+	Matrix operator + (const Matrix &b) const{ 
+	    Matrix temp;
+		temp.n=n;temp.m=m;
+		for(int i=0;i<n;i++)
+			for(int j=0;j<m;j++)
+				temp.a[i][j]=a[i][j]+b.a[i][j];
+		return temp;
+	}
+	Matrix operator - (const Matrix &b) const{ 
+	    Matrix temp;
+		temp.n=n;temp.m=m;
+		for(int i=0;i<n;i++)
+			for(int j=0;j<m;j++)
+				temp.a[i][j]=a[i][j]-b.a[i][j];
+		return temp;
+	}
+	Matrix operator * (const Matrix &b) const{ 
+	    Matrix temp;
+		temp.clear();
+		temp.n=n;temp.m=b.m;
+		for(int i=0;i<n;i++)
+			for(int j=0;j<b.m;j++)
+				for(int k=0;k<m;k++)
+					temp.a[i][j]+=a[i][k]*b.a[k][j];
+		return temp;
+	}
+	Matrix operator % (const int mod) const{ 
+	    Matrix temp;
+		temp.n=n;temp.m=m;
+		for(int i=0;i<n;i++)
+			for(int j=0;j<m;j++)
+				temp.a[i][j]=a[i][j]%mod;
+		return temp;
+	}
+};
+Matrix pow_mod(Matrix A,int i,int mod){ 
+    if(i==0){ 
+	   Matrix u;
+	   u.clear();
+	   u.n=MAXN;u.m=MAXM;
+	   u.a[0][0]=u.a[1][1]=1%mod;
+	   return u;
+	}
+	Matrix temp=pow_mod(A,i>>1,mod);
+	temp=temp*temp%mod;
+	if(i&1) temp=temp*A%mod;
+	return temp;
+}
+Matrix A,An,X;
+int main(){ 
+	int n;
+    A.n=MAXN;A.m=MAXM;
+	A.a[0][0]=0;
+	A.a[0][1]=A.a[1][0]=A.a[1][1]=1;
+	while(scanf("%d",&n)==1){ 
+	    if(n==-1) break;
+        An=pow_mod(A,n,10000);
+        Matrix X;
+		X.n=MAXN;X.m=1;
+		X.a[0][0]=0;X.a[1][0]=1;
+		X=An*X;
+		printf("%d\n",X.a[0][0]);
+	}
+	return 0;
+}

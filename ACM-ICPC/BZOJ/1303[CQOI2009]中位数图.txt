@@ -1,0 +1,30 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+const int maxn=100010;
+int n,b,temp;
+long long ans;
+int a[maxn],c[maxn*2];
+int main(){ 
+   scanf("%d%d",&n,&b);
+   for(int i=0;i<n;i++){
+	   scanf("%d",&a[i]);
+	   if(a[i]==b) temp=i;
+   }
+   ans=0;
+   memset(c,0,sizeof(c));
+   int x=0,y=0;
+   for(int i=temp;i<n;i++){ 
+      if(a[i]>b) x++;
+	  else if(a[i]<b) y++;
+		 c[x-y+maxn]++;
+   }
+   x=0;y=0;
+   for(int i=temp;i>=0;i--){ 
+	 if(a[i]>b) x++;
+	 else if(a[i]<b) y++;
+    	ans+=c[y-x+maxn];
+   }
+    printf("%lld\n",ans);
+    return 0;
+}

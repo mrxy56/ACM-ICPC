@@ -1,0 +1,39 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+int v[1010],w[1010],d[1010][35],vis[1010];
+int dp(int n,int mw){
+    int &ans=d[n][mw];
+    if(ans>=0) return ans;
+    ans=0;
+    for(int i=n-1;i>=0;i--){
+       if(!vis[i]&&mw>=w[i]){
+           vis[i]=1;
+           ans=max(ans,dp(i,mw-w[i])+v[i]);
+           vis[i]=0;
+       }
+    }
+    return ans;
+}
+int main(){
+   //freopen("a.txt","r",stdin);
+   int T,n,k,mw,ans;
+   scanf("%d",&T);
+   while(T--){
+      ans=0;
+      memset(d,-1,sizeof(d));
+      scanf("%d",&n);
+      for(int i=0;i<n;i++){
+         scanf("%d%d",&v[i],&w[i]);
+      }
+      scanf("%d",&k);
+      for(int i=0;i<k;i++){
+         scanf("%d",&mw);
+         memset(vis,0,sizeof(vis));
+         ans+=dp(n,mw);
+      }
+      printf("%d\n",ans);
+   }
+   return 0;
+}

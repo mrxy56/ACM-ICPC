@@ -1,0 +1,61 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+int a[40][15],G[40][40],d[40],path[40];
+int k,n,maxn,maxi;
+bool is_smaller(int *a,int *b){
+    for(int i=0;i<n;i++)
+       if(a[i]>=b[i]) return false;
+    return true;
+}
+void init(){
+      memset(a,0,sizeof(a));
+      memset(G,0,sizeof(G));
+      memset(d,0,sizeof(d));
+      for(int i=0;i<k;i++)
+        for(int j=0;j<n;j++)
+            scanf("%d",&a[i][j]);
+      for(int i=0;i<k;i++)
+            sort(a[i],a[i]+n);
+      for(int i=0;i<k;i++)
+        for(int j=0;j<k;j++)
+            if(i!=j&&is_smaller(a[i],a[j]))
+                G[i][j]=1;
+}
+int dp(int i){
+    int &ans=d[i];
+    if(ans>0)return ans;
+    ans=1;
+    for(int j=0;j<k;j++)
+      if(G[i][j]) ans=max(ans,dp(j)+1);
+    return ans;
+}
+void print_ans(int i){
+    printf("%d ",i+1);
+    for(int j=0;j<k;j++) if(G[i][j]&&path[i]==path[j]+1){
+        print_ans(j);
+        break;
+    }
+}
+int main(){
+   //freopen("a.txt","r",stdin);
+   while(scanf("%d%d",&k,&n)==2){
+       init();
+       maxn=0;maxi=0;
+       memset(path,0,sizeof(path));
+       for(int i=0;i<k;i++){
+           memset(d,0,sizeof(d));
+           dp(i);
+           if(d[i]>maxn){
+               maxn=d[i];
+               maxi=i;
+               memcpy(path,d,sizeof(path));
+           }
+       }
+       printf("%d\n",maxn);
+       print_ans(maxi);
+       printf("\n");
+      }
+   return 0;
+}

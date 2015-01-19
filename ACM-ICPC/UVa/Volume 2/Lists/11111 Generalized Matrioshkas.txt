@@ -1,0 +1,76 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+int main(void)
+{
+    char s[30000];
+    char*p;
+    int a[30000],stack[30000],temp[30000],i,n,count,top,num;
+    bool flag;
+    memset(s,'\0',sizeof(s));
+    memset(a,0,sizeof(a));
+    memset(stack,0,sizeof(stack));
+    memset(temp,0,sizeof(temp));
+    while(fgets(s,30000,stdin)!=NULL)
+    {
+        count=0;top=-1;flag=true;num=0;
+        p=s;
+        while(sscanf(p,"%d%n",&a[count++],&n)==1)
+        {
+            p+=n;
+        }
+        count--;
+        if(count%2==1)
+        {
+            printf(":-( Try again.\n");
+            memset(s,'\0',sizeof(s));
+            memset(a,0,sizeof(a));
+            continue;
+        }
+        for(i=0;i<count;i++)
+        {
+            if(a[i]<0)
+               num--;
+            if(a[i]>0)
+               num++;
+            if(num==0&&i!=count-1)
+            {
+                flag=false;
+                break;
+            }
+        }
+        for(i=0;i<count;i++)
+        {
+            if(a[i]<0)
+            {
+                top++;
+                stack[top]=a[i];
+                temp[top]+=a[i]*(-1);
+            }
+            if(a[i]>0)
+            {
+                if(a[i]==(-stack[top])&&a[i]>temp[top+1])
+                {
+                     stack[top]=0;
+                     temp[top+1]=0;
+                     top--;
+                }
+                else
+                {
+                    flag=false;
+                    break;
+                }
+
+            }
+        }
+        if(flag&&top==-1)
+            printf(":-) Matrioshka!\n");
+        else
+            printf(":-( Try again.\n");
+        memset(s,'\0',sizeof(s));
+        memset(a,0,sizeof(a));
+        memset(stack,0,sizeof(stack));
+        memset(temp,0,sizeof(temp));
+    }
+    return 0;
+}

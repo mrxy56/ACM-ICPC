@@ -1,0 +1,32 @@
+#include<cstdio>
+#include<cmath>
+using namespace std;
+double Rm,R,r,x,y,vx,vy;
+int main(){ 
+    while(scanf("%lf%lf%lf%lf%lf%lf%lf",&Rm,&R,&r,&x,&y,&vx,&vy)==7){ 
+	     double a=vx*vx+vy*vy;
+		 double b=2*(vx*x+vy*y);
+		 double c=x*x+y*y-(R+r)*(R+r);
+		 double delta=b*b-4*a*c;
+		 if(delta<0||a==0){ 
+		      printf("0.000\n");
+			  continue;
+		 }
+		 double t1=(-b+sqrt(delta))/(2*a),t2=(-b-sqrt(delta))/(2*a);
+		 if(t2>=0){ 
+		      c=x*x+y*y-(Rm+r)*(Rm+r);
+			  double delta1=b*b-4*a*c;
+			  if(delta1<=0){ 
+			       printf("%.3lf\n",t1-t2);
+				   continue;
+			  }else{ 
+			       double t3=(-b-sqrt(delta1))/(2*a);
+				   printf("%.3lf\n",2*(t3-t2));
+				   continue;
+			  }
+		 }else{ 
+		      printf("0.000\n");
+		 }
+	}
+	return 0;
+}

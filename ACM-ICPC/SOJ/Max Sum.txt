@@ -1,0 +1,44 @@
+#include<cstdio>
+#include<cctype>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+int a[100010],b[100010],d[100010];
+int dp(int n){ 
+    int &ans=d[n];
+    if(ans>=0) return ans;
+	if(dp(n-1)>=0){ 
+	   ans=a[n]+d[n-1];
+	   b[n]=b[n-1];
+	}
+	else{
+       ans=a[n];
+	   b[n]=n;
+	}
+	return ans;
+}
+int main(){ 
+	//freopen("a.txt","r",stdin);
+    int T,n;
+	scanf("%d",&T);b[0]=1;
+	for(int j=1;j<=T;j++){ 
+	   scanf("%d",&n);
+	   if(j>1) printf("\n");
+	   for(int i=1;i<=n;i++)
+		  scanf("%d",&a[i]);
+	   int ans,tempi=1;
+	   memset(d,-1,sizeof(d));
+	   d[0]=0;
+	   dp(n);
+	   ans=d[1];
+	   for(int i=1;i<=n;i++){ 
+	      if(d[i]>ans){
+			  ans=d[i];
+			  tempi=i;
+		  }
+	   }
+	   printf("Case %d:\n",j);
+	   printf("%d %d %d\n",ans,b[tempi],tempi);
+	}
+	return 0;
+}

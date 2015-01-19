@@ -1,0 +1,18 @@
+#include <stdio.h>
+#include <math.h>
+const double pi=atan(1)*4;
+int main(void)
+{
+    int a,b,s,m,n;
+    double dis,angle;
+    while(scanf("%d%d%d%d%d",&a,&b,&s,&m,&n)==5)
+    {
+        if(a==0&&b==0&&s==0&&m==0&&n==0) break;
+        dis=sqrt((double)(a*m)*(double)(a*m)+(double)(b*n)*(double)(b*n));
+        dis/=s;
+        angle=atan((double)b*n/(a*m));
+        angle=angle/pi*180;
+        printf("%.2lf %.2lf\n",angle,dis);
+    }
+    return 0;
+}

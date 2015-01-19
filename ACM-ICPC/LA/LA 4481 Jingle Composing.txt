@@ -1,0 +1,23 @@
+#include<cstdio>
+#include<map>
+using namespace std;
+char s[300];
+map<char,int> p;
+int main(){
+    p['W']=64;p['H']=32;p['Q']=16;p['E']=8;p['S']=4;p['T']=2;p['X']=1;
+    while(fgets(s,300,stdin)!=NULL){
+         if(s[0]=='*') break;
+         int i=0,cnt=0,ans=0;
+         while(s[i]!='\n'){
+             if(s[i]=='/'){
+                 if(ans==64) cnt++;
+                 ans=0;
+             }
+             else ans+=p[s[i]];
+             i++;
+         }
+         printf("%d\n",cnt);
+    }
+    return 0;
+}
+

@@ -1,0 +1,57 @@
+/*
+ID:mrxy564
+PROG:ariprog
+LANG:C++
+*/
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<cmath>
+using namespace std;
+struct ARI{
+    int a,b;
+    bool operator <(const ARI &obj) const{
+         return b<obj.b||b==obj.b&&a<obj.a;
+    }
+}ans[10010];
+int a[180000],list[180000];
+int main(){
+    freopen("ariprog.in","r",stdin);
+    freopen("ariprog.out","w",stdout);
+    int n,m,cnt=0,minus;
+    bool flag;
+    scanf("%d%d",&n,&m);
+    memset(a,0,sizeof(a));
+    for(int i=0;i<=m;i++)
+       for(int j=0;j<=m;j++)
+          a[i*i+j*j]=1;
+    for(int i=0;i<=2*m*m;i++){
+        if(a[i]) list[cnt++]=i;
+    }
+    int num=0;
+    for(int i=0;i<cnt;i++){
+       for(int j=i+1;j<cnt;j++){
+           minus=list[j]-list[i];flag=true;
+           for(int k=n-1;k>=1;k--)
+              if(list[i]+minus*k<=2*m*m){
+                   if(!a[list[i]+minus*k]){
+                       flag=false;
+                       break;
+                   }
+              }
+              else{flag=false;break;}
+              if(flag){
+                    ans[num].a=list[i];
+                    ans[num].b=minus;
+                    num++;
+            }
+       }
+    }
+    if(num==0) printf("NONE\n");
+    else{
+        sort(ans,ans+num);
+        for(int i=0;i<num;i++)
+           printf("%d %d\n",ans[i].a,ans[i].b);
+    }
+    return 0;
+}

@@ -1,0 +1,46 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+int a[100010],pos[100010],maxpos[400010],p,v,ql,qr;
+void update(int o,int L,int R){
+    int M=L+(R-L)/2;
+    if(L==R) maxpos[o]=v;
+    else{
+       if(p<=M) update(o*2,L,M);else update(o*2+1,M+1,R);
+       maxpos[o]=max(maxpos[o*2],maxpos[o*2+1]);
+    }
+}
+int query(int o,int L,int R){
+    int M=L+(R-L)/2,ans=0;
+    if(ql<=L&&R<=qr) return maxpos[o];
+    if(ql<=M) ans=max(ans,query(o*2,L,M));
+    if(M<qr) ans=max(ans,query(o*2+1,M+1,R));
+    return ans;
+}
+int main()
+{
+    int n,q,temp;
+    while(scanf("%d%d",&n,&q)==2){
+        memset(a,0,sizeof(a));
+        memset(pos,0,sizeof(pos));
+        for(int i=1;i<=n;i++){
+           scanf("%d",&temp);
+           if(pos[temp]==0) pos[temp]=i;
+           else {a[i]=pos[temp];pos[temp]=i;}
+        }
+        for(int i=1;i<=n;i++){
+           p=i;v=a[i];
+           update(1,1,n);
+        }
+        for(int i=0;i<q;i++){
+           scanf("%d%d",&ql,&qr);
+           temp=query(1,1,n);
+           if(temp>=ql&&temp<=qr)
+               printf("No\n");
+           else
+               printf("Yes\n");
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,37 @@
+#include<stdio.h>
+#include<ctype.h>
+#include<stdlib.h>
+#include<string.h>
+char a[300]="",s[100000][300]={""};
+int ch,i=0,j=0;
+int cmp_string(void*_a,void*_b);
+int main(void)
+{
+   /*freopen("a.txt","r",stdin);*/
+    while((ch=getchar())!=EOF)
+    {
+        ch=tolower(ch);
+        if(!isalpha(ch))
+        {
+            a[j]='\0';
+            if(a[0]!='\0')
+             strcpy(s[i++],a);
+             memset(a,'\0',sizeof(a));
+            j=0;
+        }
+        else
+            a[j++]=(char)ch;
+    }
+    qsort(s,i,sizeof(s[0]),cmp_string);
+    printf("%s\n",s[0]);
+    for(j=1;j<i;j++)
+      if(strcmp(s[j],s[j-1])!=0)
+          printf("%s\n",s[j]);
+    return 0;
+}
+int cmp_string(void*_a,void*_b)
+{
+    char*a=(char*)_a;
+    char*b=(char*)_b;
+    return strcmp(a,b);
+}

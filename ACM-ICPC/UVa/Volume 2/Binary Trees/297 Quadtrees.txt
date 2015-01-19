@@ -1,0 +1,127 @@
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+using namespace std;
+typedef struct Tnode{
+   int v;
+   struct Tnode*son[4];
+}Node;
+Node*root;
+int num,p;
+Node*newnode(){
+   Node*u=(Node*)malloc(sizeof(Node));
+   if(u!=NULL)
+      for(int i=0;i<4;i++)
+        u->son[i]=NULL;
+   return u;
+}
+void addnode(Node*Troot,char*s){
+   int n=strlen(s);
+   Node*u=Troot;
+   u->v=1;
+   if(p<=n-1){
+        for(int i=0;i<4;i++){
+            p++;if(p>=n)break;
+            if(s[p]=='p'){
+                u->son[i]=newnode();
+                u=u->son[i];
+                addnode(u,s);
+                u=Troot;
+                continue;
+            }
+            else if(s[p]=='e'){
+                u->son[i]=newnode();
+                u->son[i]->v=1;
+                continue;
+            }
+            else if(s[p]=='f'){
+                u->son[i]=newnode();
+                u->son[i]->v=2;
+                continue;
+            }
+        }
+   }
+   return;
+}
+void changenode(Node*Troot,char*s){
+   int n=strlen(s);
+   Node*u=Troot;
+   if(p<=n-1){
+        if(s[p]!='f')
+         u->v=1;
+        else{
+         u->v=2;
+         return;
+        }
+        for(int i=0;i<4;i++){
+            p++;if(p>=n)break;
+            if(s[p]=='p'){
+              if(u->son[i]==NULL){
+                u->son[i]=newnode();
+                u=u->son[i];
+                addnode(u,s);
+                u=Troot;
+              }
+              else{
+                u=u->son[i];
+                changenode(u,s);
+                u=Troot;
+              }
+            }
+            else if(s[p]=='e'){
+              if(u->son[i]==NULL){
+                u->son[i]=newnode();
+                u->son[i]->v=1;
+              }
+            }
+            else if(s[p]=='f'){
+              if(u->son[i]==NULL){
+                u->son[i]=newnode();
+                u->son[i]->v=2;
+              }
+              else
+                u->son[i]->v=2;
+            }
+        }
+   }
+   return;
+}
+int bfs(){
+  int front=0,rear=1,num=1024,ans=0;
+  Node*q[1500];
+  int value[1500];
+  q[0]=root;value[0]=num;
+  while(front<rear)
+  {
+      Node*u=q[front++];
+      if(u->v==2) ans+=value[front-1];
+      else if(u->v==1){
+         for(int i=0;i<4;i++)
+           if(u->son[i]!=NULL){
+               q[rear++]=u->son[i];
+               value[rear-1]=value[front-1]/4;
+           }
+      }
+  }
+  return ans;
+}
+int main()
+{
+    char s1[1500],s2[1500];
+    int n;
+    memset(s1,'\0',sizeof(s1));
+    memset(s2,'\0',sizeof(s2));
+    scanf("%d",&n);
+    for(int i=0;i<n;i++){
+       scanf("%s%s",s1,s2);
+       root=newnode();
+       p=0;
+       addnode(root,s1);
+       p=0;
+       changenode(root,s2);
+       printf("There are %d black pixels.\n",bfs());
+       memset(s1,'\0',sizeof(s1));
+       memset(s2,'\0',sizeof(s2));
+    }
+    return 0;
+}

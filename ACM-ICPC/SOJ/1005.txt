@@ -1,0 +1,42 @@
+#include<stdio.h>
+int n,i,j,t,ave=0,sum=0,ans=0;
+int a[1000]={0};
+int main(void)
+{
+	scanf("%d",&n);
+	for(i=1;i<=n;i++)
+	{
+		scanf("%d",&t);
+		for(j=1;j<=t;j++)
+		{
+			scanf("%d",&a[j]);
+			sum+=a[j];
+		}
+		ave=sum/t;
+		for(j=1;j<=t;j++)
+		{
+			if(a[j]==ave)
+				continue;
+			if(a[j]>ave)
+			{
+				a[j+1]+=a[j]-ave;
+				a[j]=ave;
+				ans++;
+			}
+			if(a[j]<ave)
+			{
+				a[j+1]-=ave-a[j];
+				a[j]=ave;
+				ans++;
+			}
+		}
+
+		printf("%d\n",ans);
+	    ave=0;
+		sum=0;
+		ans=0;
+		for(j=1;j<=t;j++)
+			a[j]=0;
+	}
+	return 0;
+}

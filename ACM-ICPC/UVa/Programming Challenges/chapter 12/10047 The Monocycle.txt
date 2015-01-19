@@ -1,0 +1,88 @@
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+int m,n,bx,by,ex,ey;
+char a[30][30];
+int vis[30][30][4][5];
+int q[40000];
+int q_dir[4000];
+int q_color[40000];
+int time[40000];
+int dx[4]={-1,0,1,0};
+int dy[4]={0,1,0,-1};
+int bfs(int x,int y){
+    int front=0,rear=0,d,u,mind=2147483647,di,co,nx,ny;
+    u=x*n+y;
+    vis[x][y][0][0]=1;time[front]=0;q_dir[front]=0;q_color[front]=0;
+    q[rear++]=u;
+    while(front<rear){
+       u=q[front++];
+       x=u/n;y=u%n;
+       nx=x+dx[q_dir[front-1]];ny=y+dy[q_dir[front-1]];
+       di=q_dir[front-1];co=(q_color[front-1]+1)%5;
+       if(nx>=0&&nx<m&&ny>=0&&ny<n&&a[nx][ny]!='#'&&!vis[nx][ny][di][co]){
+             int v=nx*n+ny;
+             q[rear++]=v;
+             vis[nx][ny][di][co]=1;
+             q_dir[rear-1]=di;
+             q_color[rear-1]=co;
+             time[rear-1]=time[front-1]+1;
+             if(nx==ex&&ny==ey&&q_color[rear-1]==0)
+                mind=min(mind,time[rear-1]);
+       }
+       nx=x;ny=y;
+       di=(q_dir[front-1]-1+4)%4;co=q_color[front-1];
+       if(a[nx][ny]!='#'&&!vis[nx][ny][di][co]){
+             int v=nx*n+ny;
+             q[rear++]=v;
+             vis[nx][ny][di][co]=1;
+             q_dir[rear-1]=di;
+             q_color[rear-1]=co;
+             time[rear-1]=time[front-1]+1;
+       }
+       nx=x;ny=y;
+       di=(q_dir[front-1]+1)%4;co=q_color[front-1];
+       if(a[nx][ny]!='#'&&!vis[nx][ny][di][co]){
+             int v=nx*n+ny;
+             q[rear++]=v;
+             vis[nx][ny][di][co]=1;
+             q_dir[rear-1]=di;
+             q_color[rear-1]=co;
+             time[rear-1]=time[front-1]+1;
+       }
+    }
+    if(mind!=2147483647) return mind;
+    else return -1;
+}
+int main()
+{
+   //freopen("a.txt","r",stdin);
+   bool flag=false;
+   int ans,count=0;
+   while(scanf("%d%d",&m,&n)==2){
+        if(!m&&!n) break;
+        getchar();
+        memset(vis,0,sizeof(vis));
+        for(int i=0;i<m;i++){
+          for(int j=0;j<n;j++){
+             scanf("%c",&a[i][j]);
+             if(a[i][j]=='S'){bx=i;by=j;}
+             if(a[i][j]=='T'){ex=i;ey=j;}
+          }
+          getchar();
+        }
+        if(flag)
+          printf("\n");
+        printf("Case #%d\n",++count);
+        ans=bfs(bx,by);
+        if(ans==-1)
+          printf("destination not reachable\n");
+        else
+          printf("minimum time = %d sec\n",ans);
+        flag=true;
+    }
+    //system("PAUSE");
+    return 0;
+}

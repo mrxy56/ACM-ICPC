@@ -1,0 +1,52 @@
+#include<cstdio>
+#include<vector>
+#include<cstring>
+using namespace std;
+const int N=10010;
+int n,vis[N],ans=0,maxdist,maxnode;
+struct edge{
+	int x,y,z;
+	edge(int _x,int _y,int _z):x(_x),y(_y),z(_z){}
+};
+vector<edge> edges;
+vector<int> G[N];
+void add_edge(int x,int y,int z){
+	edges.push_back(edge(x,y,z));
+	int m=edges.size();
+	G[x].push_back(m-1);
+}
+void dfs(int node,int dist){
+	if(dist>maxdist){
+		maxdist=dist;
+		maxnode=node;
+	}
+	for(int i=0;i<G[node].size();i++){
+		edge e=edges[G[node][i]];
+		int temp=e.y;
+		if(vis[temp]) continue;
+		vis[temp]=1;
+		dfs(temp,dist+e.z);
+	}
+	return;
+}
+int main(){
+	scanf("%d",&n);
+	for(int i=1;i<n;i++){
+		int x,y,z;
+		scanf("%d%d%d",&x,&y,&z);
+		add_edge(x,y,z);
+		add_edge(y,x,z);
+	}
+	memset(vis,0,sizeof(vis));
+	vis[1]=1;
+	maxdist=0;
+	maxnode=1;
+	dfs(1,0);
+	maxdist=0;
+	memset(vis,0,sizeof(vis));
+	vis[maxnode]=1;
+	dfs(maxnode,0);
+    ans=(maxdist+1)*maxdist/2+10*maxdist;
+	printf("%d\n",ans);
+	return 0;
+}

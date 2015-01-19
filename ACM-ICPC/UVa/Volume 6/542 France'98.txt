@@ -1,0 +1,37 @@
+#include<cstdio>
+#include<iostream>
+#include<string>
+using namespace std;
+int main(){
+    //freopen("a.txt","r",stdin);
+    string s[16];
+    double a[16][16],d[16][5],p,sum;
+    int temp;
+    for(int i=0;i<16;i++)
+        cin>>s[i];
+    for(int i=0;i<16;i++)
+       for(int j=0;j<16;j++){
+          scanf("%d",&temp);
+          a[i][j]=(double)temp/100;
+       }
+    for(int i=0;i<16;i++)
+        d[i][0]=1;
+    for(int j=0;j<4;j++){
+       temp=(2<<j);
+       for(int i=0;i<16;i++){
+          p=sum=0;
+          for(int k=0;k<16;k++){
+              if(i/temp==k/temp&&i/(temp/2)!=k/(temp/2))
+                 sum+=d[k][j];
+          }
+          for(int k=0;k<16;k++){
+              if(i/temp==k/temp&&i/(temp/2)!=k/(temp/2))
+                 p+=d[k][j]/sum*a[i][k];
+          }
+          d[i][j+1]=d[i][j]*p;
+       }
+    }
+    for(int i=0;i<16;i++)
+       printf("%-10s p=%.2lf%%\n",s[i].c_str(),d[i][4]*100);
+    return 0;
+}

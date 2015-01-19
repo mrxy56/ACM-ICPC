@@ -1,0 +1,12 @@
+#include<cstdio>
+using namespace std;
+int main(){
+    int ncow,ncar,nshow,ntot,all;
+    double p;
+    while(scanf("%d%d%d",&ncow,&ncar,&nshow)==3){
+         ntot=ncow+ncar;all=ntot-nshow;
+         p=(double)ncow/ntot*(double)ncar/(all-1)+(double)ncar/ntot*(double)(ncar-1)/(all-1);
+         printf("%.5lf\n",p);
+    }
+    return 0;
+}

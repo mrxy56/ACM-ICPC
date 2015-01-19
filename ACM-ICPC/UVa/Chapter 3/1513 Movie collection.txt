@@ -1,0 +1,44 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+int a[200010],b[100010];
+int n;
+int lowbit(int x){
+    return x&-x;
+}
+int sum(int x){
+    int ret=0;
+    while(x>0){
+       ret+=a[x];x-=lowbit(x);
+    }
+    return ret;
+}
+void add(int x,int d){
+    while(x<=n+100000){
+       a[x]+=d;x+=lowbit(x);
+    }
+}
+int main()
+{
+    //freopen("a.txt","r",stdin);
+    int T,m,temp;
+    scanf("%d",&T);
+    while(T--){
+       scanf("%d%d",&n,&m);
+       memset(a,0,sizeof(a));
+       for(int i=1;i<=n;i++){
+          add(i+100000,1);
+          b[i]=i+100000;
+       }
+       for(int i=0;i<m;i++){
+          scanf("%d",&temp);
+          printf("%d",sum(b[temp])-1);
+          if(i==m-1) printf("\n");
+          else printf(" ");
+          add(b[temp],-1);
+          b[temp]=100000-i;
+          add(b[temp],1);
+       }
+    }
+    return 0;
+}

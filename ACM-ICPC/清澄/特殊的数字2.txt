@@ -1,0 +1,13 @@
+#include<cstdio>
+using namespace std;
+int main(){ 
+    for(int i=1000;i<=9999;i++){ 
+	     int a,b,c,d,temp=i;
+		 a=temp%10;temp/=10;
+		 b=temp%10;temp/=10;
+		 c=temp%10;temp/=10;
+		 d=temp%10;temp/=10;
+		 if(a==d&&b==c) printf("%d\n",i);
+	}
+	return 0;
+}

@@ -1,0 +1,14 @@
+#include <stdio.h>
+int main(void)
+{
+    int n;
+    double temp;
+    while(scanf("%d",&n)==1)
+    {
+        if(n<0) break;
+        if(n==1) {printf("0%%\n");continue;}
+        temp=((double)n)/4*100;
+        printf("%.0lf%%\n",temp);
+    }
+    return 0;
+}

@@ -1,0 +1,25 @@
+#include<cstdio>
+using namespace std;
+long long fac[15];
+long long C(int n,int k){
+    return fac[n]/(fac[n-k]*fac[k]);
+}
+int main(){
+    int n,k,temp;
+    long long ans;
+    fac[0]=fac[1]=1;
+    for(int i=2;i<=12;i++)
+        fac[i]=fac[i-1]*i;
+    while(scanf("%d%d",&n,&k)==2){
+        ans=1;
+        for(int i=0;i<k;i++){
+            scanf("%d",&temp);
+            if(temp>0){
+              ans*=C(n,temp);
+              n-=temp;
+            }
+        }
+        printf("%lld\n",ans);
+    }
+    return 0;
+}

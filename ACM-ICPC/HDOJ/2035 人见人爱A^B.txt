@@ -1,0 +1,21 @@
+#include<cstdio>
+using namespace std;
+const int mod=1000;
+long long POW(long long x,long long n){ 
+    long long ret=1;
+	while(n){ 
+	    if(n&1) ret=ret*x%mod;
+		x=x*x%mod;
+		n/=2;
+	}
+	return ret;
+}
+int main(){
+	long long n,k;
+	int T,temp;
+	while(scanf("%I64d%I64d",&n,&k)==2){
+		if(n==0&&k==0) break;
+	    printf("%I64d\n",POW(n,k));
+	}
+	return 0;
+}

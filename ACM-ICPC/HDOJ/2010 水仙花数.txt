@@ -1,0 +1,27 @@
+#include<cstdio>
+using namespace std;
+int main(){
+   int n,m,a,b,c,temp;
+   bool flag;
+   while(scanf("%d%d",&n,&m)==2){
+       flag=false;
+       for(int i=n;i<=m;i++){
+            temp=i;
+            a=temp%10;
+            temp/=10;
+            b=temp%10;
+            temp/=10;
+            c=temp;
+            if(a*a*a+b*b*b+c*c*c==i)
+		if(!flag){
+                  printf("%d",i);
+		  flag=true;
+		}
+	        else
+	          printf(" %d",i);
+       }
+       if(!flag) printf("no\n");
+       else printf("\n");
+   }
+   return 0;
+}

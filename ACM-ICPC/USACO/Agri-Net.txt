@@ -1,0 +1,32 @@
+/*
+ID:mrxy564
+PROG:agrinet
+LANG:C++
+*/
+#include<cstdio>
+#include<cstring>
+using namespace std;
+const int INF=~0U>>2;
+int main(){ 
+	freopen("agrinet.in","r",stdin);
+	freopen("agrinet.out","w",stdout);
+    int n,d[110],G[110][110],vis[110],ans=0;
+	scanf("%d",&n);
+	for(int i=0;i<n;i++)
+		for(int j=0;j<n;j++)
+			scanf("%d",&G[i][j]);
+	for(int i=0;i<n;i++)
+		d[i]=(i==0)?0:INF;
+	memset(vis,0,sizeof(vis));
+	for(int i=0;i<n;i++){ 
+	    int m=INF,x;
+        for(int y=0;y<n;y++)
+			if(!vis[y]&&d[y]<m) m=d[x=y];
+		ans+=m;
+		vis[x]=1;
+		for(int y=0;y<n;y++)
+			if(!vis[y]&&d[y]>G[x][y]) d[y]=G[x][y];
+	}
+	printf("%d\n",ans);
+	return 0;
+}

@@ -1,0 +1,106 @@
+/*
+ID:mrxy564
+PROG:clocks
+LANG:C++
+*/
+#include<cstdio>
+#include<cstring>
+using namespace std;
+int a[3][3],c[10];
+bool flag=false,judge;
+bool check(){
+    for(int i=0;i<3;i++)
+       for(int j=0;j<3;j++)
+          if(a[i][j]!=12) return false;
+    return true;
+}
+void mod(){
+    for(int i=0;i<3;i++)
+       for(int j=0;j<3;j++){
+          while(a[i][j]>12)
+            a[i][j]-=12;
+          while(a[i][j]<=0)
+            a[i][j]+=12;
+       }
+}
+void change(int cnt,int num){
+    switch(cnt){
+               case 0:
+                  a[0][0]+=num;a[0][1]+=num;a[1][0]+=num;a[1][1]+=num;
+                  mod();
+                  break;
+               case 1:
+                  a[0][0]+=num;a[0][1]+=num;a[0][2]+=num;
+                  mod();
+                  break;
+               case 2:
+                  a[0][1]+=num;a[0][2]+=num;a[1][1]+=num;a[1][2]+=num;
+                  mod();
+                  break;
+               case 3:
+                  a[0][0]+=num;a[1][0]+=num;a[2][0]+=num;
+                  mod();
+                  break;
+               case 4:
+                  a[0][1]+=num;a[1][0]+=num;a[1][1]+=num;a[1][2]+=num;a[2][1]+=num;
+                  mod();
+                  break;
+               case 5:
+                  a[0][2]+=num;a[1][2]+=num;a[2][2]+=num;
+                  mod();
+                  break;
+               case 6:
+                  a[1][0]+=num;a[1][1]+=num;a[2][0]+=num;a[2][1]+=num;
+                  mod();
+                  break;
+               case 7:
+                  a[2][0]+=num;a[2][1]+=num;a[2][2]+=num;
+                  mod();
+                  break;
+               case 8:
+                  a[1][1]+=num;a[1][2]+=num;a[2][1]+=num;a[2][2]+=num;
+                  mod();
+                  break;
+            }
+}
+void dfs(int cnt){
+    if(cnt==9){
+        if(check()==true){
+             flag=true;judge=true;
+             for(int i=0;i<cnt;i++){
+                if(c[i]!=0){
+                    for(int j=0;j<c[i];j++){
+                      if(judge){
+                          printf("%d",i+1);
+                          judge=false;
+                      }
+                      else
+                          printf(" %d",i+1);
+                    }
+                }
+             }
+             printf("\n");
+        }
+        return;
+    }
+    for(int i=0;i<=3;i++){
+        c[cnt]=i;
+        for(int j=0;j<i;j++)
+            change(cnt,3);
+         dfs(cnt+1);
+         if(flag) return;
+        for(int j=0;j<i;j++)
+            change(cnt,-3);
+    }
+    return;
+}
+int main(){
+    freopen("clocks.in","r",stdin);
+    freopen("clocks.out","w",stdout);
+    for(int i=0;i<3;i++)
+       for(int j=0;j<3;j++)
+          scanf("%d",&a[i][j]);
+    memset(c,0,sizeof(c));
+    dfs(0);
+    return 0;
+}

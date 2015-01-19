@@ -1,0 +1,52 @@
+#include<cstdio>
+#include<stack>
+#include<queue>
+using namespace std;
+int main(){
+   int n,order,temp;
+   bool flag1,flag2,flag3;
+   while(scanf("%d",&n)==1){
+      stack<int> a;
+      queue<int> b;
+      priority_queue<int> c;
+      flag1=true;flag2=true;flag3=true;
+      for(int i=0;i<n;i++){
+         scanf("%d",&order);
+         if(order==1){
+            scanf("%d",&temp);
+            a.push(temp);
+            b.push(temp);
+            c.push(temp);
+         }
+         else{
+            scanf("%d",&temp);
+            if(flag1){
+               if(a.empty()) flag1=false;
+               else if(a.top()!=temp) flag1=false;
+                 else a.pop();
+            }
+            if(flag2){
+               if(b.empty()) flag2=false;
+               else if(b.front()!=temp) flag2=false;
+                 else b.pop();
+            }
+            if(flag3){
+               if(c.empty()) flag3=false;
+               else if(c.top()!=temp) flag3=false;
+                 else c.pop();
+            }
+         }
+      }
+      if(flag1&&!flag2&&!flag3)
+         printf("stack\n");
+      else if(!flag1&&flag2&&!flag3)
+         printf("queue\n");
+      else if(!flag1&&!flag2&&flag3)
+         printf("priority queue\n");
+      else if(!flag1&&!flag2&&!flag3)
+         printf("impossible\n");
+      else
+         printf("not sure\n");
+    }
+   return 0;
+}

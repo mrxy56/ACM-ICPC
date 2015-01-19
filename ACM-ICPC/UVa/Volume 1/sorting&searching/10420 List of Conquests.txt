@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+typedef struct
+{
+    char s[80];
+    int num;
+}Data;
+int cmp_string(const void*_a,const void*_b)
+{
+    char*a=(char*)_a;
+    char*b=(char*)_b;
+    return strcmp(a,b);
+}
+int main(void)
+{
+    int n,i,j,count=0;
+    char st[80]="";
+    char con[80]="";
+    char sorted[2000][80]={""};
+    int number[2000]={0};
+    Data a[2000]={{"",0}};
+    scanf("%d",&n);getchar();
+    for(i=0;i<n;i++)
+    {
+        int flag=0;
+        fgets(st,80,stdin);
+        sscanf(st,"%s",con);
+        for(j=0;j<count;j++)
+          if(strcmp(con,a[j].s)==0)
+             {a[j].num++;flag=1;break;}
+        if(!flag)
+        {
+              a[count].num=1;
+              for(j=0;st[j];j++)
+                a[count].s[j]=con[j];
+                a[count].s[j]='\0';
+                count++;
+        }
+        memset(st,'\0',sizeof(st));
+        memset(con,'\0',sizeof(con));
+    }
+    for(i=0;i<count;i++)
+        strcpy(sorted[i],a[i].s);
+    qsort(sorted,count,sizeof(sorted[0]),cmp_string);
+    for(i=0;i<count;i++)
+        for(j=0;j<count;j++)
+           if(strcmp(sorted[i],a[j].s)==0)
+                number[i]=a[j].num;
+    for(i=0;i<count;i++)
+        printf("%s %d\n",sorted[i],number[i]);
+    return 0;
+}

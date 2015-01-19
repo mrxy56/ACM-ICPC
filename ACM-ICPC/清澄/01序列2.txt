@@ -1,0 +1,26 @@
+#include<cstdio>
+#include<queue>
+using namespace std;
+queue<int> q;
+int main(){ 
+   for(int i=0;i<64;i++){
+	 int temp=32,cnt=0;
+	 while(!q.empty()) q.pop();
+	 while(temp){
+       if(temp&i){ 
+	       q.push(1);
+		   cnt++;
+	   }
+	   else q.push(0);
+	   temp>>=1;
+	 }
+	 if(cnt&1){ 
+	    for(int i=0;i<6;i++){
+			printf("%d",q.front());
+			q.pop();
+		}
+		printf("\n");
+	 }
+    }
+    return 0;
+}

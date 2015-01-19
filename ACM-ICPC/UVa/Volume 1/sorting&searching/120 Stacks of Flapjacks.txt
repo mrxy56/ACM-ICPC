@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <string.h>
+int a[40]={0},sorted[40]={0};
+char s[100]="";
+void change(int s,int t);
+void Qsort(int s,int t);
+int main(void)
+{
+    while(fgets(s,100,stdin)!=NULL)
+    {
+        int n=0,i,j,t;
+        char*p=s;
+        while(sscanf(p,"%d%n",&a[n],&t)==1)
+             {
+                 p+=t;
+                 n++;
+             }
+        for(i=0;i<n-1;i++)
+            printf("%d ",a[i]);
+        printf("%d\n",a[n-1]);
+        for(i=0;i<n;i++)
+            sorted[i]=a[i];
+        Qsort(0,n-1);
+        for(i=n-1;i>=0;i--)
+        {
+            int max=-1,maxj=0;
+            if(sorted[i]!=a[i])
+            {
+                for(j=i;j>=0;j--)
+                    if(a[j]>max) {max=a[j];maxj=j;}
+                if(maxj==0) {change(0,i);printf("%d ",n-i);}
+                   else {change(0,maxj);printf("%d ",n-maxj);change(0,i);printf("%d ",n-i);}
+            }
+        }
+        printf("%d\n",0);
+        memset(s,'\0',sizeof(s));
+        memset(a,0,sizeof(a));
+        memset(sorted,0,sizeof(sorted));
+    }
+    return 0;
+}
+void change(int s,int t)
+{
+    int i,b[40]={0};
+    for(i=s;i<=t;i++)
+        b[i]=a[s+t-i];
+    for(i=s;i<=t;i++)
+        a[i]=b[i];
+}
+void Qsort(int s,int t)
+{
+    int i=s,j=t,x,temp;
+    if(s==t) return;
+    x=sorted[i];
+    while(i<j)
+    {
+        while(i<j&&sorted[j]>=x) j--;
+        if(i<j)
+        {
+            temp=sorted[i];
+            sorted[i]=sorted[j];
+            sorted[j]=temp;
+        }
+        while(i<j&&sorted[i]<x) i++;
+        if(i<j)
+        {
+            temp=sorted[i];
+            sorted[i]=sorted[j];
+            sorted[j]=temp;
+        }
+    }
+    if(i-1>=s) Qsort(s,i-1);
+    if(i+1<=t) Qsort(i+1,t);
+}

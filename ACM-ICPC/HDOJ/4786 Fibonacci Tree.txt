@@ -1,0 +1,65 @@
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+const int MAXN=100010;
+const int MAXM=100010;
+int N,M;
+struct Edge{ 
+   int x,y,w;
+   Edge(int x=0,int y=0,int w=0):x(x),y(y),w(w){}
+}e[MAXM];
+int fa[MAXN],f[MAXM];
+bool cmp1(Edge a,Edge b){ 
+    return a.w<b.w;
+}
+bool cmp2(Edge a,Edge b){ 
+    return a.w>b.w;
+}
+int getfather(int x){ 
+    if(x==fa[x]) return x;
+	else return fa[x]=getfather(fa[x]);
+}
+int Kruskal(){ 
+	int cnt=0,num=0;
+	for(int i=1;i<=N;i++) fa[i]=i;
+	for(int i=1;i<=M;i++){ 
+	    int t1=getfather(e[i].x);
+		int t2=getfather(e[i].y);
+		if(t1!=t2){ 
+		    fa[t1]=t2;
+			if(e[i].w==1)
+			cnt++;
+			num++;
+		}
+		if(num==N-1) return cnt;
+	}
+}
+int main(){ 
+    int T;
+	scanf("%d",&T);
+	f[0]=0;f[1]=1;
+	int fcnt=1;
+	while(f[fcnt]<=100000){ 
+	    fcnt++;
+		f[fcnt]=f[fcnt-2]+f[fcnt-1];
+	}
+	for(int i=1;i<=T;i++){ 
+	    scanf("%d%d",&N,&M);
+		for(int i=1;i<=M;i++){ 
+		    scanf("%d%d%d",&e[i].x,&e[i].y,&e[i].w);
+		}
+		sort(e+1,e+M+1,cmp1);
+		int low=Kruskal();
+		sort(e+1,e+M+1,cmp2);
+		int high=Kruskal();
+		bool flag=false;
+		for(int i=1;i<fcnt;i++)
+			if(f[i]>=low && f[i]<=high){
+				flag=true;
+				break;
+			}
+		if(flag) printf("Case #%d: Yes\n",i);
+		else printf("Case #%d: No\n",i);
+	}
+	return 0;
+}

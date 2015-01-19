@@ -1,0 +1,14 @@
+#include<cstdio>
+using namespace std;
+int main(){ 
+   for(int i=0;i<64;i++){
+	 int temp=32;
+	 while(temp){
+       if(temp&i) printf("1");
+	   else printf("0");
+	   temp>>=1;
+	 }
+	 printf("\n");
+    }
+    return 0;
+}

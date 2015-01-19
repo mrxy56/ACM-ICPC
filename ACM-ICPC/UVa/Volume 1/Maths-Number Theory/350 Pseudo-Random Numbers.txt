@@ -1,0 +1,25 @@
+#include <stdio.h>
+int z,i,m,l,j,num,count=0,a[10010]={0};
+int main(void)
+{
+    while(scanf("%d%d%d%d",&z,&i,&m,&l)==4)
+    {
+        int length=0,temp,first;
+        count++;
+        if(z==0&&i==0&&m==0&&l==0) break;
+        num=0;
+        first=l;
+        while(1)
+        {
+            a[num++]=l;
+            temp=(z*l+i)%m;
+            for(j=0;j<num;j++)
+                if(num-1!=j&&a[j]==a[num-1]) break;
+            if(j<num) break;
+            l=temp;
+        }
+        printf("Case %d: %d\n",count,num-1-j);
+        memset(a,0,sizeof(a));
+    }
+    return 0;
+}

@@ -1,0 +1,32 @@
+#include <stdio.h>
+int main(void)
+{
+    int n,i,j,a[10010]={0},b[10010]={0};
+    char s[100000]="";
+    while(scanf("%d",&n)==1)
+    {
+        char*p;
+        int t;
+        getchar();
+        fgets(s,100000,stdin);
+        p=s;
+        j=0;
+        while(sscanf(p,"%d%n",&a[j],&t)==1)
+        {
+            j++;
+            p+=t;
+        }
+        n*=-1;
+        for(i=0;i<j-1;i++)
+        {
+            a[i+1]-=a[i]*n;
+            b[i]=a[i];
+        }
+        printf("q(x):");
+        for(i=0;i<j-1;i++)
+             printf(" %d",b[i]);
+        printf("\n");
+        printf("r = %d\n\n",a[j-1]);
+    }
+     return 0;
+}

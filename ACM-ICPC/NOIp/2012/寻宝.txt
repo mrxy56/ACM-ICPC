@@ -1,0 +1,39 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+int n,m,x,y,num,sum=0,temp;
+struct room{
+    int up,no;
+}a[10010][110];
+int b[10010][110];
+int c[10010];
+int change(int n,int i){
+    if(n%c[i]==0)
+        return c[i];
+    else return n%c[i];
+}
+int main(){
+    freopen("treasure.in","r",stdin);
+    freopen("treasure.out","w",stdout);
+    scanf("%d%d",&n,&m);
+    memset(c,0,sizeof(c));
+    for(int i=0;i<n;i++)
+       for(int j=0;j<m;j++){
+          scanf("%d%d",&a[i][j].up,&a[i][j].no);
+          if(a[i][j].up==1)
+             b[i][c[i]++]=j;
+       }
+    scanf("%d",&num);
+    for(int i=0;i<n;i++){
+        temp=change(a[i][num].no,i);
+        sum=(a[i][num].no+sum)%20123;
+        while(a[i][num].up!=1) num=(num+1)%m;
+        int j;
+        for(j=0;j<c[i];j++)
+            if(b[i][j]==num) break;
+        j=(j+temp-1)%c[i];
+        num=b[i][j];
+    }
+    printf("%d\n",sum);
+    return 0;
+}

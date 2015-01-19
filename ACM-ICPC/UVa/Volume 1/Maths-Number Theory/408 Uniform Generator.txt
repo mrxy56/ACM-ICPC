@@ -1,0 +1,18 @@
+#include <stdio.h>
+int gcd(int x,int y)
+{
+    if(y==0) return x;
+    return gcd(y,x%y);
+}
+int main(void)
+{
+    int a,b;
+    while(scanf("%d%d",&a,&b)==2)
+    {
+        if(gcd(a,b)==1)
+             printf("%10d%10d    Good Choice\n\n",a,b);
+        else
+             printf("%10d%10d    Bad Choice\n\n",a,b);
+    }
+    return 0;
+}

@@ -1,0 +1,58 @@
+/*
+ID:mrxy564
+PROG:spin
+LANG:C++
+*/
+#include<cstdio>
+using namespace std;
+int a[5][11],b[5];
+void change(int d,int &l,int &r){ 
+    l=(l+d)%360;
+	r=(r+d)%360;
+}
+bool judge(int x,int y,int num){ 
+    if(x>y){ 
+	    if(num>=x&&num<=359||num>=0&&num<=y) return true;
+	}else{ 
+	    if(num>=x&&num<=y) return true;
+	}
+	return false;
+}
+int main(){
+	freopen("spin.in","r",stdin);
+	freopen("spin.out","w",stdout);
+    for(int i=0;i<5;i++){
+		scanf("%d%d",&b[i],&a[i][0]);
+		for(int j=1;j<=a[i][0];j++){
+			scanf("%d%d",&a[i][2*j-1],&a[i][2*j]);
+			a[i][2*j-1]-=b[i];a[i][2*j]=a[i][2*j-1]+a[i][2*j];
+		}
+	}
+	bool flag=false;
+	for(int t=0;t<=359;t++){ 
+	    for(int i=0;i<5;i++)
+			for(int j=1;j<=a[i][0];j++)
+				change(b[i],a[i][2*j-1],a[i][2*j]);
+		bool flag1;
+		for(int k=0;k<=359;k++){
+			for(int i=0;i<5;i++){
+				flag1=false;
+				for(int j=1;j<=a[i][0];j++){
+					if(judge(a[i][j*2-1],a[i][j*2],k)){
+						flag1=true;
+						break;
+					}
+				}
+				if(!flag1) break;
+			}
+		    if(flag1){
+			   printf("%d\n",t);
+	    	   flag=true;
+		       break;
+			}
+		}
+		if(flag) break;
+	}
+	if(!flag) printf("none\n");
+	return 0;
+}

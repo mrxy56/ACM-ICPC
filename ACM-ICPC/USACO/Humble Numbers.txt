@@ -1,0 +1,34 @@
+/*
+ID:mrxy564
+PROG:humble
+LANG:C++
+*/
+#include<cstdio>
+using namespace std;
+const int INF=~0U>>1;
+int a[100010],prime[110],pos[110],min;
+int main(){ 
+	freopen("humble.in","r",stdin);
+	freopen("humble.out","w",stdout);
+    int k,n,temp;
+	scanf("%d%d",&k,&n);
+	for(int i=0;i<k;i++){
+		scanf("%d",&temp);
+	    prime[i]=temp;
+		pos[i]=0;
+	}
+	int t=0;
+	a[t]=1;
+	while(1){
+		min=INF;
+	    for(int i=0;i<k;i++)
+		   if(prime[i]*a[pos[i]]<min)
+		    	min=prime[i]*a[pos[i]];
+		a[++t]=min;
+        for(int i=0;i<k;i++)
+			if(prime[i]*a[pos[i]]==min) pos[i]++;
+		if(t==n) break;
+	}
+	printf("%d\n",a[n]);
+	return 0;
+}

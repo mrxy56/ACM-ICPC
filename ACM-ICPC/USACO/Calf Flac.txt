@@ -1,0 +1,85 @@
+/*
+ID:mrxy564
+PROG:calfflac
+LANG:C++
+*/
+#include<cstdio>
+#include<cstring>
+#include<cctype>
+using namespace std;
+char s[20010],ch;
+int len,cnt,left,right,max,maxi,num;
+int main(){
+    freopen("calfflac.in","r",stdin);
+    freopen("calfflac.out","w",stdout);
+    len=0;
+    while((ch=getchar())!=EOF) s[len++]=ch;
+         max=0;
+         for(int i=0;i<len-1;i++){
+             left=right=i;cnt=0;
+             while(1){
+               while(!isalpha(s[left])&&left>=0) left--;
+               while(!isalpha(s[right])&&right<len) right++;
+               if(left<0||right>=len-1) break;
+               else{
+                   if(tolower(s[left])==tolower(s[right])){
+                       cnt++;
+                       left--;
+                       right++;
+                       if(cnt>max) {max=cnt;maxi=i;}
+                   }
+                   else break;
+               }
+             }
+         }
+         num=max;
+         bool flag=false;
+         for(int i=0;i<len-2;i++){
+             left=i;
+             if(!isalpha(s[left])) continue;
+             right=i+1;
+             while(right<len-1&&!isalpha(s[right])) right++;
+             cnt=0;
+             while(1){
+               while(!isalpha(s[left])&&left>=0) left--;
+               while(!isalpha(s[right])&&right<len) right++;
+               if(left<0||right>=len-1) break;
+               else{
+                   if(tolower(s[left])==tolower(s[right])){
+                       cnt++;
+                       left--;
+                       right++;
+                       if(cnt*2>2*max-1) {flag=true;max=cnt;maxi=i;}
+                   }
+                   else break;
+               }
+             }
+         }
+         int p=maxi;
+         for(int i=0;i<max-1;i++){
+             p--;
+             while(!isalpha(s[p])) p--;
+         }
+        if(flag){
+           printf("%d\n",max*2);
+           max=max*2;
+           while(max--){
+             printf("%c",s[p++]);
+             if(max==0) break;
+             while(!isalpha(s[p]))
+                 printf("%c",s[p++]);
+           }
+        }
+        else{
+          printf("%d\n",2*max-1);
+          max=max*2-1;
+          while(max--){
+             printf("%c",s[p++]);
+             if(max==0) break;
+             while(!isalpha(s[p]))
+                 printf("%c",s[p++]);
+          }
+        }
+         printf("\n");
+         return 0;
+}

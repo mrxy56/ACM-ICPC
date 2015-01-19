@@ -1,0 +1,28 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+int n,maxn=0;
+int a[100010],num[1000010];
+int main(){
+    scanf("%d",&n);
+	memset(num,0,sizeof(num));
+    for(int i=0;i<n;i++){
+		scanf("%d",&a[i]);
+		num[a[i]]++;
+		if(a[i]>maxn) maxn=a[i];
+	}
+	bool flag=false;
+	for(int i=maxn;i>=1;i--){
+		int k=0;
+		for(int j=i;j<=maxn;j+=i){
+			k+=num[j];
+			if(k>1){
+				printf("%d\n",i);
+				flag=true;
+				break;
+			}
+		}
+		if(flag) break;
+	}
+	return 0;
+}

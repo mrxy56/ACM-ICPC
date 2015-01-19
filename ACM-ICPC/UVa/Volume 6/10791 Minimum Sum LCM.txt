@@ -1,0 +1,26 @@
+#include<cstdio>
+#include<cmath>
+int main(){
+   int kase=0,num;
+   long long n,m,ans;
+   while(scanf("%lld",&n)==1){
+        if(!n)break;ans=0;
+        m=(int)sqrt(n+0.5);
+        int tempn=n,num=0;
+        for(int i=2;i<=m;i++)
+          if(n%i==0){
+            num++;
+            int temp=1;
+            while(n%i==0){
+                temp*=i;
+                n/=i;
+            }
+            ans+=temp;
+          }
+          if(n!=1) {ans+=n;num++;}
+        if(num==1||num==0||tempn==1) printf("Case %d: %lld\n",++kase,tempn+1);
+        else printf("Case %d: %lld\n",++kase,ans);
+   }
+   return 0;
+}
+

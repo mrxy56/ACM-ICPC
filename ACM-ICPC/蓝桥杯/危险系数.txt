@@ -1,0 +1,62 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+const int maxn=1010;
+int n,m;
+int dist[maxn][maxn];
+int path[maxn][maxn];
+int count=0;
+int top[maxn];
+void dfs(int p,int q,int vis[]){
+	if(vis[p]) return;
+	vis[p]=1;
+	path[count][top[count]++]=p;
+	if(dist[p][q]){
+		for(int k=0;k<top[count];k++){
+			path[count+1][k]=path[count][k];
+		}
+		top[count+1]=top[count];
+		path[count][top[count]++]=q;
+		count++;
+	}else{
+		for(int k=0;k<n;k++)
+		    if(dist[p][k])
+		        dfs(k,q,vis);
+	}
+	vis[p]=0;
+	path[count][--top[count]]=0;
+}
+int cutpoint(){
+	int i,j,k,t;
+	int result=0;
+	for(i=1;i<top[0]-1;i++){
+		k=path[0][i];
+		for(j=1;j<count;j++){
+		    for(t=1;t<top[j]-1;t++){
+		        if(path[j][t]==k) break;
+		    }
+		    if(t==top[j]-1) break;
+	    }
+	    if(j==count) result++;
+	}
+	return result;
+}
+int main(){
+	int i,j;
+	int vis[maxn];
+	memset(dist,0,sizeof(dist));
+	memset(vis,0,sizeof(vis));
+	memset(top,0,sizeof(top));
+	scanf("%d%d",&n,&m);
+	int u,v;
+	int p,q;
+	for(int i=0;i<m;i++){
+		scanf("%d%d",&u,&v);
+		dist[u-1][v-1]=1;
+		dist[v-1][u-1]=1;
+	}
+	scanf("%d%d",&p,&q);
+	dfs(p-1,q-1,vis);
+	printf("%d",cutpoint());
+	return 0;
+}

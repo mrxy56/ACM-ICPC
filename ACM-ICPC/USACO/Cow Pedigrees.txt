@@ -1,0 +1,27 @@
+/*
+ID:mrxy564
+PROG:nocows
+LANG:C++
+*/
+#include<cstdio>
+#include<cstring>
+using namespace std;
+const int MOD=9901;
+int dp[110][210];
+int main(){
+	freopen("nocows.in","r",stdin);
+	freopen("nocows.out","w",stdout);
+    int N,K;
+	scanf("%d%d",&N,&K);
+	memset(dp,0,sizeof(dp));
+	for(int i=1;i<=K;i++) 
+	    dp[i][1]=1;
+    for(int i=2;i<=K;i++)
+	   for(int j=0;j<=N;j++)
+		   if(dp[i][j]==0)
+		     for(int k=0;k<=N;k++)
+			   if(j-1>=k)
+                     dp[i][j]=(dp[i][j]+dp[i-1][k]*dp[i-1][j-1-k])%MOD;
+    printf("%d\n",(dp[K][N]-dp[K-1][N]+MOD)%MOD);
+	return 0;
+}

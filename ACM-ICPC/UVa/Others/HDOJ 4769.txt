@@ -1,0 +1,56 @@
+#include <iostream>
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+struct Point{
+    int x,y;
+    Point(int x=0,int y=0):x(x),y(y){}
+};
+typedef Point Vector;
+bool operator <(const Point &a,const Point &b){
+    return a.x<b.x||(a.x==b.x&&a.y<b.y);
+}
+Point a[25];
+int vis[25];
+Vector operator - (Point A,Point B){return Vector(A.x-B.x,A.y-B.y);}
+int Dot(Vector A,Vector B){return A.x*B.x+A.y*B.y;}
+int Cross(Vector A,Vector B){return A.x*B.y-A.y*B.x;}
+int sqr(Point A,Point B){
+    return (A.x-B.x)*(A.x-B.x)+(A.y-B.y)*(A.y-B.y);
+}
+int main(){
+   //freopen("a.txt","r",stdin);
+   int n,num,temp,l,r;
+   while(scanf("%d",&n)==1){
+        if(n==-1) break;
+        for(int i=0;i<n;i++)
+            scanf("%d%d",&a[i].x,&a[i].y);
+        if(n<4) {printf("0\n");continue;}
+        sort(a,a+n);
+        memset(vis,0,sizeof(vis));
+        num=0;
+        for(int len=1;len<=100;len++){
+        for(int i=0;i<n;i++){
+           for(int j=i+1;j<n;j++){
+               if(vis[i]||vis[j]) continue;
+               l=r=-1;
+               for(int k=0;k<n;k++){
+                  if(vis[k]) continue;
+                  temp=Cross(a[i]-a[k],a[j]-a[k]);
+                  if(temp>0&&Dot(a[k]-a[i],a[k]-a[j])==0)
+                      r=k;
+                  if(temp<0&&Dot(a[k]-a[i],a[k]-a[j])==0)
+                      l=k;
+               }
+               if(l!=-1&&r!=-1&&sqr(a[i],a[r])==len*len&&sqr(a[j],a[r])==len*len){
+                  vis[l]=vis[r]=vis[i]=vis[j]=1;
+                  num+=4;
+               }
+           }
+        }
+        }
+        printf("%d\n",num);
+   }
+   return 0;
+}

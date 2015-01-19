@@ -1,0 +1,24 @@
+#include <stdio.h>
+#include <math.h>
+long long int n,j,count;
+int main(void)
+{
+    while(scanf("%lld",&n)==1)
+    {
+        if(n<0) break;
+        count=0;
+        for(j=2;j<=1000000;j++)
+        {
+              while(n%j==0)
+              {
+                    printf("    %lld\n",j);
+                    n/=j;
+              }
+              if(n==1) break;
+        }
+        if(n>1)
+           printf("    %lld\n",n);
+        printf("\n");
+    }
+    return 0;
+}

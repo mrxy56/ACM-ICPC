@@ -1,0 +1,59 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+int f[35][35],temp[35];
+void init(){
+	f[0][0]=1;
+	for(int i=1;i<=31;i++){
+		f[i][0]=f[i-1][0];
+		for(int j=1;j<=i;j++) f[i][j]=f[i-1][j]+f[i-1][j-1];
+	}
+}
+int calc(int x,int k){
+    int tot=0,ans=0;
+	for(int i=31;i>0;i--){
+		if(x&(1<<i)){
+			tot++;
+			if(tot>k) break;
+			x=x^(1<<i);
+		}
+		if((1<<(i-1))<=x){
+			ans+=f[i-1][k-tot];
+		}
+	}
+	if(tot+x==k) ans++;
+	return ans;
+}
+int change(int x,int k){
+	memset(temp,0,sizeof(temp));
+	int cnt=0,res=0;
+    while(x>0){
+		int t=x%k;
+        temp[cnt++]=t;
+		x/=k;
+	}
+	bool flag=false;
+	for(int i=cnt-1;i>=0;i--){
+		if(temp[i]>1||flag){
+			flag=true;
+			temp[i]=1;
+		}
+	}
+	int num=1;
+	for(int i=0;i<cnt;i++){
+		res+=temp[i]*num;
+		num*=2;
+	}
+	return res;
+}
+int main(){
+	int X,Y,K,B;
+	scanf("%d%d%d%d",&X,&Y,&K,&B);
+	init();
+    X=change(X,B);
+	Y=change(Y,B);
+    int ans=calc(Y,K)-calc(X-1,K);
+	printf("%d\n",ans);
+	return 0;
+}
+    

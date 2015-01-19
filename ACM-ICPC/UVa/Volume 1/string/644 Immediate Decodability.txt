@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <string.h>
+int main()
+{
+    char s[10][20]={""};
+    int count=1,i=0,j,k,a[10]={0};
+    while(fgets(s[i],100,stdin)!=NULL)
+    {
+        if(s[i][0]=='9')
+        {
+            int flag=1;
+              for(j=0;j<i;j++)
+              {
+                  for(k=0;k<i;k++)
+                  {
+                      if(a[j]<a[k])
+                      {
+                          int p=0;
+                          while(s[j][p]!='\n'&&s[j][p]==s[k][p])
+                                     p++;
+                          if(s[j][p]=='\n'){flag=0;break;}
+                          else  continue;
+                      }
+                  }
+                  if(flag==0) break;
+              }
+              if(!flag)
+                 printf("Set %d is not immediately decodable\n",count);
+              else
+                 printf("Set %d is immediately decodable\n",count);
+                 count++;i=0;
+                 memset(s,'\0',sizeof(s));memset(a,0,sizeof(a));
+        }
+        else
+        {
+            a[i]=strlen(s[i]);
+            i++;
+        }
+    }
+    return 0;
+}
+
+

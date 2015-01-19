@@ -1,0 +1,110 @@
+#include <stdio.h>
+#include <string.h>
+#include<ctype.h>
+int judge(int i,int j,int len);
+int valid(int i,int j);
+char s[100],a[60][60];
+int m,n,i,j,k,sen,p,num,ch;
+int main(void)
+{
+    scanf("%d",&num);
+    for(k=0;k<num;k++)
+    {
+        if(k>0) getchar();getchar();
+        scanf("%d%d",&m,&n);getchar();
+        memset(a,sizeof(a),'\0');
+        for(i=0;i<m;i++)
+        {
+           for(j=0;j<n;j++)
+               {
+                   ch=getchar();
+                   if(islower(ch))
+                       ch-=32;
+                    a[i][j]=ch;
+               }
+               getchar();
+        }
+        scanf("%d",&sen);
+        getchar();
+        for(p=0;p<sen;p++)
+        {
+            scanf("%s",s);
+        for(i=0;i<m;i++)
+        {
+          for(j=0;j<n;j++)
+              if(judge(i,j,strlen(s)))
+                    {
+                      printf("%d %d\n",i+1,j+1);
+                      break;
+                    }
+            if(j<n) break;
+        }
+        }
+        if(k!=num-1) printf("\n");
+    }
+    return 0;
+}
+int judge(int i,int j,int len)
+{
+   int k;
+   for(k=0;k<len;k++)
+   {
+       if(islower(s[k]))
+           s[k]-=32;
+   }
+   for(k=0;k<len;k++)
+   {
+       if(!valid(i,j+k))break;
+       if(valid(i,j+k)&&s[k]!=a[i][j+k])break;
+       if(k==len-1)return 1;
+   }
+   for(k=0;k<len;k++)
+   {
+       if(!valid(i+k,j+k))break;
+       if(valid(i+k,j+k)&&s[k]!=a[i+k][j+k]) break;
+       if(k==len-1) return 1;
+   }
+   for(k=0;k<len;k++)
+   {
+       if(!valid(i+k,j))break;
+       if(valid(i+k,j)&&s[k]!=a[i+k][j])break;
+       if(k==len-1) return 1;
+   }
+   for(k=0;k<len;k++)
+   {
+       if(!valid(i+k,j-k))break;
+       if(valid(i+k,j-k)&&s[k]!=a[i+k][j-k])break;
+       if(k==len-1) return 1;
+   }
+   for(k=0;k<len;k++)
+   {
+       if(!valid(i,j-k))break;
+      if(valid(i,j-k)&&s[k]!=a[i][j-k])break;
+      if(k==len-1) return 1;
+   }
+   for(k=0;k<len;k++)
+   {
+       if(!valid(i-k,j-k)) break;
+      if(valid(i-k,j-k)&&s[k]!=a[i-k][j-k])break;
+      if(k==len-1) return 1;
+   }
+   for(k=0;k<len;k++)
+   {
+       if(!valid(i-k,j))break;
+      if(valid(i-k,j)&&s[k]!=a[i-k][j])break;
+      if(k==len-1) return 1;
+   }
+   for(k=0;k<len;k++)
+   {
+       if(!valid(i+k,j+k))break;
+      if(s[k]!=a[i+k][j+k])break;
+      if(k==len-1) return 1;
+   }
+   return 0;
+}
+int valid(int i,int j)
+{
+    if(i>=0&&i<m&&j>=0&&j<n)
+    return 1;
+    return 0;
+}

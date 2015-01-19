@@ -1,0 +1,44 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+const int INF=1000000000;
+int p,v,num[200010];
+int query(int o,int L,int R,int cnt){
+    int M=L+(R-L)/2,ans;
+    if(L==R) return L;
+    if(cnt<=num[o*2]) ans=query(o*2,L,M,cnt);
+    else ans=query(o*2+1,M+1,R,cnt-num[o*2]);
+    return ans;
+}
+void update(int o,int L,int R){
+    int M=L+(R-L)/2;
+    if(L==R) num[o]=v;
+    else{
+      if(p<=M) update(o*2,L,M);else update(o*2+1,M+1,R);
+      num[o]=num[o*2]+num[o*2+1];
+    }
+}
+int main()
+{
+    //freopen("a.txt","r",stdin);
+    int T,k,temp,ans;
+    scanf("%d",&T);
+    while(T--){
+       scanf("%d",&k);
+       memset(num,0,sizeof(num));
+       for(int i=1;i<=k;i++){
+          p=i;v=1;
+          update(1,1,k);
+       }
+       for(int i=0;i<k;i++){
+           scanf("%d",&temp);
+           ans=query(1,1,k,temp+1);
+           printf("%d",ans);
+           p=ans;v=0;
+           update(1,1,k);
+           if(i==k-1) printf("\n");
+           else printf(" ");
+       }
+    }
+    return 0;
+}

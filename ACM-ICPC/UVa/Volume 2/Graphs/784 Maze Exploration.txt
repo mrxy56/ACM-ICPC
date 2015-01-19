@@ -1,0 +1,72 @@
+#include <cstdio>
+#include <cstring>
+using namespace std;
+int n,i,j,h,w,temp;
+char a[40][100];
+char s[100];
+void dfs(int x,int y)
+{
+    if(x<0||x>=h||y<0||y>=w)
+       return;
+    if(a[x][y]==' '||a[x][y]=='*')
+    {
+       a[x][y]='#';
+       dfs(x-1,y-1);dfs(x-1,y);dfs(x-1,y+1);
+       dfs(x,y-1);             dfs(x,y+1);
+       dfs(x+1,y-1);dfs(x+1,y);dfs(x+1,y+1);
+    }
+    return;
+}
+void init(void)
+{
+    while(s[w]!='\n')
+    {
+        a[h][w]=s[w];
+        w++;
+    }
+    if(w>temp)
+        temp=w;
+    h++;w=0;
+}
+void print(void)
+{
+    for(i=0;i<h;i++)
+        {
+           for(j=0;j<w;j++)
+           {
+               if(a[i][j]!='\0')
+                  printf("%c",a[i][j]);
+               else break;
+           }
+           printf("\n");
+        }
+    printf("%s",s);
+}
+int main(void)
+{
+    //freopen("a.txt","r",stdin);
+    scanf("%d\n",&n);
+    while(n--)
+    {
+        memset(s,'\0',sizeof(s));
+        memset(a,'\0',sizeof(a));
+        h=w=temp=0;
+        while(fgets(s,100,stdin)!=NULL)
+        {
+            if(s[0]=='_')
+            {
+               w=temp;
+               for(i=0;i<h;i++)
+                 for(j=0;j<w;j++)
+                 {
+                     if(a[i][j]=='*')
+                        dfs(i,j);
+                 }
+               break;
+            }
+            init();
+        }
+        print();
+    }
+    return 0;
+}

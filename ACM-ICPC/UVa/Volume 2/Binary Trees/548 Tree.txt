@@ -1,0 +1,89 @@
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+using namespace std;
+typedef struct Tnode
+{
+    int v;
+    struct Tnode*left,*right;
+}Node;
+Node *root;
+Node* newnode(void)
+{
+    Node*u=(Node*)malloc(sizeof(Node));
+    if(u!=NULL)
+    {
+        u->left=u->right=NULL;
+    }
+    return u;
+}
+Node* build(int n,int*a1,int*a2)
+{
+    Node*u;
+    int p=0;
+    if(n<=0) return NULL;
+    while(a1[p]!=a2[n-1]) p++;
+    u=newnode();u->v=a1[p];
+    u->left=build(p,a1,a2);
+    u->right=build(n-1-p,a1+p+1,a2+p);
+    return u;
+}
+int bfs(void)
+{
+    int front=0,rear=1,ans=-10001,min=2147483647;
+    Node*q[10010];
+    int sum[10010];
+    q[0]=root;
+    while(front<rear)
+    {
+        Node*u=q[front++];
+        if(u->left==NULL&&u->right==NULL)
+        {
+            if(sum[front-1]<min)
+            {
+                min=sum[front-1];
+                ans=u->v;
+            }
+            else if(sum[front-1]==min&&u->v<ans)
+                 ans=u->v;
+        }
+        else
+        {
+            if(u->left!=NULL)
+            {
+               q[rear++]=u->left;
+               sum[rear-1]=sum[front-1]+u->left->v;
+            }
+            if(u->right!=NULL)
+            {
+                q[rear++]=u->right;
+                sum[rear-1]=sum[front-1]+u->right->v;
+            }
+        }
+    }
+    printf("%d\n",ans);
+    return 1;
+}
+int main(void)
+{
+    //freopen("a.txt","r",stdin);
+    int a1[10010],a2[10010];
+    int k;
+    char ch;
+    while(1)
+    {
+    k=0;if(scanf("%d",&a1[k++])!=1) break;
+    while((ch=getchar())!='\n')
+    {
+        scanf("%d",&a1[k++]);
+    }
+    k=0;scanf("%d",&a2[k++]);
+    while((ch=getchar())!='\n')
+    {
+        scanf("%d",&a2[k++]);
+    }
+    root=build(k,a1,a2);
+    bfs();
+    }
+    return 0;
+}

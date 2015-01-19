@@ -1,0 +1,69 @@
+/*
+ID:mrxy564
+PROG:cowtour
+LANG:C++
+*/
+#include<cstdio>
+#include<cmath>
+using namespace std;
+struct point{ 
+    double x,y;
+};
+point a[155];
+char G[155][155];
+double d[155][155],dia[155];
+const double INF=150000;
+double dist(int i,int j){ 
+	double dx=a[i].x-a[j].x,dy=a[i].y-a[j].y;
+	double ans=sqrt(dx*dx+dy*dy);
+    return ans;
+}
+int main(){
+	freopen("cowtour.in","r",stdin);
+	freopen("cowtour.out","w",stdout);
+    int n;
+	scanf("%d",&n);
+	for(int i=0;i<n;i++)
+		scanf("%lf%lf",&a[i].x,&a[i].y);
+	getchar();
+    for(int i=0;i<n;i++){
+		for(int j=0;j<n;j++){
+			scanf("%c",&G[i][j]);
+			if(i==j){ 
+			    d[i][j]=0;
+			}else if(G[i][j]=='1'){ 
+			    d[i][j]=dist(i,j);
+			}else if(G[i][j]=='0'){ 
+			    d[i][j]=INF;
+			}
+		}
+		getchar();
+	}
+	for(int k=0;k<n;k++)
+		for(int i=0;i<n;i++)
+			for(int j=0;j<n;j++)
+				if(d[i][k]<INF&&d[k][j]<INF)
+					d[i][j]=d[i][j]<d[i][k]+d[k][j]?d[i][j]:d[i][k]+d[k][j];
+    for(int i=0;i<n;i++)
+        dia[i]=0;
+	double maxnum=0;
+	for(int i=0;i<n;i++)
+		for(int j=0;j<n;j++)
+			if(fabs(d[i][j]-INF)<1e-9)
+				continue;
+	        else{
+				dia[i]=dia[i]>d[i][j]?dia[i]:d[i][j];
+				if(dia[i]>maxnum) maxnum=dia[i];
+			}
+	double ans=INF;
+	for(int i=0;i<n;i++)
+		for(int j=0;j<n;j++){ 
+			if(i==j||d[i][j]<INF) continue;
+		    double temp=dist(i,j);
+			if(dia[i]+dia[j]+temp<ans)
+				ans=dia[i]+dia[j]+temp;
+		}
+	if(maxnum>ans) ans=maxnum;
+	printf("%.6lf\n",ans);
+	return 0;
+}

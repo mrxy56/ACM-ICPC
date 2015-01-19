@@ -1,0 +1,230 @@
+/*
+ID:mrxy564
+PROG:packrec
+LANG:C++
+*/
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+struct Rec{
+    int l,w;
+};
+struct Sqr{
+    int s,l,w;
+    bool operator<(const Sqr &obj)const{
+        return l<obj.l||l==obj.l&&w<obj.w;
+    }
+    bool operator ==(const Sqr &obj)const{
+        return l==obj.l&&w==obj.w;
+    }
+    bool operator>(const Sqr &obj)const{
+        return l>obj.l||l==obj.l&&w>obj.w;
+    }
+};
+Rec a[4],b[4];
+Sqr ans[5000];
+int vis[4],cnt=0,minn;
+void dfs1(int depth,Rec* b){
+    if(depth==4){
+        int len=0,wid=0;
+        for(int i=0;i<4;i++){
+          len=max(len,b[i].l);
+          wid+=b[i].w;
+        }
+        ans[cnt].s=len*wid;
+        ans[cnt].l=len;
+        ans[cnt].w=wid;
+        if(ans[cnt].s<minn) minn=ans[cnt].s;
+        cnt++;
+        return;
+    }
+    for(int i=0;i<4;i++){
+      if(!vis[i]){
+        vis[i]=1;
+        b[depth].l=a[i].l;
+        b[depth].w=a[i].w;
+        dfs1(depth+1,b);
+        b[depth].l=a[i].w;
+        b[depth].w=a[i].l;
+        dfs1(depth+1,b);
+        vis[i]=0;
+      }
+    }
+    return;
+}
+void dfs2(int depth,Rec* b){
+    if(depth==4){
+         int len=0,wid=0;
+         for(int i=0;i<3;i++)
+           len=max(len,b[i].l+b[3].l);
+         wid=max(b[3].w,b[0].w+b[1].w+b[2].w);
+         ans[cnt].s=len*wid;
+         ans[cnt].l=len;
+         ans[cnt].w=wid;
+         if(ans[cnt].s<minn) minn=ans[cnt].s;
+         cnt++;
+         return;
+    }
+    for(int i=0;i<4;i++){
+      if(!vis[i]){
+        vis[i]=1;
+        b[depth].l=a[i].l;
+        b[depth].w=a[i].w;
+        dfs2(depth+1,b);
+        b[depth].l=a[i].w;
+        b[depth].w=a[i].l;
+        dfs2(depth+1,b);
+        vis[i]=0;
+      }
+    }
+    return;
+}
+void dfs3(int depth,Rec* b){
+    if(depth==4){
+         int len=0,wid=0;
+         for(int i=0;i<2;i++)
+           len=max(len,b[i].l+b[3].l);
+         len=max(len,b[2].l);
+         wid=max(b[0].w+b[1].w+b[2].w,b[3].w+b[2].w);
+         ans[cnt].s=len*wid;
+         ans[cnt].l=len;
+         ans[cnt].w=wid;
+         if(ans[cnt].s<minn) minn=ans[cnt].s;
+         cnt++;
+         return;
+    }
+    for(int i=0;i<4;i++){
+      if(!vis[i]){
+        vis[i]=1;
+        b[depth].l=a[i].l;
+        b[depth].w=a[i].w;
+        dfs3(depth+1,b);
+        b[depth].l=a[i].w;
+        b[depth].w=a[i].l;
+        dfs3(depth+1,b);
+        vis[i]=0;
+      }
+    }
+    return;
+}
+void dfs4(int depth,Rec* b){
+    if(depth==4){
+         int len=0,wid=0;
+         len=max(b[0].l,b[3].l);
+         len=max(len,b[1].l+b[2].l);
+         wid=max(b[0].w+b[1].w+b[3].w,b[0].w+b[2].w+b[3].w);
+         ans[cnt].s=len*wid;
+         ans[cnt].l=len;
+         ans[cnt].w=wid;
+         if(ans[cnt].s<minn) minn=ans[cnt].s;
+         cnt++;
+         return;
+    }
+    for(int i=0;i<4;i++){
+      if(!vis[i]){
+        vis[i]=1;
+        b[depth].l=a[i].l;
+        b[depth].w=a[i].w;
+        dfs4(depth+1,b);
+        b[depth].l=a[i].w;
+        b[depth].w=a[i].l;
+        dfs4(depth+1,b);
+        vis[i]=0;
+      }
+    }
+    return;
+}
+void dfs5(int depth,Rec* b){
+    if(depth==4){
+         int len=0,wid=0;
+         len=max(b[2].l,b[3].l);
+         len=max(len,b[0].l+b[1].l);
+         wid=max(b[0].w+b[2].w+b[3].w,b[1].w+b[2].w+b[3].w);
+         ans[cnt].s=len*wid;
+         ans[cnt].l=len;
+         ans[cnt].w=wid;
+         if(ans[cnt].s<minn) minn=ans[cnt].s;
+         cnt++;
+         return;
+    }
+    for(int i=0;i<4;i++){
+      if(!vis[i]){
+        vis[i]=1;
+        b[depth].l=a[i].l;
+        b[depth].w=a[i].w;
+        dfs5(depth+1,b);
+        b[depth].l=a[i].w;
+        b[depth].w=a[i].l;
+        dfs5(depth+1,b);
+        vis[i]=0;
+      }
+    }
+    return;
+}
+void dfs6(int depth,Rec* b){
+    if(depth==4){
+         int len,wid;
+         if(b[1].l>=b[3].l&&b[1].w>=b[0].w||b[1].l<b[3].l&&b[1].w<b[0].w){
+           len=wid=0;
+           len=max(b[0].l+b[1].l,b[2].l+b[3].l);
+           wid=max(b[0].w,b[1].w)+max(b[2].w,b[3].w);
+           ans[cnt].s=len*wid;
+           ans[cnt].l=len;
+           ans[cnt].w=wid;
+           if(ans[cnt].s<minn) minn=ans[cnt].s;
+           cnt++;
+         }
+         if(b[1].l<b[3].l&&b[1].w>=b[0].w||b[1].l>=b[3].l&&b[1].w<b[0].w){
+           len=wid=0;
+           len=max(b[0].l+b[1].l,b[2].l+b[3].l);
+           wid=max(b[0].w+b[2].w,b[1].w+b[3].w);
+           ans[cnt].s=len*wid;
+           ans[cnt].l=len;
+           ans[cnt].w=wid;
+           if(ans[cnt].s<minn) minn=ans[cnt].s;
+           cnt++;
+         }
+         return;
+    }
+    for(int i=0;i<4;i++){
+      if(!vis[i]){
+        vis[i]=1;
+        b[depth].l=a[i].l;
+        b[depth].w=a[i].w;
+        dfs6(depth+1,b);
+        b[depth].l=a[i].w;
+        b[depth].w=a[i].l;
+        dfs6(depth+1,b);
+        vis[i]=0;
+      }
+    }
+    return;
+}
+int main(){
+    freopen("packrec.in","r",stdin);
+    freopen("packrec.out","w",stdout);
+    for(int i=0;i<4;i++)
+        scanf("%d%d",&a[i].l,&a[i].w);
+    memset(b,0,sizeof(b));
+    memset(ans,-1,sizeof(ans));
+    memset(vis,0,sizeof(vis));
+    minn=2147483647;
+    dfs1(0,b);
+    dfs2(0,b);
+    dfs3(0,b);
+    dfs4(0,b);
+    dfs5(0,b);
+    dfs6(0,b);
+    for(int i=0;i<cnt;i++)
+       if(ans[i].l>ans[i].w)
+           swap(ans[i].l,ans[i].w);
+    sort(ans,ans+cnt);
+    cnt=unique(ans,ans+cnt)-ans;
+    printf("%d\n",minn);
+    for(int i=0;i<cnt;i++)
+       if(ans[i].s==minn){
+             printf("%d %d\n",ans[i].l,ans[i].w);
+       }
+    return 0;
+}

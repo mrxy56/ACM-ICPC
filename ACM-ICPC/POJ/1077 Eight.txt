@@ -1,0 +1,124 @@
+#include<cstdio>
+#include<cctype>
+#include<algorithm>
+#include<queue>
+#include<cstring>
+using namespace std;
+const int MAXN=10;
+struct state{ 
+    int val;
+	int xpos;
+};
+struct path{ 
+    int parent;
+	char dir;
+}p[370000];
+int factorial[MAXN],a[MAXN],n;
+char dir[370000];
+state s,e;
+bool vis[370000],flag;
+char ch;
+queue<state> q;
+int arrayToInt(int *a){ 
+    int ans,temp;
+	ans=0;
+	for(int i=1;i<=n;i++){ 
+	    temp=a[i]-1;
+		for(int j=1;j<i;j++) if(a[j]<a[i]) temp--;
+		ans+=factorial[n-i]*temp;
+	}
+	return ans;
+}
+void intToArray(int x,int a[MAXN]){ 
+    bool used[MAXN];
+	int i,j,temp;
+	for(i=1;i<=n;i++) used[i]=false;
+	for(i=1;i<=n;i++){ 
+	    temp=x/factorial[n-i];
+		for(j=1;j<=n;j++) if(!used[j]){ 
+		    if(temp==0) break;
+			temp--;
+		}
+		a[i]=j;
+		used[j]=true;
+		x%=factorial[n-i];
+	}
+}
+void init(){ 
+    factorial[0]=1;
+	for(int i=1;i<MAXN;i++)
+		factorial[i]=factorial[i-1]*i;
+	n=9;
+	memset(vis,0,sizeof(vis));
+	int temp=0;
+	while((ch=getchar())!=EOF){ 
+	    if(!isspace(ch)&&ch!='\n'){
+			if(ch!='x')
+		       a[++temp]=ch-'0';
+			else{
+			   a[++temp]=9;
+			   s.xpos=temp;
+			}
+		}
+	}
+	s.val=arrayToInt(a);
+	e.val=0;e.xpos=9;
+	flag=false;
+}
+void change(state &t,char d){ 
+	int x=(t.xpos-1)/3+1,y=(t.xpos-1)%3+1;
+	if(d=='u'&&x==1) return;
+	if(d=='d'&&x==3) return;
+	if(d=='l'&&y==1) return;
+	if(d=='r'&&y==3) return;
+    int a[MAXN],xpos=t.xpos;
+	intToArray(t.val,a);
+    if(d=='u'){swap(a[xpos],a[xpos-3]);xpos-=3;}
+	if(d=='d'){swap(a[xpos],a[xpos+3]);xpos+=3;}
+	if(d=='l'){swap(a[xpos],a[xpos-1]);xpos-=1;}
+	if(d=='r'){swap(a[xpos],a[xpos+1]);xpos+=1;}
+	state newt;
+	newt.val=arrayToInt(a);
+	newt.xpos=xpos;
+	if(!vis[newt.val]){
+		q.push(newt);
+		vis[newt.val]=true;
+		p[newt.val].parent=t.val;
+		p[newt.val].dir=d;
+	}
+	return;
+}
+void bfs(){ 
+    while(!q.empty()) q.pop();
+    q.push(s);
+	vis[s.val]=true;
+	while(!q.empty()&&!flag){ 
+	    state head=q.front();
+        q.pop();
+		if(head.val==e.val){ 
+		    flag=true;return;
+		}
+		change(head,'u');
+		change(head,'d');
+		change(head,'l');
+		change(head,'r');
+	}
+	return;
+}
+void print(int v){ 
+    if(v!=s.val){ 
+	   print(p[v].parent);
+	   printf("%c",p[v].dir);
+	}
+	return;
+}
+int main(){ 
+    init();
+    bfs();
+	if(flag){ 
+	    print(e.val);
+		printf("\n");
+	}
+	else printf("unsolvable\n");
+	return 0;
+}

@@ -1,0 +1,73 @@
+/*
+ID:mrxy564
+PROG:prefix
+LANG:C++
+*/
+#include<cstdio>
+#include<cstring>
+#include<cstdlib>
+#include<stack>
+using namespace std;
+stack<int> a;
+bool dp[200010];
+int cnt,ch,len;
+char s[210][12],str[200010],L[210];
+int cmp_string(const void *_a,const void *_b){
+	char*a=(char*)_a;
+	char*b=(char*)_b;
+	return strcmp(a,b);
+}
+void init(){ 
+	cnt=0;
+    while(scanf("%s",s[cnt])==1){ 
+	    if(s[cnt][0]=='.') break;
+		else
+	    	cnt++;
+	}
+	qsort(s,cnt,sizeof(s[0]),cmp_string);
+	for(int i=0;i<cnt;i++)
+		L[i]=strlen(s[i]);
+	getchar();len=0;
+	while((ch=getchar())!=EOF){ 
+	    if(ch!='\n')
+            str[len++]=ch;
+	}
+}
+bool Equal(char*a,char*b,int len){ 
+    for(int i=0;i<len;i++)
+		if(a[i]!=b[i]) return false;
+	return true;
+}
+int main(){ 
+	freopen("prefix.in","r",stdin);
+	freopen("prefix.out","w",stdout);
+    memset(dp,false,sizeof(dp));
+	init();
+	while(!a.empty()) a.pop();
+    for(int i=0;i<cnt;i++){ 
+	    if(Equal(s[i],str,L[i])){
+			a.push(L[i]);
+			dp[L[i]]=true;
+		}
+	}
+	while(!a.empty()){ 
+	    int index=a.top();
+		a.pop();
+		if(index>=len) continue;
+		for(int i=0;i<cnt;i++)
+            if(!dp[index+L[i]] && Equal(s[i],str+index,L[i])){ 
+			    a.push(index+L[i]);
+				dp[index+L[i]]=true;
+			}
+	}
+	bool flag=false;
+	for(int i=len;i>=1;i--){ 
+	    if(dp[i]==true){
+			printf("%d\n",i);
+			flag=true;
+			break;
+		}
+	}
+	if(!flag) printf("0\n");
+	return 0;
+}

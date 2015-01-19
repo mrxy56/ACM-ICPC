@@ -1,0 +1,89 @@
+#include <iostream>
+#include <cstdio>
+using namespace std;
+int main(void)
+{
+    int N,k,m,left[20],right[20];
+    while(scanf("%d%d%d",&N,&k,&m)==3)
+    {
+        if(N==0) break;
+        int i=1,j=N,k1=0,m1=0,count=0,t;
+        for(t=2;t<=N;t++)
+           left[t]=t-1;
+        left[1]=N;
+        for(t=1;t<=N-1;t++)
+           right[t]=t+1;
+        right[N]=1;
+        while(1)
+        {
+            while(k1!=k)
+            {
+                i=right[i];
+                k1++;
+            }
+            if(count==0) i=left[i];
+            while(m1!=m)
+            {
+                j=left[j];
+                m1++;
+            }
+            if(count==0) j=right[j];
+            if(k1==k&&m1==m)
+            {
+               if(i==j)
+               {
+                  if(i>=10)
+                  printf(" ");
+                  else
+                  printf("  ");
+                  printf("%d",i);
+                  count+=1;
+                  left[right[i]]=left[i];
+                  right[left[i]]=right[i];
+               }
+               if(i!=j)
+               {
+                  if(i>=10)
+                  printf(" ");
+                  else
+                  printf("  ");
+                  printf("%d",i);
+                  if(j>=10)
+                  printf(" ");
+                  else
+                  printf("  ");
+                  printf("%d",j);
+                  count+=2;
+                  left[right[i]]=left[i];
+                  if(left[i]==j)
+                  {
+                    left[right[i]]=left[left[i]];
+                    left[i]=left[left[i]];
+                  }
+                  right[left[i]]=right[i];
+                  if(right[i]==j)
+                   {
+                     right[left[i]]=right[right[i]];
+                     right[i]=right[right[i]];
+                   }
+                  left[right[j]]=left[j];
+                  if(left[j]==i)
+                   {
+                        left[right[j]]=left[left[j]];
+                        left[j]=left[left[j]];
+                   }
+                  right[left[j]]=right[j];
+                  if(right[j]==i)
+                  {
+                    right[left[j]]=right[right[j]];
+                    right[j]=right[right[j]];
+                  }
+               }
+               if(count!=N) printf(",");
+               else {printf("\n");break;}
+               k1=0;m1=0;
+            }
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,35 @@
+#include <cstdio>
+using namespace std;
+int main()
+{
+    //freopen("a.txt","r",stdin);
+    int n,m,kase=0;
+    int x[8]={-1,0,1,0,-1,1,-1,1};
+    int y[8]={0,-1,0,1,-1,1,1,-1};
+    char a[110][110];
+    bool flag=false;
+    while(scanf("%d%d",&n,&m)==2&&n&&m){
+         if(flag) printf("\n");
+         printf("Field #%d:\n",++kase);
+         getchar();
+         for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++)
+                scanf("%c",&a[i][j]);
+            getchar();
+         }
+         for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+               if(a[i][j]=='*') {printf("*");continue;}
+               int count=0;
+               for(int k=0;k<8;k++){
+                   int x1=i+x[k],y1=j+y[k];
+                     if(x1>=0&&x1<n&&y1>=0&&y1<m&&a[x1][y1]=='*') count++;
+               }
+               printf("%d",count);
+            }
+            printf("\n");
+         }
+         flag=true;
+    }
+    return 0;
+}

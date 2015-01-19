@@ -1,0 +1,49 @@
+#include<cstdio>
+#include<algorithm>
+#include<cstring>
+using namespace std;
+int T,n,m,a,b;
+int G[55][55],vis[55];
+bool dfs(int num,int last,int sum){
+    int temp=sum;
+    for(int i=1;i<=n;i++)
+       if(G[num][i]>=0&&i!=last){
+           if(sum==-1) temp=G[num][i];
+           else temp=sum^G[num][i];
+           if(!vis[i]){
+             vis[i]=1;
+             if(!dfs(i,num,temp)) return false;
+             vis[i]=0;
+           }
+           else if(vis[i]==-1){
+             if(temp!=0) return false;
+           }
+       }
+       return true;
+}
+int main(){
+   //freopen("a.txt","r",stdin);
+   scanf("%d",&T);
+   while(T--){
+       scanf("%d%d",&n,&m);
+       memset(G,-1,sizeof(G));
+       memset(vis,0,sizeof(vis));
+       for(int i=0;i<m;i++){
+           scanf("%d%d",&a,&b);
+           scanf("%d",&G[a][b]);
+           G[b][a]=G[a][b];
+       }
+       bool flag=true;
+       for(int i=1;i<=n;i++){
+           memset(vis,0,sizeof(vis));
+           vis[i]=-1;
+           if(!dfs(i,-1,-1)) {printf("No\n");flag=false;break;}
+           for(int j=1;j<=n;j++)
+              if(G[i][j]>=0||G[j][i]>=0){
+                  G[i][j]=G[j][i]=-1;
+              }
+       }
+       if(flag) printf("Yes\n");
+   }
+   return 0;
+} 

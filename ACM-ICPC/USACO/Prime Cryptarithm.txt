@@ -1,0 +1,42 @@
+/*
+ID:mrxy564
+PROG:crypt1
+LANG:C++
+*/
+#include<cstdio>
+#include<cstring>
+using namespace std;
+int cnt,in[10];
+bool is_valid(int num,int bit){
+    char s[6];
+    sprintf(s,"%d",num);
+    if(s[0]=='0') return false;
+    int len=strlen(s);
+    if(len!=bit) return false;
+    for(int i=0;i<len;i++)
+       if(!in[s[i]-'0']) return false;
+    return true;
+}
+int main(){
+    freopen("crypt1.in","r",stdin);
+    freopen("crypt1.out","w",stdout);
+    int num,temp,a,b;
+    scanf("%d",&num);
+    memset(in,0,sizeof(in));
+    for(int i=0;i<num;i++){
+       scanf("%d",&temp);
+       in[temp]=1;
+    }
+    for(int i=100;i<=999;i++){
+      if(is_valid(i,3)){
+       for(int j=10;j<=99;j++){
+           if(is_valid(j,2)){
+             if(is_valid(j/10*i,3)&&is_valid(j%10*i,3)&&is_valid(i*j,4)){
+                  cnt++;
+             }
+           }
+       }
+      }
+    }
+    printf("%d\n",cnt);
+}

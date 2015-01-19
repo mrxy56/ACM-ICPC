@@ -1,0 +1,59 @@
+#include<cstdio>
+#include<algorithm>
+#include<cmath>
+using namespace std;
+typedef struct{
+   double x,y;
+}point;
+point p[110];
+int parent[110];
+bool intree[110];
+double d[110][110],e[5010],dis[110],ans,maxd,dist,weight;
+int main(){
+   //freopen("a.txt","r",stdin);
+   int T,n,w;
+   scanf("%d",&T);
+   while(T--){
+      scanf("%d",&n);ans=0.0;
+      for(int i=0;i<n;i++)
+         scanf("%lf%lf",&p[i].x,&p[i].y);
+      maxd=0;
+      for(int i=0;i<n;i++)
+         for(int j=0;j<n;j++){
+            if(i==j)
+              d[i][j]=0;
+            else{
+              d[i][j]=sqrt((p[i].x-p[j].x)*(p[i].x-p[j].x)+(p[i].y-p[j].y)*(p[i].y-p[j].y));
+              maxd=max(d[i][j],maxd);
+            }
+         }
+       for(int i=0;i<n;i++){
+          intree[i]=false;
+          dis[i]=maxd+1;
+          parent[i]=-1;
+       }
+       dis[0]=0;
+       int v=0;
+       while(intree[v]==false){
+          intree[v]=true;
+          for(int i=0;i<n;i++){
+               w=i;weight=d[v][i];
+             if((dis[w]>weight)&&(intree[w]==false)){
+                   dis[w]=weight;
+                   parent[w]=v;
+             }
+          }
+          v=0;
+          dist=maxd+1;
+          for(int i=0;i<n;i++)
+            if((intree[i]==false)&&(dist>dis[i])){
+                dist=dis[i];
+                v=i;
+            }
+          ans+=dis[v];
+       }
+       printf("%.2lf\n",ans);
+       if(T) printf("\n");
+   }
+   return 0;
+}

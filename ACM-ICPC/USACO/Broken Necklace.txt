@@ -1,0 +1,36 @@
+/*
+ID:mrxy564
+PROG:beads
+LANG:C++
+*/
+#include<cstdio>
+using namespace std;
+int main()
+{
+    freopen("beads.in","r",stdin);
+    freopen("beads.out","w",stdout);
+    int n,ans,max=0,color;
+    char s[710];
+    while(scanf("%d",&n)==1){
+        getchar();
+        fgets(s,360,stdin);
+        for(int i=0;i<n;i++)
+           s[i+n]=s[i];
+        s[n*2]='\0';
+        for(int i=0;i<n;i++){
+           ans=color=0;
+           int j=i;
+           char temp=s[i];
+           if(temp=='r'||temp=='b') color++;
+           while(s[j]&&j<i+n){
+              if(s[j]=='r'&&s[j]!=temp) {color++;temp=s[j];}
+              if(s[j]=='b'&&s[j]!=temp) {color++;temp=s[j];}
+              if(color==3) break;
+              ans++;j++;
+           }
+           if(ans>max) max=ans;
+        }
+        printf("%d\n",max);
+    }
+    return 0;
+}

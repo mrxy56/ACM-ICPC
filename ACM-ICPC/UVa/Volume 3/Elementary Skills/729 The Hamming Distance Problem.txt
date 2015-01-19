@@ -1,0 +1,31 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+int n,h;
+char s[20];
+void search(int floor,int num){
+     if(floor==n){
+        if(num==h){
+        for(int i=0;i<n;i++)
+           printf("%c",s[i]);
+        printf("\n");
+        }
+        return;
+     }
+     s[floor]='0';
+     search(floor+1,num);
+     s[floor]='1';
+     search(floor+1,num+1);
+     return;
+}
+int main(void){
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        scanf("%d%d",&n,&h);
+        memset(s,'\0',sizeof(s));
+        search(0,0);
+        if(T) printf("\n");
+    }
+    return 0;
+}

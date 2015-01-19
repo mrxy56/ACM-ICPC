@@ -1,0 +1,29 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void)
+{
+    int A,limit,sum=0;
+   while(scanf("%d%d",&A,&limit)==2&&A>=0&limit>=0)
+    {
+         int term=1,preA;
+         sum+=1;preA=A;
+         while(A!=1&&A<=limit)
+             {
+                if(A%2==1)
+                 {
+                     if(A>715827882)
+                     {
+                           break;
+                     }
+                     else
+                          A=3*A+1;
+                    if(A<=limit)
+                    term++;
+                  }
+                 else {A/=2;term++;}
+                }
+            printf("Case %d: A = %d, limit = %d, number of terms = %d\n",sum,preA,limit,term);
+    }
+    return 0;
+}

@@ -1,0 +1,54 @@
+/*
+ID:mrxy564
+PROG:comehome
+LANG:C++
+*/
+#include<cstdio>
+#include<cstring>
+using namespace std;
+const int INF=~0U>>2;
+char s1[2],s2[2];
+int d[52],w[52][52],vis[52],n,temp;
+int to_digit(char ch){ 
+	int ans;
+    if(ch>='A'&&ch<='Z') ans=ch-'A'+26;
+	if(ch>='a'&&ch<='z') ans=ch-'a';
+	return ans;
+}
+void init(){ 
+    for(int i=0;i<52;i++)
+        d[i]=(i==51)?0:INF;
+	for(int i=0;i<52;i++)
+		for(int j=0;j<52;j++)
+			w[i][j]=(i==j)?0:INF;
+	scanf("%d",&n);
+	for(int i=0;i<n;i++){ 
+	     scanf("%s%s%d",s1,s2,&temp);
+		 int a=to_digit(s1[0]),b=to_digit(s2[0]);
+         w[a][b]=(temp<w[a][b])?temp:w[a][b];
+		 w[b][a]=w[a][b];
+	}
+}
+int main(){ 
+	freopen("comehome.in","r",stdin);
+	freopen("comehome.out","w",stdout);
+    memset(vis,0,sizeof(vis));
+	init();
+	for(int i=0;i<52;i++){ 
+	     int x,m=INF;
+		 for(int y=0;y<52;y++) if(!vis[y]&&d[y]<=m) m=d[x=y];
+		 vis[x]=1;
+		 for(int y=0;y<52;y++){ 
+		     if(d[y]>d[x]+w[x][y])
+			     d[y]=d[x]+w[x][y];
+		  }
+	}
+	int min=INF,mini;
+    for(int i=26;i<51;i++)
+		if(d[i]<min){
+			min=d[i];
+			mini=i;
+		}
+    printf("%c %d\n",'A'+mini-26,min);
+	return 0;
+}

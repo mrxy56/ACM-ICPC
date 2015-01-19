@@ -1,0 +1,47 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+#define FOR(i,s,t) for(int i=(s);i<(t);i++)
+#define RST(x,t) memset(x,t,sizeof(x))
+int n,num,ans;
+int a[5010],c[5010],d[5010];
+int lowbit(int x){
+	return x&-x;
+}
+void update(int pos,int val){
+	while(pos<=n){
+		c[pos]+=val;
+		pos+=lowbit(pos);
+	}
+}
+int req(int pos){
+	int ans=0;
+	while(pos>0){
+		ans+=c[pos];
+		pos-=lowbit(pos);
+	}
+	return ans;
+}
+int main(){
+    while(scanf("%d",&n)==1){
+		num=0;
+		FOR(i,1,n+1){
+			scanf("%d",a+i);
+			a[i]++;
+		}
+	    RST(d,0);RST(c,0);
+        FOR(i,1,n){ 
+            num+=(a[i]-1)-req(a[i]);
+		    update(a[i],1);
+		}
+        ans=num;
+        FOR(i,1,n+1){
+			num-=a[i]-1;
+			num+=n-a[i];
+			ans=min(ans,num);
+		}
+		printf("%d\n",ans);
+	}
+	return 0;
+}

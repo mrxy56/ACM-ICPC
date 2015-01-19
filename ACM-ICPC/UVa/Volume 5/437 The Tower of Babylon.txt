@@ -1,0 +1,46 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+struct Rec{
+    int l,w,h;
+    bool operator > (const Rec &obj) const{
+         return l>obj.l&&w>obj.w||l>obj.w&&w>obj.l;
+    }
+};
+int n;
+Rec a[35][3];
+int d[35][3],kase=0;
+int dp(int num,int no){
+    int& ans=d[num][no];
+    if(ans>=0) return ans;
+    ans=a[num][no].h;
+    int maxn=0;
+    for(int i=0;i<n;i++)
+       for(int j=0;j<3;j++)
+         if(a[num][no]>a[i][j]){
+            maxn=max(dp(i,j),maxn);
+         }
+    ans+=maxn;
+    return ans;
+}
+int main(){
+   //freopen("a.txt","r",stdin);
+   while(scanf("%d",&n)==1&&n){
+   for(int i=0;i<n;i++){
+      scanf("%d%d%d",&a[i][0].l,&a[i][0].w,&a[i][0].h);
+      a[i][1].l=a[i][0].w;a[i][1].w=a[i][0].h;a[i][1].h=a[i][0].l;
+      a[i][2].l=a[i][0].l;a[i][2].w=a[i][0].h;a[i][2].h=a[i][0].w;
+   }
+   memset(d,-1,sizeof(d));
+   for(int i=0;i<n;i++)
+      for(int k=0;k<3;k++)
+        dp(i,k);
+   int maxn=0;
+   for(int i=0;i<n;i++)
+      for(int j=0;j<3;j++)
+         if(d[i][j]>maxn) maxn=d[i][j];
+       printf("Case %d: maximum height = %d\n",++kase,maxn);
+   }
+   return 0;
+}

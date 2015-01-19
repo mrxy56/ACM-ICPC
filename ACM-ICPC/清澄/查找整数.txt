@@ -1,0 +1,19 @@
+#include<cstdio>
+using namespace std;
+int a[1010];
+int main(){ 
+   int n,num;
+   scanf("%d",&n);
+   for(int i=1;i<=n;i++)
+	   scanf("%d",&a[i]);
+   scanf("%d",&num);
+   bool flag=false;
+   for(int i=1;i<=n;i++)
+	   if(a[i]==num){
+		   printf("%d\n",i);
+		   flag=true;
+		   break;
+	   }
+   if(!flag) printf("-1\n");
+   return 0;
+}

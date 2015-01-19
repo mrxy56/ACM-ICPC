@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <math.h>
+const double pi=atan(1.0)*4;
+int main(void)
+{
+    int n;
+    double b,h,r,R,H,B,sum;
+    scanf("%d",&n);
+    while(n--)
+    {
+        sum=0.0;
+        scanf("%lf%lf",&b,&h);
+        R=sqrt(h*h+b*b/4);
+        r=b*h/(2*R+b);
+        H=h-2*r;
+        B=b*H/h;
+        while(r>=0.000001)
+        {
+             sum+=2*r*pi;
+             b=B;h=H;
+             R=sqrt(h*h+b*b/4);
+             r=b*h/(2*R+b);
+             H=h-2*r;
+             B=b*H/h;
+        }
+        printf("%13.6lf\n",sum);
+        if(n)
+            printf("\n");
+    }
+    return 0;
+}
+//小数点后保留XX位数字是四舍五入的结果。

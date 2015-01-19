@@ -1,0 +1,16 @@
+#include <stdio.h>
+#include <math.h>
+int main(void)
+{
+    unsigned int i,n;
+    while(scanf("%u",&n)==1)
+    {
+        if(!n) break;
+        i=floor(sqrt(n));
+        if(i*i==n) printf("yes\n");
+        else printf("no\n");
+    }
+    return 0;
+}
+
+

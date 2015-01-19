@@ -1,0 +1,12 @@
+int findKth(int *s,int n,int K){ 
+    int x=s[0],i=0,j=n-1,temp;
+	while(i<j){
+	   while(i<j&&s[j]>=x) j--;
+          temp=s[i];s[i]=s[j];s[j]=temp;
+	   while(i<j&&s[i]<=x) i++;
+	      temp=s[i];s[i]=s[j];s[j]=temp;
+	}
+	if(i==K-1) return s[i];
+	else if(i<K-1) return findKth(&s[i+1],n-i-1,K-i-1);
+	else return findKth(s,i+1,K);
+}

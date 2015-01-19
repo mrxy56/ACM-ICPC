@@ -1,0 +1,67 @@
+/*
+ID:mrxy564
+PROG:holstein
+LANG:C++
+*/
+#include<cstdio>
+#include<cstring>
+using namespace std;
+const int maxnum=2147483647;
+int a[30],sum[30];
+int b[20][30];
+int c[20];
+int n,m,num,state,cnt;
+bool is_bigger(int a[],int b[]){ 
+    for(int i=0;i<n;i++)
+		if(a[i]<b[i]) return false;
+	return true;
+}
+void dfs(int cur){
+	if(cur==m){ 
+		int bit=1,temp=0;
+		memset(sum,0,sizeof(sum));
+	    for(int i=0;i<m;i++){ 
+		    if(state&bit){
+			  for(int j=0;j<n;j++)
+				  sum[j]+=b[i][j];
+			  temp++;
+			}
+            bit<<=1;
+		}
+		if(is_bigger(sum,a)&&temp<num){
+		   bit=1;cnt=0;
+	       for(int i=0;i<m;i++){
+			 if(state&bit)
+				  c[cnt++]=i+1;
+			 bit<<=1;
+		   }
+           num=temp;
+		}
+		return;
+    }
+    state|=(1<<cur);
+    dfs(cur+1);
+	state&=~(1<<cur);
+	dfs(cur+1);
+	return;
+}
+int main(){  
+	freopen("holstein.in","r",stdin);
+	freopen("holstein.out","w",stdout);
+	scanf("%d",&n);
+	for(int i=0;i<n;i++)
+		scanf("%d",&a[i]);
+	scanf("%d",&m);
+	for(int i=0;i<m;i++)
+		for(int j=0;j<n;j++)
+			scanf("%d",&b[i][j]);
+	num=maxnum;
+	state=0;
+	dfs(0);
+	printf("%d",num);
+    for(int i=0;i<num;i++)
+		printf(" %d",c[i]);
+	printf("\n");
+	return 0;
+}
+

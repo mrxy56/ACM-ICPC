@@ -1,0 +1,51 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+const int INF=2147483647;
+int d[15][15],p[15],di[15][15],vis[15];
+int dp(int i,int j){
+    int &ans=d[i][j];
+    if(ans!=INF) return ans;
+    for(int k=i;k<j;k++){
+        if((dp(i,k)+dp(k+1,j)+p[i-1]*p[k]*p[j])<ans){
+           di[i][j]=k;
+           ans=d[i][k]+d[k+1][j]+p[i-1]*p[k]*p[j];
+        }
+    }
+    return ans;
+}
+void print(int i,int j){
+    if(i==j){
+        if(!vis[i])
+        {printf("A%d",i);vis[i]=1;}
+        return;
+    }
+    printf("(");
+    int k=di[i][j];
+    if(k>0){
+      print(i,k);
+      printf(" x ");
+      print(k+1,j);
+    }
+    printf(")");
+}
+int main(){
+    //freopen("a.txt","r",stdin);
+    int n,q,kase=0;
+    while(scanf("%d",&n)==1&&n){
+        memset(di,0,sizeof(di));
+        memset(vis,0,sizeof(vis));
+        for(int i=1;i<=n;i++)
+           for(int j=1;j<=n;j++)
+              if(i==j) d[i][j]=0;
+                else d[i][j]=INF;
+        for(int i=1;i<=n;i++)
+           scanf("%d%d",&p[i-1],&p[i]);
+        dp(1,n);q=0;
+        printf("Case %d: ",++kase);
+        print(1,n);
+        printf("\n");
+    }
+    return 0;
+}

@@ -1,0 +1,16 @@
+#include <cstdlib>
+#include <cstdio>
+#include <cmath>
+using namespace std;
+double getRoot(double (*f)(double), double a, double b)
+{
+const double eps=1e-6;
+    while(1){
+       double fa=f(a),fb=f(b),mid=(a+b)/2;
+       if(fabs(fa)<eps) return a;
+       if(fabs(fb)<eps) return b; 
+       double fmid=f(mid);
+         if(fmid*fa>eps) a=mid;
+         else b=mid;
+     }
+}

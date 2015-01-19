@@ -1,0 +1,21 @@
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+int a[110];
+bool cmp(int x,int y){
+	return x>y;
+}
+int main(){ 
+   int n,cost=0;
+   scanf("%d",&n);
+   for(int i=0;i<n;i++)
+	   scanf("%d",&a[i]);
+   while(n>1){
+     sort(a,a+n,cmp);
+     cost+=a[n-1]+a[n-2];
+     a[n-2]+=a[n-1];
+     n--;
+   }
+   printf("%d\n",cost);
+   return 0;
+}

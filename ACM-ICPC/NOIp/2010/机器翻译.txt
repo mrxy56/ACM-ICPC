@@ -1,0 +1,36 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+int vis[1010],a[110];
+int main()
+{
+    freopen("translate.in","r",stdin);
+    freopen("translate.ans","w",stdout);
+    int m,n,temp,front,rear,len,num;
+    while(scanf("%d%d",&m,&n)==2){
+        memset(vis,0,sizeof(vis));
+        front=rear=len=num=0;
+        for(int i=0;i<n;i++){
+           scanf("%d",&temp);
+           if(!vis[temp]){
+               if(len!=m){
+                  a[rear]=temp;
+                  vis[temp]=1;
+                  rear=(rear+1)%m;
+                  len++;
+                  num++;
+               }
+               else{
+                  vis[a[front]]=0;
+                  vis[temp]=1;
+                  a[front]=temp;
+                  front=(front+1)%m;
+                  rear=(rear+1)%m;
+                  num++;
+               }
+           }
+        }
+        printf("%d\n",num);
+    }
+    return 0;
+}

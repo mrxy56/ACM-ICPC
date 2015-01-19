@@ -1,0 +1,86 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+int maxv[400010],minv[400010],setv[400010],cnt,v,y1,y2;
+struct interval{
+    int l,r,h;
+};
+interval a[100010];
+void pushdown(int o){
+    int lc=o*2,rc=o*2+1;
+    if(setv[o]>=0){
+        setv[lc]=setv[rc]=setv[o];
+        setv[o]=-1;
+    }
+}
+void maintain(int o,int L,int R){
+    int lc=o*2,rc=o*2+1;
+    if(setv[o]>=0){
+        maxv[o]=minv[o]=setv[o];
+    }
+    else if(R>L){
+        maxv[o]=max(maxv[lc],maxv[rc]);
+        minv[o]=min(minv[lc],minv[rc]);
+    }
+    return;
+}
+void update(int o,int L,int R){
+    int lc=o*2,rc=o*2+1;
+    if(setv[o]>=0){
+        maxv[o]=minv[o]=setv[o];
+    }
+    if(y1<=L&&y2>=R){
+        if(v>=maxv[o]){
+            cnt+=R-L+1;
+            maxv[o]=minv[o]=setv[o]=v;
+            int t=o;
+            while(t>1){
+               t/=2;
+               maxv[t]=max(maxv[o],maxv[t]);
+               minv[t]=min(minv[o],minv[t]);
+            }
+            return;
+        }
+        else if(v<minv[o]) return;
+        else{
+            pushdown(o);
+            int M=L+(R-L)/2;
+            if(y1<=M) update(lc,L,M);else maintain(lc,L,M);
+            if(y2>M) update(rc,M+1,R);else maintain(rc,M+1,R);
+        }
+    }else{
+       pushdown(o);
+       int M=L+(R-L)/2;
+       if(y1<=M) update(lc,L,M);else maintain(lc,L,M);
+       if(y2>M) update(rc,M+1,R);else maintain(rc,M+1,R);
+    }
+    maintain(o,L,R);
+    return;
+}
+int main()
+{
+    //freopen("a.txt","r",stdin);
+    int T,n,tmax,tmin;
+    scanf("%d",&T);
+    while(T--){
+      cnt=0;tmax=-1;tmin=100010;
+      scanf("%d",&n);
+      for(int i=0;i<n;i++){
+         scanf("%d%d%d",&a[i].l,&a[i].r,&a[i].h);
+         a[i].r--;
+         if(a[i].l<tmin) tmin=a[i].l;
+         if(a[i].r>tmax) tmax=a[i].r;
+      }
+      memset(setv,-1,sizeof(setv));
+      memset(maxv,0,sizeof(maxv));
+      memset(minv,0,sizeof(minv));
+      for(int i=0;i<n;i++){
+         y1=a[i].l;y2=a[i].r;v=a[i].h;
+         update(1,tmin,tmax);
+      }
+      printf("%d\n",cnt);
+    }
+    scanf("%d",&n);
+    return 0;
+}

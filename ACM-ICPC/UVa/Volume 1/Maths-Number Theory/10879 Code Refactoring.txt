@@ -1,0 +1,25 @@
+#include <stdio.h>
+int main(void)
+{
+    int n,p,i,count=0;
+    scanf("%d",&n);
+    while(n--)
+    {
+        scanf("%d",&p);
+        count++;
+        for(i=2;i*i<=p;i++)
+             if(p%i==0)
+             {
+                printf("Case #%d: %d = %d * %d = ",count,p,i,p/i);
+                break;
+             }
+        i++;
+        for(;i*i<=p;i++)
+              if(p%i==0)
+              {
+                  printf("%d * %d\n",i,p/i);
+                  break;
+              }
+    }
+    return 0;
+}

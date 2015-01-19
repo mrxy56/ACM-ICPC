@@ -1,0 +1,38 @@
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+int const N=1000010;
+int vis[N];
+long long gcd(long long a,long long b){
+     return b==0?a:gcd(b,a%b);
+}
+int main(){
+   long long n,a,b,c;
+   long long count1,count2;
+   while(scanf("%lld",&n)==1){
+       count1=count2=0;
+       memset(vis,0,sizeof(vis));
+       long long m=(long long)sqrt(n+0.5);
+       for(long long t=1;t<=m;t++)
+          for(long long s=t+2;s*t<=n;s+=2){
+              if(gcd(s,t)==1){
+                 a=s*t;
+                 b=(s*s-t*t)/2;
+                 c=(s*s+t*t)/2;
+                 if(c<=n){
+                   count1++;
+                   if(!vis[a]){count2++;vis[a]=1;}
+                   if(!vis[b]){count2++;vis[b]=1;}
+                   if(!vis[c]){count2++;vis[c]=1;}
+                 }
+                 for(int j=2;c*j<=n;j++){
+                   if(!vis[a*j]){count2++;vis[a*j]=1;}
+                   if(!vis[b*j]){count2++;vis[b*j]=1;}
+                   if(!vis[c*j]){count2++;vis[c*j]=1;}
+                 }
+              }
+          }
+         printf("%lld %lld\n",count1,n-count2);
+   }
+   return 0;
+}

@@ -1,0 +1,13 @@
+#include<cstdio>
+using namespace std;
+int main(){
+    int h,m,s,num;
+    scanf("%d",&num);
+    h=num/3600;
+    num%=3600;
+    m=num/60;
+    num%=60;
+    s=num;
+    printf("%d:%d:%d\n",h,m,s);
+    return 0;
+}

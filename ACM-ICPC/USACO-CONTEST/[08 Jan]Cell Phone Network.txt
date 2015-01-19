@@ -1,0 +1,46 @@
+#include<cstdio>
+#include<vector>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+int n;
+const int INF=1000000;
+vector<int> g[10010];
+int dp[10010][3];
+void dfs(int u,int fa){ 
+   int sz=g[u].size();
+   int sum=0;
+   dp[u][0]=1;
+   for(int i=0;i<sz;i++){ 
+      int v=g[u][i];
+	  if(v==fa) continue;
+	  dfs(v,u);
+	  dp[u][0]+=min(dp[v][0],min(dp[v][1],dp[v][2]));
+	  sum+=min(dp[v][0],dp[v][1]);
+	  dp[u][2]+=dp[v][1];
+   }
+   dp[u][1]=INF;
+   if(sz==1&&u!=1) return;
+   for(int i=0;i<sz;i++){ 
+      int v=g[u][i];
+	  if(v==fa) continue;
+	  dp[u][1]=min(dp[u][1],dp[v][0]+sum-min(dp[v][0],dp[v][1]));
+   }
+}
+int main(){ 
+   int u,v;
+   while(scanf("%d",&n)==1){
+	 for(int i=1;i<=n;i++){
+		while(!g[i].empty()) g[i].pop_back();
+	 }
+     for(int i=1;i<n;i++){ 
+        scanf("%d%d",&u,&v);
+        g[u].push_back(v);
+		g[v].push_back(u);
+     }
+	 memset(dp,0,sizeof(dp));
+	 dfs(1,0);
+	 printf("%d\n",min(dp[1][0],dp[1][1]));
+   }
+   return 0;
+}

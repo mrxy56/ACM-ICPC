@@ -1,0 +1,22 @@
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+int n,num,T;
+int main(){
+   scanf("%d",&T);
+   while(T--){
+      scanf("%d",&n);
+      scanf("%d",&num);
+    int maxai=num;
+      scanf("%d",&num);
+    int ans=maxai-num;
+    if(num>maxai) maxai=num;
+    for(int j=2;j<n;j++){
+       scanf("%d",&num);
+       ans=max(ans,maxai-num);
+       maxai=max(maxai,num);
+    }
+    printf("%d\n",ans);
+    }
+    return 0;
+}

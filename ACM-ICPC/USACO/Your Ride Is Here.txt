@@ -1,0 +1,64 @@
+/*
+ID:mrxy564
+PROG:ride
+LANG:C++
+*/
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <cmath>
+using namespace std;
+int main()
+{
+    freopen("ride.in","r",stdin);
+    freopen("ride.out","w",stdout);
+    char a[10],b[10];
+    bool flag;
+    int num1,num2,maxnum,len1,len2;
+    while(scanf("%s%s",&a,&b)==2){
+        num1=num2=1;flag=false;
+        len1=strlen(a);len2=strlen(b);
+        for(int i=0;i<len1;i++)
+           num1*=a[i]-'A'+1;
+        for(int i=0;i<len2;i++)
+           num2*=b[i]-'A'+1;
+        if(num1%47==num2%47)flag=true;
+        if(flag) printf("GO\n");
+        else printf("STAY\n");
+        memset(a,'\0',sizeof(a));
+        memset(b,'\0',sizeof(b));
+    }
+    return 0;
+}
+#include <stdio.h>
+#include <ctype.h>
+
+int hash(char *s)
+{
+	int i, h;
+
+	h = 1;
+	for(i=0; s[i] && isalpha(s[i]); i++)
+		h = ((s[i]-'A'+1)*h) % 47;
+	return h;
+}
+
+void main(void)
+{
+	FILE *in, *out;
+	char comet[100], group[100];  /* bigger than necessary, room for newline */
+
+	in = fopen("input.txt", "r");
+	out = fopen("output.txt", "w");
+
+	fgets(comet, sizeof comet, in);
+	fgets(group, sizeof group, in);
+
+	if(hash(comet) == hash(group))
+		fprintf(out, "GO\n");
+	else
+		fprintf(out, "STAY\n");
+	exit (0);
+}
+
+

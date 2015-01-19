@@ -1,0 +1,82 @@
+#include<cstdio>
+#include<cstring>
+int n,t;
+int a[110][110],val[110],c[110],e[110],q[110];
+bool judge,flag;
+void init(void)
+{
+    int i,j;
+    for(i=1;i<=n;i++)
+    {
+        scanf("%d%d",&val[i],&a[i][0]);
+        for(j=1;j<=a[i][0];j++)
+        {
+            scanf("%d",&a[i][j]);
+        }
+    }
+    return;
+}
+bool have_exit(int num)
+{
+    int v,i,front=0,rear=0;
+    c[num]=1;q[rear++]=num;
+    while(front<rear)
+    {
+         v=q[front++];
+         for(i=1;i<=a[v][0];i++)
+         {
+             if(!c[a[v][i]])
+             {
+                 if(a[v][i]==n)return true;
+                 q[rear++]=a[v][i];
+                 c[q[rear-1]]=1;
+             }
+         }
+    }
+    return false;
+}
+bool dfs(int num,int energy)
+{
+    int u,i;
+    if(num==n&&energy>0) return true;
+	for(i=1;i<=a[num][0];i++)
+	{
+      u=a[num][i];
+	  if(energy+val[u]>0)
+	 	{
+	 		if(!e[u])
+	 		{
+	 			e[u]=energy+val[u];
+	 			if(dfs(u,e[u])) return true;
+	 		}
+	 		else if(e[u]<energy+val[u]&&have_exit(u))
+            {
+                   return true;
+            }
+	 	}
+    }
+    return false;
+}
+void print(void)
+{
+    if(dfs(1,100))
+       printf("winnable\n");
+    else
+       printf("hopeless\n");
+}
+int main(void)
+{
+    //freopen("a.txt","r",stdin);
+    while(scanf("%d",&n)==1)
+    {
+        if(n==-1)break;
+        memset(a,0,sizeof(a));
+        memset(val,0,sizeof(val));
+        memset(c,0,sizeof(c));
+        memset(e,0,sizeof(e));
+        memset(q,0,sizeof(q));
+        init();
+        e[1]=100;
+        print();
+     }
+}

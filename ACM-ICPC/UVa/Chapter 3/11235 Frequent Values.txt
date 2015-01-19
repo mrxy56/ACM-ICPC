@@ -1,0 +1,48 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+int value[100010],cnt[100010],num[100010],left[100010],right[100010];
+int main(){
+   int n,p,q,last,L,R,ans,temp;
+   while(scanf("%d",&n)==1&&n){
+        scanf("%d",&q);last=-100001;p=0;
+        memset(cnt,0,sizeof(cnt));
+        for(int i=1;i<=n;i++){
+          scanf("%d",&temp);
+          if(temp>last){
+             p++;
+             value[p]=temp;
+             cnt[p]++;
+             num[i]=p;
+             left[i]=i;
+             last=value[p];
+          }
+          else if(temp==last){
+              cnt[p]++;
+              num[i]=p;
+              left[i]=left[i-1];
+              last=value[p];
+          }
+        }
+        for(int i=n;i>=1;i--){
+            if(i==n) right[i]=i;
+            else if(num[i]==num[i+1]) right[i]=right[i+1];
+            else if(num[i]<num[i+1]) right[i]=i;
+        }
+        for(int i=0;i<q;i++){
+           scanf("%d%d",&L,&R);
+           if(num[L]==num[R])
+              ans=R-L+1;
+           else{
+              temp=0;
+              for(int i=num[L]+1;i<=num[R]-1;i++)
+                  temp=max(cnt[i],temp);
+              ans=max(right[L]-L+1,R-left[R]+1);
+              ans=max(temp,ans);
+           }
+           printf("%d\n",ans);
+        }
+   }
+   return 0;
+}

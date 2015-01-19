@@ -1,0 +1,155 @@
+#include<cstdio>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+#include<cmath>
+using namespace std;
+typedef unsigned long long LL;
+const int MAXN=2;
+const int MAXM=2;
+const int N=4000005,M=20005;
+bool vis[N];
+LL prime[M],pri[M],fac[M],num[M],number,MOD,n;
+struct Matrix{ 
+  int n,m;
+  LL a[MAXN][MAXM];
+ void clear(){
+  n=MAXN;m=MAXM;
+  memset(a,0,sizeof(a));
+ }
+ Matrix operator * (const Matrix &b) const{ 
+  Matrix temp;
+  temp.clear();
+  temp.n=n;temp.m=b.m;
+  for(int i=0;i<n;i++)
+   for(int j=0;j<b.m;j++)
+    for(int k=0;k<m;k++){
+     temp.a[i][j]+=a[i][k]*b.a[k][j];
+  temp.a[i][j]%=MOD;
+ }
+  return temp;
+ }
+};
+Matrix A;
+Matrix pow_mod(Matrix A,LL i,LL mod){ 
+    if(i==0){ 
+    Matrix u;
+    u.clear();
+    u.n=MAXN;u.m=MAXM;
+    u.a[0][0]=u.a[1][1]=1%mod;
+    return u;
+ }
+   MOD=mod;
+   Matrix temp=pow_mod(A,i>>1,mod);
+   temp=temp*temp;
+   if(i&1) temp=temp*A;
+    return temp;
+}
+LL pow_mod(LL a,LL p,LL n){ 
+    if(p==0) return 1;
+ LL ans=pow_mod(a,p/2,n);
+ ans=ans*ans%n;
+ if(p%2==1) ans=ans*a%n;
+ return ans;
+}
+int solve(LL n){ 
+    int cnt=0;
+ LL m=(LL)sqrt(n+0.5);
+    for(int i=0;prime[i]<=m;i++){ 
+    if(n%prime[i]==0){ 
+        int temp=0;
+     pri[cnt]=prime[i];
+     while(n%prime[i]==0){ 
+         temp++;
+      n/=prime[i];
+     }
+     num[cnt]=temp;
+     cnt++;
+    }
+ }
+ if(n>1){ 
+    pri[cnt]=n;
+    num[cnt]=1;
+    cnt++;
+ }
+ return cnt;
+}
+int work(LL n){ 
+    int c=0;
+ LL m=(LL)sqrt(n+0.5);
+ for(LL i=1;i<=m;i++)
+  if(n%i==0){ 
+     if(i*i==n) fac[c++]=i;
+     else{ 
+        fac[c++]=i;
+     fac[c++]=n/i;
+     }
+  }
+ return c;
+}
+LL gcd(LL a,LL b){ 
+   return b==0?a:gcd(b,a%b);
+}
+LL lcm(LL a,LL b){ 
+   return a/gcd(a,b)*b;
+}
+LL legendre(LL a,LL p){ 
+   if(pow_mod(a,(p-1)/2,p)==1) return 1;
+   else return 0;
+}
+LL find(LL n){ 
+    int cnt=solve(n);
+ LL ans=1;
+ for(int i=0;i<cnt;i++){ 
+  LL period=1;
+  int c;
+  if(pri[i]==2) period=3;
+  else if(pri[i]==3) period=8;
+  else if(pri[i]==5) period=20;
+  else{ 
+      if(legendre(5,pri[i])==1)
+    c=work(pri[i]-1);
+   else
+    c=work(2*(pri[i]+1));
+   sort(fac,fac+c);
+   for(int k=0;k<c;k++){ 
+    Matrix a=pow_mod(A,fac[k],pri[i]);
+    LL x=(a.a[0][0]*0+a.a[0][1]*1)%pri[i];
+    LL y=(a.a[1][0]*0+a.a[1][1]*1)%pri[i]; 
+    if(x==0&&y==1){ 
+     period=fac[k];
+     break;
+    }
+   }
+  }
+  for(LL k=1;k<num[i];k++)
+   period*=pri[i];
+  ans=lcm(ans,period);
+ }
+ return ans;
+}
+void sieve(LL n){ 
+    LL m=(LL)sqrt(n+0.5);
+ memset(vis,0,sizeof(vis));
+ for(LL i=2;i<=m;i++) if(!vis[i])
+  for(LL j=i*i;j<=n;j+=i) vis[j]=true;
+}
+int generate_prime(LL n){ 
+    sieve(n);
+    int c=0;
+ for(LL i=2;i<=n;i++) if(!vis[i])
+  prime[c++]=i;
+ return c;
+}
+int main(){ 
+ number=generate_prime(150000);
+ A.clear();
+ A.a[0][0]=0;
+ A.a[0][1]=A.a[1][0]=A.a[1][1]=1;
+ while(cin>>n){
+  cout<<find(n)/2<<endl;
+ }
+ return 0;
+}
+
+

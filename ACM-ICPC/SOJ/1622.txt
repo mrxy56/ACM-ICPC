@@ -1,0 +1,11 @@
+#include<stdio.h>
+int main(void)
+{
+	int i,sum=0;
+	while(scanf("%d",&i)==1)//getchar会读入回车，其ascll码是10
+		sum=sum+i;
+	printf("%d\n",sum);
+	return 0;
+}
+
+		

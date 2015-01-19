@@ -1,0 +1,44 @@
+用sprintf来输出数组的内容，需要关注一个格式符%n
+给个例子
+#include <stdio.h>
+
+int main()
+{
+    char s[1000];
+
+    int x[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+    char *p = s;
+    for (int i = 0; i < 10; i++)
+    {
+        int n;
+        sprintf(p, " %d%n", x[i], &n);
+        p += n;
+    }
+
+    printf("%s\n", s);
+
+    return 0;
+}
+其实用sscanf来读取内容存入数组也是一样：
+#include<cstdio>
+#include<cstring>
+int main(void)
+{
+    char s[100];
+    char*p;
+    int a[100],i,n;
+    memset(s,'\0',sizeof(s));
+    memset(a,0,sizeof(a));
+    while(fgets(s,100,stdin)!=NULL)
+    {
+        i=0;p=s;//注意p赋值的位置，每次都要赋给s，别在定义的地方赋值
+        while(sscanf(p,"%d%n",&a[i++],&n)==1)
+        {
+            p+=n;
+        }
+        memset(s,'\0',sizeof(s));
+        memset(a,0,sizeof(a));
+    }
+    return 0;
+}

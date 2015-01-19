@@ -1,0 +1,54 @@
+/*
+ID:mrxy564
+PROG:zerosum
+LANG:C++
+*/
+#include<cstdio>
+using namespace std;
+int N;
+char q[100];
+void dfs(int last,int n,int m,char c,int cnt){
+	q[cnt]=m+'0';
+    if(m==N){   
+		int ans;
+		if(c=='+') ans=last+n;
+		else if(c=='-') ans=last-n;
+		else if(c==' ') ans=last;
+	    if(ans==0){
+	       for(int i=0;i<=cnt;i++)
+			 printf("%c",q[i]);
+		   printf("\n");
+		}
+		return;
+	}
+	if(c=='+'){
+		q[cnt+1]=' ';
+	    dfs(last+11*m+1,0,m+1,' ',cnt+2);
+		q[cnt+1]='+';
+	    dfs(last+n,m+1,m+1,'+',cnt+2);
+		q[cnt+1]='-';
+	    dfs(last+n,m+1,m+1,'-',cnt+2);
+	}
+	else if(c=='-'){ 
+		q[cnt+1]=' ';
+		dfs(last-11*m-1,0,m+1,' ',cnt+2);
+		q[cnt+1]='+';
+	    dfs(last-n,m+1,m+1,'+',cnt+2);
+		q[cnt+1]='-';
+		dfs(last-n,m+1,m+1,'-',cnt+2);
+	}
+	else if(c==' '){ 
+		q[cnt+1]='+';
+	    dfs(last,m+1,m+1,'+',cnt+2);
+		q[cnt+1]='-';
+		dfs(last,m+1,m+1,'-',cnt+2);
+	}
+	return;
+}
+int main(){ 
+	 freopen("zerosum.in","r",stdin);
+	 freopen("zerosum.out","w",stdout);
+     scanf("%d",&N);
+	 dfs(0,1,1,'+',0);
+	 return 0;
+}

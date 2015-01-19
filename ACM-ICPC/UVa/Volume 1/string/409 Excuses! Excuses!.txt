@@ -1,0 +1,49 @@
+#include<stdio.h>
+#include<string.h>
+#include<ctype.h>
+int m,n,i,ch,j;
+char s[30][30]={""},a[30]="",sen[30][80]={""};
+int p=0,count=0,sum[30]={0};
+int main(void)
+{
+    while(scanf("%d%d",&m,&n)==2)
+    {
+        int max=0;
+        count++;
+        for(i=0;i<m;i++)
+            scanf("%s",s[i]);
+        getchar();
+        for(i=0;i<n;i++)
+        {
+            int q=0;
+            fgets(sen[i],100,stdin);
+            while((ch=sen[i][q++])!='\n')
+            {
+                ch=tolower(ch);
+                if(!isalpha(ch))
+                {
+                    for(j=0;j<m;j++)
+                       if(strcmp(a,s[j])==0)
+                           sum[i]++;
+                       memset(a,'\0',sizeof(a));p=0;
+                }
+                else
+                    a[p++]=ch;
+            }
+        }
+            for(j=0;j<n;j++)
+                if(max<sum[j]) max=sum[j];
+            printf("Excuse Set #%d\n",count);
+            for(j=0;j<n;j++)
+                 if(sum[j]==max)
+                    printf("%s",sen[j]);
+            printf("\n");
+        memset(sum,0,sizeof(sum));
+        memset(sen,'\0',sizeof(sen));
+        memset(s,'\0',sizeof(s));
+    }
+    return 0;
+}
+
+
+

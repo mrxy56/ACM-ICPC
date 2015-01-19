@@ -1,0 +1,48 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+const int maxn=1000+10;
+struct ept{
+   int id;
+   int w;
+   int s;
+   bool operator < (const ept&obj)const{
+        return w<obj.w||w==obj.w&&s>obj.s;
+   }
+}a[maxn];
+int d[maxn],fa[maxn],ncount=0;
+int dp(int num){
+    int &ans=d[num];
+    if(ans>0)return ans;
+    ans=1;
+    for(int i=num+1;i<=ncount;i++)
+    if(a[num].s>a[i].s&&a[num].w<a[i].w){
+         if(dp(i)+1>ans){ans=d[i]+1;fa[num]=i;}
+    }
+    return ans;
+}
+int main(){
+    //freopen("a.txt","r",stdin);
+    memset(d,0,sizeof(d));
+    int weight,smart;
+    while(scanf("%d%d",&weight,&smart)==2){
+        a[++ncount].id=ncount;a[ncount].w=weight;a[ncount].s=smart;
+    }
+    sort(a+1,a+1+ncount);
+    memset(d,-1,sizeof(d));
+    for(int i=1;i<=ncount;i++)
+        fa[i]=i;
+    int ans=d[1],j=1;
+    for(int i=1;i<=ncount;i++)
+        if(dp(i)>ans){
+           ans=d[i];
+           j=i;
+        }
+    printf("%d\n",d[j]);
+    for(int i=1;i<=ans;i++){
+        printf("%d\n",a[j].id);
+        j=fa[j];
+    }
+    return 0;
+}

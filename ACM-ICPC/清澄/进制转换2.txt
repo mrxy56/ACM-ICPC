@@ -1,0 +1,28 @@
+#include<cstdio>
+#include<stack>
+using namespace std;
+stack<int> s;
+int main(){ 
+   int n,a;
+   scanf("%d",&n);
+   if(n==0) {
+	   printf("0");
+       return 0;
+   }
+   while(n){ 
+      s.push(n%16);
+	  n/=16;
+   }
+   while(!s.empty()){
+	   a=s.top();
+       if(a>=0&&a<=9){ 
+           printf("%d",a);
+       }
+       else{
+	       printf("%c",a-10+'A');
+       }
+       s.pop();
+	}
+   return 0;
+}
+   

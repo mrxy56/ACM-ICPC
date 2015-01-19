@@ -1,0 +1,95 @@
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cctype>
+using namespace std;
+typedef struct Tnode
+{
+    bool have_value;
+    char v;
+    struct Tnode *left,*right;
+}Node;
+Node* root;
+Node* stack[10010],*q[10010];
+char ans[10010],s[10010];
+int num;
+Node* newnode(void)
+{
+    Node*u=(Node*)malloc(sizeof(Node));
+    if(u!=NULL)
+    {
+        u->have_value=false;
+        u->left=u->right=NULL;
+    }
+    return u;
+}
+void addnode(Node*x,Node*y,Node*opt)
+{
+    opt->left=x;
+    opt->right=y;
+    return;
+}
+int bfs(void)
+{
+    int front=0,rear=1;
+    root=stack[0];
+    q[0]=root;
+    while(front<rear)
+    {
+        Node*u=q[front++];
+        if(!u->have_value)return 0;
+        ans[num++]=u->v;
+        if(u->left!=NULL) q[rear++]=u->left;
+        if(u->right!=NULL)q[rear++]=u->right;
+    }
+    return 1;
+}
+void remove_tree(Node*u)
+{
+    if(u==NULL) return;
+    remove_tree(u->left);
+    remove_tree(u->right);
+    free(u);
+}
+int main(void)
+{
+    int test,i,n,top;
+    Node*opnode;
+    scanf("%d",&test);
+    while(test--)
+    {
+        memset(s,'\0',sizeof(s));
+        memset(ans,'\0',sizeof(ans));
+        scanf("%s",s);
+        n=strlen(s);top=-1;
+        for(i=0;i<n;i++)
+        {
+            if(islower(s[i]))
+            {
+                top++;
+                stack[top]=newnode();
+                stack[top]->have_value=true;
+                stack[top]->v=s[i];
+            }
+            if(isupper(s[i]))
+            {
+                opnode=newnode();
+                opnode->have_value=true;
+                opnode->v=s[i];
+                addnode(stack[top-1],stack[top],opnode);
+                stack[top-1]=opnode;
+                top--;
+            }
+        }
+        bfs();
+        num=strlen(ans);
+        while(num>0)
+        {
+           printf("%c",ans[num-1]);
+           num--;
+        }
+        printf("\n");
+        remove_tree(root);
+    }
+    return 0;
+}

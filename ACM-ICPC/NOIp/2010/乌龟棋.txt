@@ -1,0 +1,39 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+int n,m,temp,answer,a[360],num[5],d[45][45][45][45];
+int dp(int na,int nb,int nc,int nd){
+   int &ans=d[na][nb][nc][nd];
+   if(ans>=0) return ans;
+   ans=0;
+   if(na>0)
+     ans=max(ans,dp(na-1,nb,nc,nd));
+   if(nb>0)
+     ans=max(ans,dp(na,nb-1,nc,nd));
+   if(nc>0)
+     ans=max(ans,dp(na,nb,nc-1,nd));
+   if(nd>0)
+     ans=max(ans,dp(na,nb,nc,nd-1));
+   temp=1+na*1+nb*2+nc*3+nd*4;
+   ans+=a[temp];
+   return ans;
+}
+int main()
+{
+    freopen("tortoise.in","r",stdin);
+    freopen("tortoise.out","w",stdout);
+    while(scanf("%d%d",&n,&m)==2){
+        for(int i=1;i<=n;i++)
+           scanf("%d",&a[i]);
+        memset(num,0,sizeof(num));
+        for(int i=0;i<m;i++){
+           scanf("%d",&temp);
+           num[temp]++;
+        }
+        memset(d,-1,sizeof(d));
+        answer=dp(num[1],num[2],num[3],num[4]);
+        printf("%d\n",answer);
+    }
+    return 0;
+}

@@ -1,0 +1,16 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+int main()
+{
+    char s[60];
+    while(scanf("%s",s)==1){
+       if(s[0]=='#') break;
+       int len=strlen(s),j=len-1;
+       while(j&&s[j]<=s[j-1]) j--;
+       if(j==0) printf("No Successor\n");
+       else {next_permutation(s+j-1,s+len);printf("%s\n",s);}
+    }
+    return 0;
+}

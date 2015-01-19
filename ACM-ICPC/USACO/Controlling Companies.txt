@@ -1,0 +1,47 @@
+/*
+ID:mrxy564
+PROG:concom
+LANG:C++
+*/
+#include<cstdio>
+#include<cstring>
+using namespace std;
+const int MAX=105;
+struct node{ 
+    int num;
+	int stock;
+}G[110][110];
+int con[110][110];
+bool vis[110];
+int n,a,b;
+void dfs(int boss,int num){
+	vis[num]=true;
+    for(int i=1;i<=G[num][0].num;i++){
+		int temp=G[num][i].num;
+		con[boss][temp]+=G[num][i].stock;
+		if(con[boss][temp]>50&&!vis[temp]) dfs(boss,temp);
+	}
+	return;
+}
+int main(){ 
+	freopen("concom.in","r",stdin);
+	freopen("concom.out","w",stdout);
+	scanf("%d",&n);
+	memset(con,0,sizeof(con));
+	memset(G,0,sizeof(G));
+	for(int i=0;i<n;i++){ 
+	    scanf("%d%d",&a,&b);
+		scanf("%d",&G[a-1][++G[a-1][0].num].stock);
+		G[a-1][G[a-1][0].num].num=b-1;
+	}
+    for(int i=0;i<MAX;i++){ 
+		if(G[i][0].num>0){
+			memset(vis,false,sizeof(vis));
+	        dfs(i,i);
+		}
+	}
+	for(int i=0;i<MAX;i++)
+		for(int j=0;j<MAX;j++)
+			if(con[i][j]>50&&i!=j) printf("%d %d\n",i+1,j+1);
+	return 0;
+}

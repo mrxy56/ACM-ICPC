@@ -1,0 +1,44 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+struct rice{
+   int p,h,c;
+}a[110];
+int dp[110],n,m;
+void ZeroOnePack(int cost,int weight){ 
+    for(int v=n;v>=cost;v--)
+		dp[v]=max(dp[v],dp[v-cost]+weight);
+}
+void CompletePack(int cost,int weight){ 
+    for(int v=cost;v<=n;v++)
+		dp[v]=max(dp[v],dp[v-cost]+weight);
+}
+void MultiplePack(int cost,int weight,int amount){ 
+    if(cost*amount>=n){
+		CompletePack(cost,weight);
+	    return;
+	}
+	int k=1;
+	while(k<amount){ 
+	    ZeroOnePack(k*cost,k*weight);
+		amount-=k;
+		k*=2;
+	}
+	ZeroOnePack(amount*cost,amount*weight);
+}
+int main(){ 
+   int T;
+   scanf("%d",&T);
+   while(T--){ 
+       scanf("%d%d",&n,&m);
+	   memset(dp,0,sizeof(dp));
+       for(int i=1;i<=m;i++)
+		   scanf("%d%d%d",&a[i].p,&a[i].h,&a[i].c);
+       for(int i=1;i<=m;i++){ 
+			   MultiplePack(a[i].p,a[i].h,a[i].c);
+	   }
+	   printf("%d\n",dp[n]);
+   }
+   return 0;
+}

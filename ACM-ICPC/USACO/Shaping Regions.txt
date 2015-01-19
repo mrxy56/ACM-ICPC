@@ -1,0 +1,95 @@
+/*
+ID:mrxy564
+PROG:rect1
+LANG:C++
+*/
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<algorithm>
+#include<map>
+#include<utility>
+using namespace std;
+typedef pair<const int,int> Pair;
+map<int,int> mx,my;
+int A,B,N,a[1010][5],x[2010],y[2010],color[2510],xn,yn,
+	setv[8010],y1,y2,v,maxc=0;
+void init(){ 
+    scanf("%d%d%d",&A,&B,&N);
+	int cnt=1;
+	for(int i=0;i<N;i++){
+		scanf("%d%d%d%d%d",&a[i][0],&a[i][1],&a[i][2],&a[i][3],&a[i][4]);
+		if(a[i][4]>maxc) maxc=a[i][4];
+		x[cnt]=a[i][0];x[cnt+1]=a[i][2];
+		y[cnt]=a[i][1];y[cnt+1]=a[i][3];
+		cnt+=2;
+	}
+    sort(x+1,x+1+cnt);sort(y+1,y+1+cnt);
+    xn=unique(x+1,x+1+cnt)-(x+1);yn=unique(y+1,y+cnt+1)-(y+1);
+    for(int i=1;i<=xn;i++)
+		mx.insert(Pair(x[i],i));
+	for(int i=1;i<=yn;i++)
+		my.insert(Pair(y[i],i));
+	for(int i=0;i<N;i++){ 
+	    for(int j=0;j<3;j+=2){ 
+		    a[i][j]=mx[a[i][j]];
+			a[i][j+1]=my[a[i][j+1]];
+		}
+	}
+}
+void pushdown(int o){ 
+    int lc=o*2,rc=o*2+1;
+	if(setv[o]>=0){ 
+	    setv[lc]=setv[rc]=setv[o];
+		setv[o]=-1;
+	}
+}
+void update(int o,int L,int R){ 
+    int lc=o*2,rc=o*2+1;
+	if(y1<=L&&y2>=R){ 
+	    setv[o]=v;
+	}else{ 
+	    pushdown(o);
+		int M=L+(R-L)/2;
+		if(y1<=M) update(lc,L,M);
+		if(y2>M) update(rc,M+1,R);
+	}
+}
+void query(int o,int L,int R,int base){ 
+    if(setv[o]>0){
+		color[setv[o]]+=(y[R+1]-y[L])*base;
+		return;
+	}
+	else{
+	   if(L==R) return;
+	   int M=L+(R-L)/2;
+	   query(o*2,L,M,base);
+	   query(o*2+1,M+1,R,base);
+	}
+}
+int main(){ 
+	freopen("rect1.in","r",stdin);
+	freopen("rect1.out","w",stdout);
+	init();
+	memset(color,0,sizeof(color));
+	x[xn+1]=A;y[yn+1]=B;
+    for(int i=1;i<=xn;i++){
+	    memset(setv,-1,sizeof(setv));
+            setv[1]=1;
+		for(int j=0;j<N;j++)
+		   if(mx[x[i]]>=a[j][0]&&mx[x[i]]<a[j][2]){
+			   y1=a[j][1];y2=a[j][3]-1;v=a[j][4];
+			   update(1,1,yn);
+		   }
+		int base=x[i+1]-x[i];
+                query(1,1,yn,base);
+	}
+        color[1]=0;
+	for(int i=2;i<=maxc;i++)
+        color[1]+=color[i];
+	color[1]=A*B-color[1];
+	for(int i=1;i<=maxc;i++)
+		if(color[i])
+		   printf("%d %d\n",i,color[i]);
+    return 0;
+}

@@ -1,0 +1,23 @@
+#include<cstdio>
+using namespace std;
+int n,f[35];
+double t,d[35];
+double dfs(int num){
+    if(num==n) return d[n]=f[n];
+    double temp=dfs(num+1);
+    double m=f[num]/temp;
+    if(m<t) d[num]=(t+1)/2*temp;
+    else d[num]=(m-t)/(1-t)*f[num]+(1-m)/(1-t)*(m+1)/2*temp;
+    return d[num];
+}
+int main(){
+   f[0]=1;
+   for(int i=1;i<=31;i++)
+       f[i]=f[i-1]*2;
+   while(scanf("%d%lf",&n,&t)==2){
+       if(n==0) break;
+       dfs(0);
+       printf("%.3lf\n",d[0]);
+   }
+   return 0;
+}

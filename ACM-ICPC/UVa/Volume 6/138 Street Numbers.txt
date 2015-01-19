@@ -1,0 +1,27 @@
+#include <cstdio>
+#include <cmath>
+using namespace std;
+int main()
+{
+    /*freopen("a.txt","w",stdout);
+    int count=0;
+    for(long long x=3;x<100000000;x++){
+       double temp=sqrt((double)(x*(x+1)/2));
+          if(temp-(long long)temp==0){
+              printf("%10I64d%10I64d\n",(long long)temp,(long long)x);
+              count++;
+          }
+       if(count==10) break;
+       }*/
+   printf("         6         8\n");
+   printf("        35        49\n");
+   printf("       204       288\n");
+   printf("      1189      1681\n");
+   printf("      6930      9800\n");
+   printf("     40391     57121\n");
+   printf("    235416    332928\n");
+   printf("   1372105   1940449\n");
+   printf("   7997214  11309768\n");
+   printf("  46611179  65918161\n");
+   return 0;
+}

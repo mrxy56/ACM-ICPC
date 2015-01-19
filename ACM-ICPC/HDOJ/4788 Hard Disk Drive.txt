@@ -1,0 +1,22 @@
+#include<cstdio>
+#include<map>
+using namespace std;
+map<char,int> m;
+char s[10],s1[10];
+int main(){ 
+    int T,num;
+	m['B']=0;m['K']=1;m['M']=2;m['G']=3;
+	m['T']=4;m['P']=5;m['E']=6;m['Z']=7;m['Y']=8;
+	scanf("%d",&T);
+	for(int i=1;i<=T;i++){ 
+	     scanf("%s",s);
+		 sscanf(s,"%d[%s",&num,s1);
+		 int temp=m[s1[0]];
+		 double temp1=(double)1000/1024,temp2=1;
+		 for(int i=0;i<temp;i++){ 
+		     temp2*=temp1;
+		 }
+		 printf("Case #%d: %.2lf%%\n",i,(1-temp2)*100);
+	}
+	return 0;
+}

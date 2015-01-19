@@ -1,0 +1,38 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+bool invalid[25][25];
+int n,m,x,y;
+bool is_valid(int x,int y){ 
+    if(x>=0&&x<=n&&y>=0&&y<=m) return true;
+	return false;
+}
+long long dp[25][25];
+int dx[8]={-2,-1,1,2,2,1,-1,-2};
+int dy[8]={1,2,2,1,-1,-2,-2,-1};
+int main(){
+     memset(invalid,0,sizeof(invalid));
+	 scanf("%d%d%d%d",&n,&m,&x,&y);
+	 for(int k=0;k<8;k++){
+		int nx=x+dx[k],ny=y+dy[k];
+	    if(is_valid(nx,ny))
+			invalid[nx][ny]=true;
+	}
+	 invalid[x][y]=true;
+	memset(dp,0,sizeof(dp));
+	for(int j=0;j<=m;j++) 
+		if(invalid[0][j]) break;
+	    else dp[0][j]=1;
+	for(int j=0;j<=n;j++)
+		if(invalid[j][0]) break;
+	    else dp[j][0]=1;
+	for(int i=1;i<=n;i++){
+		for(int j=1;j<=m;j++){
+			if(!invalid[i][j]){
+	            dp[i][j]=dp[i-1][j]+dp[i][j-1];
+		    }
+	    }
+	}
+	printf("%I64d\n",dp[n][m]);
+	return 0;
+}

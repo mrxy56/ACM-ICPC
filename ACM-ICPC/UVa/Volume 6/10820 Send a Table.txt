@@ -1,0 +1,22 @@
+#include <cstdio>
+#include <cstring>
+using namespace std;
+int main()
+{
+    int n,phi[50010];
+     memset(phi,0,sizeof(phi));
+        phi[1]=1;
+        for(int i=2;i<=50010;i++)
+           if(!phi[i])
+             for(int j=i;j<=50010;j+=i){
+               if(!phi[j]) phi[j]=j;
+               phi[j]=phi[j]/i*(i-1);
+             }
+    while(scanf("%d",&n)==1&&n){
+        int count=0;
+        for(int i=1;i<=n;i++)
+           count+=phi[i];
+        printf("%d\n",2*count-1);
+    }
+    return 0;
+}

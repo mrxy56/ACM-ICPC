@@ -1,0 +1,60 @@
+int a[100];
+int n,k,cnt;
+priority_queue<point,vector<point>,cmp>q;
+void init(){ 
+	for(int i=0;i<n;i++)
+			scanf("%d",&cost[i]);
+        for(int i=0;i<MAXN;i++)
+			d[i]=(i==0?0:INF);
+	for(int i=0;i<n;i++){ 			
+		int temp,N=0;
+		char ch;
+	    while(scanf("%d",&temp)==1){
+			a[N++]=temp;
+            if((ch=getchar())=='\n') break;
+		}
+		for(int j=0;j<N-1;j++){
+			for(int h=j+1;h<N;h++){
+			 int num=abs(a[h]-a[j])*cost[i];
+			 e[cnt].u=a[j];e[cnt].v=a[h];e[cnt].w=num;e[cnt].type=i;				
+             e[cnt+1].u=a[h];e[cnt+1].v=a[j];e[cnt+1].w=num;e[cnt+1].type=i;
+             cnt+=2;
+			}
+		}
+	}
+	return;
+}
+int main(){
+	//freopen("lift.in","r",stdin);
+	//freopen("lift.out","w",stdout);
+	while(scanf("%d%d",&n,&k)==2){
+		cnt=0;
+		init();
+		for(int i=0;i<MAXN;i++) first[i]=-1;
+		for(int j=0;j<cnt;j++){ 
+		    next[j]=first[e[j].u];
+			first[e[j].u]=j;
+		}
+        memset(done,0,sizeof(done));
+		q.push(point(d[0],0,-1));
+		while(!q.empty()){ 
+		    point u=q.top();q.pop();
+			int x=u.num;
+			if(done[x]) continue;
+			done[x]=true;
+			int plus;
+			for(int i=first[x];i!=-1;i=next[i]){
+				if(e[i].type==u.type||u.type==-1) plus=0;
+				else plus=60;
+             	if(d[e[i].v]>d[x]+e[i].w+plus){ 
+				    d[e[i].v]=d[x]+e[i].w+plus;
+					q.push(point(d[e[i].v],e[i].v,e[i].type));
+				}
+			}
+		}
+		if(d[k]!=INF)
+           printf("%d\n",d[k]);
+		else printf("IMPOSSIBLE\n");
+	}
+	return 0;
+}

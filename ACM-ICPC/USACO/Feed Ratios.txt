@@ -1,0 +1,90 @@
+/*
+ID:mrxy564
+PROG:ratios
+LANG:C++
+*/
+#include<cstdio>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+int G[3][4],b[3],ans[3],num;
+bool l[3];
+int gcd(int a,int b){ 
+    return b==0?a:gcd(b,a%b);
+}
+int lcm(int a,int b){ 
+    return a*b/gcd(a,b);
+}
+int Gauss(int G[][4],bool l[],int ans[],const int &n){ 
+    int res=0,r=0,a[3][4];
+	for(int i=0;i<n;i++)
+		for(int j=0;j<=n;j++)
+			a[i][j]=G[i][j];
+	for(int i=0;i<n;i++)
+		l[i]=false;
+	for(int i=0;i<n;i++){
+		for(int j=r;j<n;j++)
+			if(a[j][i]!=0){ 
+			    for(int k=i;k<=n;k++)
+					swap(a[j][k],a[r][k]);
+				break;
+			}
+	if(a[r][i]==0){ 
+	   res++;
+	   continue;
+	}
+	for(int j=0;j<n;j++)
+		if(j!=r&&a[j][i]!=0){
+			int temp=lcm(a[j][i],a[r][i]);
+			int x1=temp/a[j][i],x2=temp/a[r][i];
+			for(int k=0;k<=n;k++)
+				a[j][k]=a[j][k]*x1-a[r][k]*x2;
+			int g=a[j][i];
+			for(int k=0;k<=n;k++)
+				g=gcd(g,a[j][k]);
+			for(int k=0;k<=n;k++)
+				a[j][k]/=g;
+		}
+	    l[i]=true;r++;
+	}
+	for(int i=0;i<n;i++)
+		if(l[i])
+			for(int j=0;j<n;j++)
+				if(a[j][i]!=0){
+					if(a[j][n]%a[j][i]==0)
+					   ans[i]=a[j][n]/a[j][i];
+					else return -1;
+                                        if(ans[i]<0) return -1;
+				}
+	return res;
+}
+int main(){ 
+	freopen("ratios.in","r",stdin);
+	freopen("ratios.out","w",stdout);
+	for(int j=0;j<3;j++){
+		scanf("%d",&b[j]);
+		G[j][3]=0;
+	}
+    for(int i=0;i<3;i++)
+		for(int j=0;j<3;j++)
+			scanf("%d",&G[j][i]);
+        bool flag1=false;
+	for(int x=1;x<100;x++){ 
+	    for(int j=0;j<3;j++)
+			G[j][3]=b[j]*x;
+		num=Gauss(G,l,ans,3);
+		bool flag=true;
+		if(num<0) flag=false;
+		else{
+                           for(int k=3;k>3-num;k--)
+			   if(G[k][3]) {flag=false;break;}
+		}
+		if(flag){ 
+		    printf("%d %d %d %d\n",ans[0],ans[1],ans[2],x);
+                    flag1=true;
+			break;
+		}
+	}
+        if(!flag1) printf("NONE\n");
+	return 0;
+}

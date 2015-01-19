@@ -1,0 +1,53 @@
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+struct point{
+    int x,y;
+}a[800];
+struct edge{
+    int u,v;
+    double w;
+}e[650000];
+int p[800],r[650000],n,m;
+bool vis[800][800];
+int cmp(const int i,const int j){return e[i].w<e[j].w;}
+int find(int x){return p[x]==x?x:p[x]=find(p[x]);}
+double Kruskal(){
+    double ans=0;
+    for(int i=0;i<n;i++) p[i]=i;
+    for(int i=0;i<m;i++) r[i]=i;
+    sort(r,r+m,cmp);
+    for(int i=0;i<m;i++){
+       int k=r[i];int x=find(e[k].u);int y=find(e[k].v);
+       if(x!=y){ans+=e[k].w;p[x]=y;}
+    }
+    return ans;
+}
+int main(){
+    //freopen("a.txt","r",stdin);
+    while(scanf("%d",&n)==1){
+        for(int i=0;i<n;i++)
+            scanf("%d%d",&a[i].x,&a[i].y);
+        memset(vis,false,sizeof(vis));
+        scanf("%d",&m);
+        int tempx,tempy;
+        for(int i=0;i<m;i++){
+            scanf("%d%d",&tempx,&tempy);
+            vis[tempx-1][tempy-1]=vis[tempy-1][tempx-1]=true;
+        }
+    m=0;
+    for(int i=0;i<n-1;i++)
+       for(int j=i+1;j<n;j++){
+           e[m].u=i;e[m].v=j;
+           if(vis[i][j])
+              e[m].w=0;
+           else
+              e[m].w=sqrt((a[i].x-a[j].x)*(a[i].x-a[j].x)+(a[i].y-a[j].y)*(a[i].y-a[j].y));
+           m++;
+       }
+     printf("%.2lf\n",Kruskal());
+    }
+    return 0;
+}

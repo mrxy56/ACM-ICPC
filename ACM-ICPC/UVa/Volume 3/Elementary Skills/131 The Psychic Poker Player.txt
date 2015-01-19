@@ -1,0 +1,99 @@
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<algorithm>
+#include<map>
+using namespace std;
+map<char,int> face;
+map<char,int> suit;
+int judge(int num,char hand[5][3],char table[5][3]){
+    int p=0,i,bit;
+    char h[5][3],t[5][3],ch;
+    for(int i=0;i<5;i++){
+       strcpy(h[i],hand[i]);
+       strcpy(t[i],table[i]);
+    }
+    for(i=1,bit=0;i<32;i<<=1,bit++){
+        if(num&i) strcpy(h[4-bit],t[p++]);
+    }
+    for(int i=0;i<5;i++)
+       for(int j=i+1;j<5;j++)
+          if(face[h[i][0]]>face[h[j][0]]){
+             for(int k=0;k<2;k++){
+               ch=h[i][k];
+               h[i][k]=h[j][k];
+               h[j][k]=ch;
+             }
+          }
+    bool flush=true,straight=true;
+    for(int i=0;i<4;i++)
+        if(h[i][1]!=h[i+1][1]) flush=false;
+    if(h[0][0]!='A'){
+         for(int i=0;i<4;i++)
+            if(face[h[i][0]]+1!=face[h[i+1][0]]) straight=false;
+    }
+    else{
+        for(int i=1;i<4;i++)
+            if(face[h[i][0]]+1!=face[h[i+1][0]]) straight=false;
+            if(!(h[1][0]=='T'||h[1][0]=='2')) straight=false;
+    }
+    if(flush&&straight) return 0;
+    bool four=true;
+    for(int i=0;i<3;i++)
+       if(h[i][0]!=h[i+1][0]) {four=false;break;}
+    if(four) return 1;
+    else{
+       four=true;
+       for(int i=1;i<4;i++)
+         if(h[i][0]!=h[i+1][0]) {four=false;break;}
+    }
+    if(four) return 1;
+    bool house=false;
+    if(h[0][0]==h[1][0]&&h[1][0]==h[2][0]&&h[3][0]==h[4][0]) house=true;
+    else if(h[0][0]==h[1][0]&&h[2][0]==h[3][0]&&h[3][0]==h[4][0]) house=true;
+    if(house) return 2;
+    bool flush2=true;
+    for(int i=0;i<4;i++)
+       if(h[i][1]!=h[i+1][1]) {flush2=false;break;}
+    if(flush2) return 3;
+    if(straight&&!flush) return 4;
+    bool three=false;
+    if(h[0][0]==h[1][0]&&h[1][0]==h[2][0]) three=true;
+    if(h[1][0]==h[2][0]&&h[2][0]==h[3][0]) three=true;
+    if(h[2][0]==h[3][0]&&h[3][0]==h[4][0]) three=true;
+    if(three) return 5;
+    int pair=0;
+    for(int i=0;i<4;i++)
+       if(h[i][0]==h[i+1][0]) pair++;
+    if(pair==2) return 6;
+    else if(pair==1) return 7;
+    return 8;
+}
+int main()
+{
+    //freopen("a.txt","r",stdin);
+    char s[35],hand[5][3],table[5][3];
+    char ans[9][20]={"straight-flush","four-of-a-kind","full-house","flush","straight",
+    "three-of-a-kind","two-pairs","one-pair","highest-card"};
+    int num,min;
+    face['A']=1;face['2']=2;face['3']=3;face['4']=4;face['5']=5;face['6']=6;
+    face['7']=7;face['8']=8;face['9']=9;face['T']=10;face['J']=11;face['Q']=12;face['K']=13;
+    suit['C']=1;suit['D']=2;suit['H']=3;suit['S']=4;
+    while(fgets(s,35,stdin)!=NULL){
+         sscanf(s,"%s%s%s%s%s%s%s%s%s%s",hand[0],hand[1],hand[2],hand[3],hand[4],
+         table[0],table[1],table[2],table[3],table[4]);
+         printf("Hand: ");
+         for(int i=0;i<5;i++)
+            printf("%s ",hand[i]);
+         printf("Deck: ");
+         for(int i=0;i<5;i++)
+            printf("%s ",table[i]);
+         min=2147483647;
+         for(int i=0;i<32;i++){
+            num=judge(i,hand,table);
+            if(num<min) min=num;
+         }
+         printf("Best hand: %s\n",ans[min]);
+    }
+    return 0;
+}

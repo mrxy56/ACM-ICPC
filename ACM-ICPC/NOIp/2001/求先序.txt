@@ -1,0 +1,20 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+char s1[10],s2[10],s3[10];
+int len,pos;
+void find(char*s1,char*s2,int num){
+	if(num<=0) return;
+    s3[pos++]=s2[num-1];
+	int temp=strchr(s1,s2[num-1])-s1;
+    find(s1,s2,temp);
+	find(s1+temp+1,s2+temp,num-temp-1);
+}
+int main(){ 
+    scanf("%s%s",s1,s2);
+	len=strlen(s1);
+	pos=0;
+    find(s1,s2,len);
+	printf("%s\n",s3);
+	return 0;
+}

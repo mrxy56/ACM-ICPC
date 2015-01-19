@@ -1,0 +1,85 @@
+#include <stdio.h>
+char s[60][110]={""};
+int p,i,num[60]={0},flag=1,pile=0,left[60]={0},right[60]={0},temp;
+void perform(int i,int j)
+{
+    if(s[i][num[i]]&&(s[i][num[i]]==s[j][num[j]]||s[i][num[i]+1]==s[j][num[j]+1]))
+         {
+            num[j]+=2;
+            s[j][num[j]]=s[i][num[i]];
+            s[j][num[j]+1]=s[i][num[i]+1];
+            s[i][num[i]]=s[i][num[i]+1]='\0';
+            num[i]-=2;
+               if(num[i]==-2)
+               {
+                left[right[i]]=left[i];
+                right[left[i]]=right[i];
+               }
+            flag=1;
+         }
+}
+int main(void)
+{
+     num[52]=-2;left[52]=51;left[51]=50;right[51]=52;
+    while(1)
+    {
+       p=0;pile=0;
+       while(scanf("%s",s[p])==1)
+      {
+        if(s[p][0]=='#'||p==51) break;
+        else
+        {
+            left[p]=p-1;
+            right[p]=p+1;
+            p++;
+        }
+      }
+      if(p==0) break;
+      flag=1;
+      while(flag)
+      {
+        flag=0;
+        perform(1,0);
+        if(flag) continue;
+        temp=left[2];
+        perform(2,temp);
+        if(flag) continue;
+        i=3;
+         while(i<52)
+        {
+            while(num[i]<0&&i<52) i++;
+            if(num[i]>=0)
+            {
+               temp=left[left[left[i]]];
+               perform(i,temp);
+               if(flag) break;
+               temp=left[i];
+               perform(i,temp);
+               if(flag) break;
+            }
+            if(i!=52)
+              i=right[i];
+            else
+              break;
+        }
+      }
+      for(i=0;i<52;i++)
+      if(num[i]>=0) pile++;
+      if(pile==1)
+          printf("%d pile remaining:",pile);
+      else
+           printf("%d piles remaining:",pile);
+      for(i=0;i<52;i++)
+      if(num[i]>=0)
+      {
+          printf(" %d",(num[i]+2)/2);
+      }
+      printf("\n");
+      memset(s,'\0',sizeof(s));
+      memset(num,0,sizeof(num));
+      memset(left,0,sizeof(left));
+      memset(right,0,sizeof(right));
+      num[52]=-2;left[52]=51;left[51]=50;right[51]=52;
+    }
+    return 0;
+}

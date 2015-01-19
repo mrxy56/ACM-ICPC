@@ -1,0 +1,34 @@
+/*
+ID:mrxy564
+PROG:stamps
+LANG:C++
+*/
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+const int INF=~0U>>2;
+int a[55],K,N,dp[2000010],maxn=0,minn=INF;
+int main(){
+	freopen("stamps.in","r",stdin);
+	freopen("stamps.out","w",stdout);
+	scanf("%d%d",&K,&N);
+	for(int i=0;i<N;i++){
+		scanf("%d",&a[i]);
+		maxn=max(maxn,a[i]);
+		minn=min(minn,a[i]);
+	}
+	for(int i=0;i<=maxn*K+1;i++)
+		dp[i]=INF;
+	dp[0]=0;
+	for(int j=0;j<=maxn*K+1;j++){
+		  for(int k=0;k<N;k++)
+				if(j>=a[k])
+                   dp[j]=min(dp[j-a[k]]+1,dp[j]);
+	      if(dp[j]>K){
+			  printf("%d\n",j-1);
+			  break;
+		  }
+	}
+	return 0;
+}

@@ -1,0 +1,32 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+int tot,n;
+int c[15];
+void search(int cur){ 
+	if(cur==n) tot++;
+	else for(int i=0;i<n;i++){ 
+	   int ok=1;
+	   c[cur]=i;
+       for(int j=0;j<cur;j++)
+		   if(c[cur]==c[j]||cur-c[cur]==j-c[j]||cur+c[cur]==j+c[j]){ 
+		       ok=0;break;
+		   }
+	   if(ok) search(cur+1);
+	}
+	return;
+}
+int main(){
+   int f[15];
+   for(int i=1;i<=10;i++){ 
+       n=i;tot=0;
+	   memset(c,0,sizeof(c));
+	   search(0);
+	   f[i]=tot;
+   }
+   while(scanf("%d",&n)==1){ 
+       if(n==0) break;
+	   printf("%d\n",f[n]);
+   }
+   return 0;
+}

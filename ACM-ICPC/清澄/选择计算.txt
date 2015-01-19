@@ -1,0 +1,37 @@
+#include<cstdio>
+#include<iostream>
+using namespace std;
+int gcd(int x,int y){
+    return y==0?x:gcd(y,x%y);
+}
+int lcm(int x,int y){
+    return x/gcd(x,y)*y;
+}
+int main(){
+    int x,y,z;
+    scanf("%d%d%d",&x,&y,&z);
+    switch(z){
+	case 1:
+	    cout<<x+y<<endl;
+	    break;
+        case 2:
+	    cout<<x-y<<endl;
+	    break;
+	case 3:
+	    cout<<x*y<<endl;
+	    break;
+	case 4:
+	    cout<<x/y<<endl;
+	    break;
+	case 5:
+	    cout<<x%y<<endl;
+	    break;
+	case 6:
+	    cout<<gcd(x,y)<<endl;
+	    break;
+	case 7:
+	    cout<<lcm(x,y)<<endl;
+	    break;
+    }
+    return 0;
+}

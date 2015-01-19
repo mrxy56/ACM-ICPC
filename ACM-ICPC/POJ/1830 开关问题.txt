@@ -1,0 +1,67 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+int f[30],e[30],G[30][30],ans[30];
+bool l[30];
+int Gauss(int a[][30],bool l[],int ans[],const int &n){ 
+    int res=0,r=1;
+	for(int i=1;i<=n;i++)
+		l[i]=false;
+	for(int i=1;i<=n;i++){
+		for(int j=r;j<=n;j++)
+			if(a[j][i]>0){ 
+			    for(int k=i;k<=n+1;k++)
+					swap(a[j][k],a[r][k]);
+				break;
+			}
+	      if(a[r][i]==0){ 
+		       res++;
+			   continue;
+		  }
+		  for(int j=1;j<=n;j++)
+			  if(j!=r&&a[j][i]>0){ 
+			      for(int k=i;k<=n+1;k++)
+                      a[j][k]^=a[r][k];
+			  }
+		  l[i]=true;r++;
+	}
+	for(int i=1;i<=n;i++)
+		  if(l[i])
+			  for(int j=1;j<=n;j++)
+				  if(a[j][i]>0) ans[i]=a[j][n+1]^a[j][i];
+	return res;
+}
+int main(){ 
+    int T,n,num;
+	scanf("%d",&T);
+	while(T--){ 
+	     scanf("%d",&n);
+         for(int i=1;i<=n;i++)
+			 scanf("%d",&f[i]);
+		 for(int i=1;i<=n;i++)
+			 scanf("%d",&e[i]);
+         memset(G,0,sizeof(G));
+		 int x,y;
+		 while(scanf("%d%d",&x,&y)==2){ 
+		      if(x==0&&y==0) break;
+			  G[y][x]=1;
+		 }
+		 for(int i=1;i<=n;i++){
+		      G[i][n+1]=f[i]^e[i];
+			  G[i][i]=1;
+		 }
+		 num=Gauss(G,l,ans,n);
+		 bool flag=true;
+		 for(int i=n;i>n-num;i--)
+			 if(G[i][n+1]!=0){
+				 printf("Oh,it's impossible~!!\n");
+				 flag=false;
+			     break;
+			 }
+		 if(flag){
+		     printf("%d\n",1<<num);
+		 }
+	}
+	return 0;
+}

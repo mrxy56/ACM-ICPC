@@ -1,0 +1,57 @@
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+using namespace std;
+char s[1010];
+int id[30],od[30],G[30][30],vis[30];
+int n,num;
+int dfs(int u,int count){
+    if(count==num) return true;
+    else{
+       vis[u]=1;
+       for(int v=0;v<26;v++)
+         if(G[u][v]&&!vis[v]&&dfs(v,count+1))
+            return true;
+    }
+    return false;
+}//这个连通性判断的程序有误，AC只是偶然。
+int main()
+{
+    int T,dnum;
+    bool flag;
+    scanf("%d",&T);
+    while(T--){
+       scanf("%d\n",&n);
+       memset(G,0,sizeof(G));
+       memset(id,0,sizeof(id));
+       memset(od,0,sizeof(od));
+       memset(vis,0,sizeof(vis));
+       num=0;
+       for(int i=0;i<n;i++){
+         scanf("%s",s);
+         int x=s[0]-'a',y=s[strlen(s)-1]-'a';
+         G[x][y]=1;id[y]++;od[x]++;
+         if(!vis[x]){vis[x]=1;num++;}
+         if(!vis[y]){vis[y]=1;num++;}
+       }
+         memset(vis,0,sizeof(vis));
+         int j;
+         for(j=0;j<26;j++)
+           if(id[j]||od[j]) break;
+         if(!dfs(j,1))
+           printf("The door cannot be opened.\n");
+         else{
+           flag=true;dnum=0;
+           for(int i=0;i<26;i++){
+             if(id[i]==od[i]+1||id[i]+1==od[i])
+               dnum++;
+             else if(id[i]!=od[i]){flag=false;break;}
+           }
+           if(flag&&(dnum==2||dnum==0))
+              printf("Ordering is possible.\n");
+           else printf("The door cannot be opened.\n");
+        }
+    }
+    //system("PAUSE");
+    return 0;
+}

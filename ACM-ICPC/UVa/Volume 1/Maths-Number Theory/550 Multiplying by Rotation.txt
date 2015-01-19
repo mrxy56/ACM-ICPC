@@ -1,0 +1,25 @@
+#include <stdio.h>
+int a0,a,b,a_next,base,num,temp,i=0;
+int main(void)
+{
+    while(scanf("%d%d%d",&base,&a0,&num)==3)
+    {
+         a=a0;temp=0;
+          while(1)
+          {
+              i++;
+              b=(a*num+temp)%base;
+              if(b==a0&&(a*num+temp)/base==0)
+              {
+                  printf("%d\n",i);
+                  i=0;
+                  break;
+              }
+              else
+                  a_next=b;
+               temp=(a*num+temp)/base;
+               a=a_next;
+          }
+    }
+    return 0;
+}

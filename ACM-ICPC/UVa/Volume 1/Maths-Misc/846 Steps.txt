@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <math.h>
+int main(void)
+{
+    int n,a,b,m,i,x,y,temp;
+    scanf("%d",&n);
+    while(n--)
+    {
+        scanf("%d%d",&a,&b);
+        m=abs(a-b);
+        i=0;
+        while(1)
+        {
+            x=i*(i+1);
+            y=(i+1)*(i+2);
+            if(m>=x&&m<y)
+            {
+                temp=m-x;
+                if(temp==0)
+                    {printf("%d\n",2*i);break;}
+                if(temp>0&&temp<=i+1)
+                    {printf("%d\n",2*i+1);break;}
+                if(temp>i+1)
+                    {printf("%d\n",2*i+2);break;}
+            }
+            i++;
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,73 @@
+#include<cstdio>
+#include<cstring>
+#include<cctype>
+#include<algorithm>
+using namespace std;
+const int INF=1000000000;
+const int maxn=100000+10;
+const int maxnode=400000+10;
+int ql,qr,len,num,cnt;
+int minv[maxnode],a[maxn],change[30];
+int query(int o,int L,int R){
+    int M=L+(R-L)/2,ans=INF;
+    if(ql<=L&&R<=qr) return minv[o];
+    if(ql<=M) ans=min(ans,query(o*2,L,M));
+    if(M<qr) ans=min(ans,query(o*2+1,M+1,R));
+    return ans;
+}
+int p,v;
+void update(int o,int L,int R,int p,int v){
+    int M=L+(R-L)/2;
+    if(L==R) minv[o]=v;
+    else{
+       if(p<=M) update(o*2,L,M,p,v);else update(o*2+1,M+1,R,p,v);
+       minv[o]=min(minv[o*2],minv[o*2+1]);
+    }
+}
+int main()
+{
+    //freopen("a.txt","r",stdin);
+    int n,q;
+    char s[40],ch;
+         scanf("%d%d",&n,&q);
+         for(int i=1;i<=n;i++){
+           scanf("%d",&a[i]);
+           update(1,1,n,i,a[i]);
+         }
+         ch=getchar();
+         for(int i=0;i<q;i++){
+           fgets(s,40,stdin);
+           if(s[0]=='s'){
+               len=strlen(s);num=0;cnt=0;
+               for(int j=6;j<len;j++){
+                  if(isdigit(s[j]))
+                     num=10*num+s[j]-'0';
+                  if(s[j]==','||s[j]==')'){
+                     change[cnt++]=num;
+                     num=0;
+                  }
+               }
+               num=a[change[0]];
+               for(int k=0;k<cnt-1;k++)
+                   a[change[k]]=a[change[k+1]];
+               a[change[cnt-1]]=num;
+               for(int k=0;k<cnt;k++){
+                   update(1,1,n,change[k],a[change[k]]);
+               }
+            }
+            if(s[0]=='q'){
+               len=strlen(s);num=0;cnt=0;
+               for(int j=6;j<len;j++){
+                  if(isdigit(s[j]))
+                     num=10*num+s[j]-'0';
+                  if(s[j]==','||s[j]==')'){
+                     change[cnt++]=num;
+                     num=0;
+                  }
+               }
+               ql=change[0];qr=change[1];
+               printf("%d\n",query(1,1,n));
+            }
+           }
+    return 0;
+}

@@ -1,0 +1,40 @@
+/*
+ID:mrxy564
+PROG:milk
+LANG:C++
+*/
+#include <cstdio>
+#include <algorithm>
+using namespace std;
+struct milk{
+   int p,num;
+   bool operator < (const milk &obj)const{
+        return p<obj.p;
+   }
+}a[5010];
+int main()
+{
+    freopen("milk.in","r",stdin);
+    freopen("milk.out","w",stdout);
+    int n,m;
+    long long cost;
+    while(scanf("%d%d",&n,&m)==2){
+        for(int i=0;i<m;i++){
+            scanf("%d%d",&a[i].p,&a[i].num);
+        }
+        sort(a,a+m);
+        cost=0;
+        for(int i=0;i<m;i++){
+            if(n>=a[i].num){
+                n-=a[i].num;
+                cost+=a[i].num*a[i].p;
+            }
+            else{
+                cost+=n*a[i].p;
+                break;
+            }
+        }
+        printf("%lld\n",cost);
+    }
+    return 0;
+}

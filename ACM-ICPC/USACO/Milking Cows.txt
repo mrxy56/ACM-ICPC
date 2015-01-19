@@ -1,0 +1,43 @@
+/*
+ID:mrxy564
+PROG:milk2
+LANG:C++
+*/
+#include <cstdio>
+#include <algorithm>
+using namespace std;
+struct Interval{
+    int left;
+    int right;
+    bool operator<(const Interval &obj)const{
+        return left<obj.left;
+    }
+};
+Interval a[5010];
+int main()
+{
+    freopen("milk2.in","r",stdin);
+    freopen("milk2.out","w",stdout);
+    int n,len1,len2,maxlen,p,maxright;
+    while(scanf("%d",&n)==1){
+        len1=len2=maxlen=-1;
+        for(int i=0;i<n;i++){
+          scanf("%d%d",&a[i].left,&a[i].right);
+          maxlen=max(maxlen,a[i].right-a[i].left);
+        }
+        sort(a,a+n);p=0;maxright=a[0].right;
+        for(int i=1;i<n;i++){
+          if(a[i-1].right>maxright)
+               maxright=a[i-1].right;
+            if(a[i].left>maxright){
+              len1=max(maxright-a[p].left,len1);
+              len2=max(a[i].left-maxright,len2);
+              p=i;maxright=a[i].right;
+            }
+        }
+        printf("%d",max(len1,maxlen));
+        if(len2==-1) printf(" %d\n",0);
+        else printf(" %d\n",len2);
+    }
+    return 0;
+}

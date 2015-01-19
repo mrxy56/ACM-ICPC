@@ -1,0 +1,43 @@
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+long long d[25][50010];
+int a[25],p[25][50010];
+int n,num;
+void print(int m,int c){
+    if(m==num+1) return;
+    if(m==num&&p[m][c]>0) {printf("%d ",p[m][c]);return;}
+    if(p[m][c]){
+        printf("%d ",a[m]);
+        print(m+1,c-a[m]);
+    }
+    else print(m+1,c);
+    return;
+}
+int main()
+{
+    while(scanf("%d",&n)==1){
+       memset(d,0,sizeof(d));
+       memset(p,0,sizeof(p));
+       scanf("%d",&num);
+       for(int i=1;i<=num;i++)
+         scanf("%d",&a[i]);
+        for(int i=num;i>=1;i--){
+        for(int j=0;j<=n;j++){
+            d[i][j]=(i==n?0:d[i+1][j]);
+            if(j>=a[i])
+               if(d[i][j]<d[i+1][j-a[i]]+a[i]){
+                  d[i][j]=d[i+1][j-a[i]]+a[i];
+                  p[i][j]=a[i];
+               }
+            }
+        }
+        if(n==0) printf("sum:%d\n",0);
+        else{
+          print(1,n);
+          printf("sum:%d\n",d[1][n]);
+        }
+    }
+    return 0;
+}

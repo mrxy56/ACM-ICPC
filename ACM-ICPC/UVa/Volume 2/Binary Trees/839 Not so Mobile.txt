@@ -1,0 +1,88 @@
+#include<cstdio>
+#include<cstdlib>
+using namespace std;
+typedef struct Tnode{
+    int wl,dl,wr,dr;
+    struct Tnode *left,*right;
+}Node;
+int a,b,c,d;
+bool judge;
+Node *newnode(){
+    Node*u=(Node*)malloc(sizeof(Node));
+    if(u!=NULL){
+       u->left=u->right=NULL;
+    }
+    return u;
+}
+void addnode(Node*u){
+    if(u->wl==0){
+        if(scanf("%d%d%d%d",&a,&b,&c,&d)==4){
+        Node*v1=newnode();
+        v1->wl=a;v1->dl=b;v1->wr=c;v1->dr=d;
+        u->left=v1;
+        addnode(v1);
+        }
+    }
+    if(u->wr==0){
+        if(scanf("%d%d%d%d",&a,&b,&c,&d)==4){
+        Node*v2=newnode();
+        v2->wl=a;v2->dl=b;v2->wr=c;v2->dr=d;
+        u->right=v2;
+        addnode(v2);
+        }
+    }
+    return;
+}
+void remove(Node*u){
+     if(u==NULL) return;
+     remove(u->left);
+     remove(u->right);
+     free(u);
+}
+int calculate(Node*temp){
+    int lsum=0,rsum=0;
+    if(temp->left==NULL)
+        lsum=temp->wl;
+    else if(temp->left!=NULL)
+        lsum=calculate(temp->left);
+    if(lsum<0) return -1;
+    if(temp->right==NULL)
+        rsum=temp->wr;
+    else if(temp->right!=NULL)
+        rsum=calculate(temp->right);
+    if(rsum<0) return -1;
+    if(lsum*temp->dl==rsum*temp->dr)
+        return lsum+rsum;
+    else{
+        judge=false;
+        return -1;
+    }
+}
+int main(){
+   //freopen("a.txt","r",stdin);
+   int T,lsum,rsum;
+   Node*root;
+   bool flag=false;
+   scanf("%d",&T);
+   while(T--){
+      if(flag) printf("\n");
+      scanf("%d%d%d%d",&a,&b,&c,&d);
+      root=newnode();
+      root->wl=a;root->dl=b;root->wr=c;root->dr=d;
+      addnode(root);
+      lsum=0;rsum=0;
+      if(root->left!=NULL){
+          lsum=calculate(root->left);
+      }
+      if(root->right!=NULL){
+          rsum=calculate(root->right);
+      }
+      if(calculate(root)!=-1)
+          printf("YES\n");
+      else
+          printf("NO\n");
+      flag=true;
+      remove(root);
+   }
+   return 0;
+}

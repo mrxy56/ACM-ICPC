@@ -1,0 +1,57 @@
+#include<stdio.h>
+#include<string.h>
+#include<ctype.h>
+int main(void)
+{
+    int n,i,j,len,len2,len3,k,flag;
+    char find[15][100]={""},replaced[15][100]={""},sen[300]="";
+    while(scanf("%d",&n)==1)
+    {
+        getchar();
+        if(n==0) break;
+        for(i=0;i<n;i++)
+        {
+            fgets(find[i],100,stdin);
+            fgets(replaced[i],100,stdin);
+        }
+        fgets(sen,300,stdin);
+        for(i=0;i<n;i++)
+        {
+            j=0;
+            len=strlen(find[i]);
+            while(sen[j])
+            {
+                if(sen[j]==find[i][0])
+                      {
+                          k=0;flag=1;
+                          while(sen[j+k]!='\n'&&find[i][k]!='\n'&&find[i][k]==sen[j+k]) k++;
+                          if(k<len-1) flag=0;
+                          if(flag)
+                          {
+                             len2=strlen(replaced[i]);len3=strlen(sen);
+                            if(len2>len)
+                            for(k=len3-1;k>=j;k--)
+                             sen[k+len2-len]=sen[k];
+                            if(len2<len)
+                            {
+                              for(k=j+len-1;k<=len3-1;k++)
+                                sen[k+len2-len]=sen[k];
+                              for(k=len3-1;k>len3-1+len2-len;k--)
+                                    sen[k]='\0';
+                            }
+                              for(k=0;k<len2-1;k++)
+                                   sen[j+k]=replaced[i][k];
+                          }
+                          if(flag) j=-1;
+                        }
+                j++;
+
+            }
+        }
+        printf("%s",sen);
+        memset(sen,'\0',sizeof(sen));
+        memset(find,'\0',sizeof(find));
+        memset(replaced,'\0',sizeof(replaced));
+    }
+    return 0;
+}

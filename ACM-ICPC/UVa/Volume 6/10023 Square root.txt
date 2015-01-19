@@ -1,0 +1,146 @@
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+const int maxn=5000;
+struct bign{
+    int len,s[maxn];
+    bign(){memset(s,0,sizeof(s));len=1;}
+    bign(int num){*this=num;}
+    bign(const char*num){*this=num;}
+    bign operator = (int num){
+       char s[maxn];
+       sprintf(s,"%d",num);
+       *this=s;
+       return *this;
+    }
+    bign operator = (const char*num){
+       len=strlen(num);
+       for(int i=0;i<len;i++) s[i]=num[len-i-1]-'0';
+       return *this;
+    }
+    string str()const{
+       string res="";
+       for(int i=0;i<len;i++) res=(char)(s[i]+'0')+res;
+       if(res=="") res="0";
+       return res;
+    }
+    void clean() {
+        while(len > 1 && !s[len-1]) len--;
+    }
+    bign operator - (const bign& b) {
+        bign c; c.len = 0;
+        for(int i = 0, g = 0; i < len; i++) {
+        int x = s[i] - g;
+        if(i < b.len) x -= b.s[i];
+        if(x >= 0) g = 0;
+        else {
+          g = 1;
+          x += 10;
+        }
+        c.s[c.len++] = x;
+         }
+         c.clean();
+        return c;
+    }
+    bign operator *(const int num){
+       bign c;
+       int bit=0,n=num;
+       if(n==0) bit=1;
+       while(n){
+           n/=10;
+           bit++;
+           if(n==0) break;
+       }
+       for(int i = 0; i < len; i++)
+             c.s[i]=s[i]*num;
+        c.len=len+bit;
+        for(int i=0;i<c.len;i++){
+             c.s[i+1] += c.s[i] / 10;
+             c.s[i]%=10;
+        }
+        c.clean();
+        return c;
+    }
+    bool operator < (const bign& b) const{
+       if(len != b.len) return len < b.len;
+       for(int i = len-1; i >= 0; i--)
+          if(s[i] != b.s[i]) return s[i] < b.s[i];
+            return false;
+    }
+    bool operator > (const bign& b) const{
+       return b < *this;
+    }
+      bool operator ==(const bign& b) const{
+       return !(b<*this)&&!(*this<b);
+    }
+};
+void sqrt(char *str)
+{
+    int i,j,l,size,num,x[1005];
+    bign n,r,temp;
+    size=strlen(str);
+    if (size==1&&str[0]=='0')
+    {
+        printf("0\n");
+        return;
+    }
+    if (size&1)
+    {
+        n=str[0]-'0';
+        l=-1;
+    }
+    else
+    {
+        n=(str[0]-'0')*10+str[1]-'0';
+        l=0;
+    }
+    r=0,num=0;
+    while(1)
+    {
+        i=0;
+        temp=r*20;
+        while(1){
+           temp.s[0]=i;
+           if(temp*i>n) break;
+           i++;
+        }
+        i--;temp.s[0]=i;
+        n=n-temp*i;
+        for(int i=r.len-1;i>=0;i--)
+            r.s[i+1]=r.s[i];
+        r.len++;
+        r.s[0]=i;
+        x[num]=i;
+        ++num;
+        l+=2;
+        if (l>=size)
+            break;
+        if(n==0) n.len=0;
+        for(int i=n.len-1;i>=0;i--){
+           n.s[i+2]=n.s[i];
+        }
+        n.s[1]=str[l]-'0';
+        n.s[0]=str[l+1]-'0';
+        n.len+=2;
+    }
+    for (j=0;j<num;++j)
+        printf("%d",x[j]);
+    printf("\n");
+}
+int main()
+{
+    char s[1005];
+    int n;
+    scanf("%d",&n);
+    while(n--){
+        memset(s,'\0',sizeof(s));
+        scanf("%s",s);
+        sqrt(s);
+        if(n>0) printf("\n");
+    }
+    return 0;
+}

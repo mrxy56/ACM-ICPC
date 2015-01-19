@@ -1,0 +1,29 @@
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+long long d[30010][12];
+int v[5]={50,25,10,5,1};
+long long dp(int num,int pre){
+  long long &ans=d[num][pre];
+    if(ans>0) return ans;
+    for(int i=pre;i<5;i++){
+       if(num>v[i]&&dp(num-v[i],i))
+          ans+=d[num-v[i]][i];
+       if(num==v[i])
+          ans+=1;
+    }
+    return ans;
+}
+int main()
+{
+    int num;
+    memset(d,0,sizeof(d));
+    while(scanf("%d",&num)==1){
+        if(dp(num,0)>1)
+           printf("There are %lld ways to produce %d cents change.\n",d[num][0],num);
+        else
+           printf("There is only 1 way to produce %d cents change.\n",num);
+    }
+    return 0;
+}

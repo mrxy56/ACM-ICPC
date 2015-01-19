@@ -1,0 +1,31 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+const int V=1010;
+int e[V][2],left[V],n,m;
+bool vis[V];
+bool dfs(int x){ 
+    if(vis[x]) return 0;
+	vis[x]=1;
+	for(int i=0;i<2;i++){ 
+	    int t=e[x][i];
+		if(left[t]==-1||dfs(left[t])){ 
+               left[t]=x;
+			   return 1;
+		}
+	}
+    return 0;
+}
+int main(){ 
+    scanf("%d%d",&n,&m);
+	for(int i=0;i<m;i++)
+		scanf("%d%d\n",&e[i][0],&e[i][1]);
+	for(int i=0;i<n;i++) left[i]=-1;
+	int ans;
+	for(ans=0;ans<m;ans++){ 
+	    memset(vis,0,sizeof(vis));
+		if(!dfs(ans)) break;
+	}
+	printf("%d\n",ans);
+	return 0;
+}

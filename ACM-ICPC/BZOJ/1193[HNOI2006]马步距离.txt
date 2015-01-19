@@ -1,0 +1,58 @@
+#include<cstdio>
+#include<iostream>
+#include<algorithm>
+#include<utility>
+#include<queue>
+#define rep(i,n) for(int i=0;i<n;i++)
+using namespace std;
+typedef pair<int,int> pi;
+const pi D[8]={pi(2,1),pi(1,2),pi(-1,2),pi(-2,1),
+	       pi(-2,-1),pi(-1,-2),pi(1,-2),pi(2,-1)};
+const int inf=~0U>>1;
+inline int abs(int (x)){return (x)<0?-(x):(x);}
+inline pi dist(pi a,pi b){ 
+    int x=abs(a.first-b.first),y=abs(a.second-b.second);
+	return pi(x+y,abs(x-y));
+}
+pi operator+(const pi &a,const pi &b){ 
+    return pi(a.first+b.first,a.second+b.second);
+}
+int main(){ 
+	pi a,b;
+	int ans=0;
+	cin>>a.first>>a.second>>b.first>>b.second;
+	while(dist(a,b).first>10){ 
+	    pi next,Min(inf,inf);
+		rep(i,8){ 
+		   pi c=a+D[i];
+		   pi ncost=dist(c,b);
+		   if(ncost<Min)
+			   Min=ncost,next=c;
+		}
+		a=next,ans++;
+	}
+	int x=min(a.first,b.first),y=min(a.second,b.second);
+	pi c=pi(-x,-y);
+	a=a+c+pi(5,5);b=b+c+pi(5,5);
+	bool vis[100][100]={0};
+	int d[100][100];
+	vis[a.first][a.second]=true;
+	d[a.first][a.second]=0;
+	queue<pi> Q;Q.push(a);
+	while(Q.size()){ 
+	    pi t=Q.front();
+		Q.pop();
+		int cost=d[t.first][t.second];
+		if(t==b) break;
+		rep(i,8){ 
+		   pi c=t+D[i];
+		   if(c.first>=0&&c.first<100&&c.second>=0&&c.second<100)
+			   if(!vis[c.first][c.second]){ 
+			       vis[c.first][c.second]=true;
+				   d[c.first][c.second]=cost+1;
+				   Q.push(c);
+			   }
+		}
+	}
+	cout<<ans+d[b.first][b.second];
+}

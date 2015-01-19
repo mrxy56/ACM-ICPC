@@ -1,0 +1,22 @@
+#include <stdio.h>
+#include <stdlib.h>
+int main(void)
+{
+    int n,a,b,c,d;
+    scanf("%d",&n);
+    while(n--)
+    {
+        scanf("%d%d",&a,&b);
+        a-=2;b-=2;
+        if(a%3==0)
+            c=a/3;
+        else
+            c=a/3+1;
+        if(b%3==0)
+            d=b/3;
+        else
+            d=b/3+1;
+        printf("%d\n",c*d);
+    }
+    return 0;
+}

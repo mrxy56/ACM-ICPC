@@ -1,0 +1,67 @@
+#include<cstdio>
+#include<queue>
+#include<cstring>
+using namespace std;
+queue<char> q;
+int main(){ 
+   char s[100010];
+   int a,b,c;
+   char bin[16][5]={"0000","0001","0010","0011",
+                    "0100","0101","0110","0111",
+                    "1000","1001","1010","1011",
+                    "1100","1101","1110","1111"};
+   int n;
+   scanf("%d",&n);
+   while(n--){
+   scanf("%s",s);
+   int len=strlen(s);
+   if(len==1&&s[0]=='0'){printf("0\n");continue;}
+   while(!q.empty()) q.pop();
+   for(int i=0;i<len;i++){ 
+       if(s[i]>='0'&&s[i]<='9')
+		   a=s[i]-'0';
+	   else
+		   a=s[i]-'A'+10;
+	   for(int j=0;j<4;j++)
+		   q.push(bin[a][j]);
+   }
+   if(len*4%3==2){ 
+        b=q.front()-'0';
+		q.pop();
+		c=q.front()-'0';
+		q.pop();
+		c+=b*2;
+		if(c!=0)
+		  printf("%d",c);
+   }
+   else if(len*4%3==1){
+	    c=q.front()-'0';
+		q.pop();
+		if(c!=0)
+		printf("%d",c);
+   }
+   else if(len*4%3==0){
+	    a=q.front()-'0';
+		q.pop();
+        b=q.front()-'0';
+		q.pop();
+		c=q.front()-'0';
+		q.pop();
+		c+=a*4+b*2;
+		if(c!=0)
+		  printf("%d",c);
+   }
+	while(!q.empty()){ 
+	      a=q.front()-'0';
+		  q.pop();
+		  b=q.front()-'0';
+		  q.pop();
+		  c=q.front()-'0';
+		  q.pop();
+		  c+=a*4+b*2;
+		  printf("%d",c);
+	}
+	printf("\n");
+   }
+   return 0;
+}

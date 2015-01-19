@@ -1,0 +1,54 @@
+/*
+ID:mrxy564
+PROG:checker
+LANG:C++
+*/
+
+#include<cstdio>
+#include<cstring>
+using namespace std;
+int row[15];
+bool col[15];
+bool dia1[30],dia2[30];
+int cnt=0;
+void print(int n){ 
+	printf("%d",row[1]);
+    for(int i=2;i<=n;i++)
+		printf(" %d",row[i]);
+	printf("\n");
+	return;
+}
+void dfs(int now,int n){
+	if(now>n){ 
+		cnt++;
+	    if(cnt<=3) print(n);
+		return;
+	}
+    for(int i=1;i<=n;i++)
+		if(!col[i]&&!dia1[now-i+n]&&!dia2[now+i]){
+			  row[now]=i;
+			  col[i]=true;
+			  dia1[now-i+n]=true;
+			  dia2[now+i]=true;
+			  dfs(now+1,n);
+			  dia2[now+i]=false;
+			  dia1[now-i+n]=false;
+			  col[i]=false;
+		}
+    return;
+}
+void init(){ 
+    memset(col,false,sizeof(col));
+	memset(dia1,false,sizeof(dia1));
+	memset(dia2,false,sizeof(dia2));
+}
+int main(){ 
+   freopen("checker.in","r",stdin);
+   freopen("checker.out","w",stdout);
+   int n;
+   scanf("%d",&n);
+   init();
+   dfs(1,n);
+   if(cnt>3) printf("%d\n",cnt);
+   return 0;
+}

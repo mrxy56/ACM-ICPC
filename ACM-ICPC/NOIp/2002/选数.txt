@@ -1,0 +1,30 @@
+#include<cstdio>
+#include<cmath>
+using namespace std;
+int a[25],n,k,ans;
+bool is_prime(int num){ 
+   int m=(int)sqrt(num+0.5);
+   for(int i=2;i<=m;i++)
+	   if(num%i==0) return false;
+   return true;
+}
+void dfs(int num,int sum,int cnt){
+	if(cnt==k){ 
+	    if(is_prime(sum)){ 
+		    ans++;
+			return;
+		}
+	}
+	if(num==n) return;
+    dfs(num+1,sum+a[num],cnt+1);
+	dfs(num+1,sum,cnt);
+	return;
+}
+int main(){ 
+	scanf("%d%d",&n,&k);
+	for(int i=0;i<n;i++)
+		scanf("%d",&a[i]);
+    dfs(0,0,0);
+	printf("%d\n",ans);
+	return 0;
+}

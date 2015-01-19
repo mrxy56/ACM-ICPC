@@ -1,0 +1,27 @@
+#include<cstdio>
+using namespace std;
+int main(){
+   int a[10],sum,n;
+   scanf("%d",&n);
+   for(int i=10000;i<=99999;i++){ 
+       int temp=i;
+	   sum=0;
+	   for(int i=0;i<5;i++){ 
+	       a[i]=temp%10;
+		   temp/=10;
+		   sum+=a[i];
+	   }
+	   if(a[0]==a[4]&&a[1]==a[3]&&sum==n) printf("%d\n",i);
+   } 
+   for(int i=100000;i<=999999;i++){ 
+       int temp=i;
+	   sum=0;
+	   for(int i=0;i<6;i++){ 
+		   a[i]=temp%10;
+		   temp/=10;
+		   sum+=a[i];
+	   }
+	   if(a[0]==a[5]&&a[1]==a[4]&&a[2]==a[3]&&sum==n) printf("%d\n",i);
+   }
+   return 0;
+}

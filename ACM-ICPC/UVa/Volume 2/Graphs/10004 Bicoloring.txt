@@ -1,0 +1,41 @@
+#include <cstdio>
+#include <cstring>
+using namespace std;
+int n,e,a[210][210],vis[210];
+bool dfs(int n,int color){
+    for(int i=1;i<=a[n][0];i++){
+       if(!vis[a[n][i]]){
+          vis[a[n][i]]=!color;
+          if(!dfs(a[n][i],!color)) return false;
+       }
+       else{
+          if(vis[a[n][i]]==color)
+             return false;
+       }
+    }
+    return true;
+}
+int main()
+{
+    while(scanf("%d",&n)==1){
+      if(!n) break;
+      memset(vis,0,sizeof(vis));
+        scanf("%d",&e);
+      for(int i=0;i<n;i++)
+         a[i][0]=0;
+      for(int i=0;i<e;i++){
+         int temp,temp2;
+         scanf("%d",&temp);
+         a[temp][0]++;
+         scanf("%d",&temp2);
+         a[temp][a[temp][0]]=temp2;
+         a[temp2][0]++;
+         a[temp2][a[temp2][0]]=temp;
+      }
+    if(dfs(a[0][1],0))
+       printf("BICOLORABLE.\n");
+    else
+       printf("NOT BICOLORABLE.\n");
+    }
+    return 0;
+}

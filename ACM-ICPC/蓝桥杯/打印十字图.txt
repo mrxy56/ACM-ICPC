@@ -1,0 +1,37 @@
+#include<cstdio>
+using namespace std;
+char a[150][150];
+int main(){
+	int n;
+	scanf("%d",&n);
+	int num=4*n+5;
+	for(int i=1;i<=num;i++)
+    	for(int j=1;j<=num;j++)
+			    a[i][j]='.';
+	int mid=num/2+1;
+	int up=1,down=num,left=1,right=num;
+	while(n){
+		int k=4*n+5;
+	    for(int i=mid-2*n;i<=mid+2*n;i++)
+	          a[up][i]=a[down][i]=a[i][left]=a[i][right]='$';
+	    a[up+1][mid-2*n]=a[up+1][mid+2*n]='$';
+	    a[down-1][mid-2*n]=a[down-1][mid+2*n]='$';
+	    for(int j=0;j<=1;j++){
+	    	a[up+2][mid-2*n-j]=a[up+2][mid+2*n+j]='$';
+	    	a[down-2][mid-2*n-j]=a[down-2][mid+2*n+j]='$';
+	    }
+	    up+=2;down-=2;left+=2;right-=2;
+	    n--;
+    }
+    for(int k=1;k<=2;k++){
+    	a[mid][mid-k]=a[mid][mid+k]='$';
+    	a[mid-k][mid]=a[mid+k][mid]='$';
+    }
+    a[mid][mid]='$';
+    for(int i=1;i<=num;i++){
+        for(int j=1;j<=num;j++)
+            printf("%c",a[i][j]);
+        printf("\n");
+    }
+	return 0;
+}

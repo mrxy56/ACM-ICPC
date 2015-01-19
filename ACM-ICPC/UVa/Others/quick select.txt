@@ -1,0 +1,67 @@
+01.// 快速选择，平均时间复杂度O(N)   
+02.int quickSelect( DataType* A, int beg, int end, int K )  
+03.{  
+04.    DataType pivot;   
+05.    int i, j;  
+06.  
+07.    if ( end - beg + 1 < K )  // error   
+08.    {  
+09.        printf("error!\n");  
+10.        exit(0);  
+11.    }  
+12.  
+13.    pivot = A[beg];  
+14.    i = beg;  
+15.    j = end + 1;  
+16.  
+17.    // 将数组分为小于pivot和大于pivot的两部分   
+18.    for ( ;; )  
+19.    {  
+20.        while( A[++i] < pivot );  
+21.        while( A[--j] > pivot );  
+22.        if ( i > j ) break;  
+23.        SWAP( A[i], A[j] );  
+24.    }  
+25.    SWAP( A[beg], A[j] );  
+26.  
+27.    if ( j - beg  == K-1 )   // 如果小于pivot的数目刚好为K-1个，这返回该pivot   
+28.        return A[j];  
+29.    else if ( j - beg >= K ) // 否则，如果小于pivot的数目大于K-1个，则返回该部分中第K大的数   
+30.        return quickSelect( A, beg, j-1, K );  
+31.    else  
+32.        return quickSelect( A, j+1, end, K-(j-beg+1) );  
+33.}  
+// 快速选择，平均时间复杂度O(N)
+int quickSelect( DataType* A, int beg, int end, int K )
+{
+	DataType pivot; 
+	int i, j;
+
+	if ( end - beg + 1 < K )  // error
+	{
+		printf("error!\n");
+		exit(0);
+	}
+
+	pivot = A[beg];
+	i = beg;
+	j = end + 1;
+
+	// 将数组分为小于pivot和大于pivot的两部分
+	for ( ;; )
+	{
+		while( A[++i] < pivot );
+		while( A[--j] > pivot );
+		if ( i > j ) break;
+		SWAP( A[i], A[j] );
+	}
+	SWAP( A[beg], A[j] );
+
+	if ( j - beg  == K-1 )   // 如果小于pivot的数目刚好为K-1个，这返回该pivot
+		return A[j];
+	else if ( j - beg >= K ) // 否则，如果小于pivot的数目大于K-1个，则返回该部分中第K大的数
+		return quickSelect( A, beg, j-1, K );
+	else
+		return quickSelect( A, j+1, end, K-(j-beg+1) );
+}
+

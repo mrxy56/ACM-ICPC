@@ -1,0 +1,63 @@
+/*
+ID:mrxy564
+PROG:butter
+LANG:C++
+*/
+#include<cstdio>
+#include<algorithm>
+#include<vector>
+#include<queue>
+#include<cstring>
+using namespace std;
+#define FOR(i,s,t) for(int i=(s);i<(t);i++)
+#define RST(x,t) memset(x,t,sizeof(x))
+const int INT=10000;
+int a[810];
+bool inque[810];
+vector<int> G[810],d[810];
+queue<int> q;
+int main(){
+	freopen("butter.in","r",stdin);
+	freopen("butter.out","w",stdout);
+	int n,p,c;
+	scanf("%d%d%d",&n,&p,&c);
+	FOR(i,0,n) scanf("%d",&a[i]);
+    FOR(i,0,c){
+		int x,y,z;
+		scanf("%d%d%d",&x,&y,&z);
+		x--;y--;
+        G[x].push_back(y);
+		G[y].push_back(x);
+		d[x].push_back(z);
+		d[y].push_back(z);
+	}
+	int ans=~0U>>1;
+	int dist[810];
+	FOR(i,0,p){
+		int temp=0;
+		while(!q.empty()) q.pop();
+		RST(inque,0);
+		FOR(j,0,p) dist[j]=10000;
+		dist[i]=0;
+		q.push(i); inque[i]=true;
+		while(!q.empty()){
+			int u=q.front();
+			q.pop();inque[u]=false;
+			FOR(j,0,G[u].size()){
+				int v=G[u][j];
+				if(dist[v]>dist[u]+d[u][j]){
+					q.push(v);
+					dist[v]=dist[u]+d[u][j];
+					inque[v]=true;
+				}
+			}
+		}
+		FOR(j,0,n){
+            temp+=dist[a[j]-1];
+		}
+		if(temp<ans) ans=temp;
+	}
+	printf("%d\n",ans);
+	return 0;
+}
+        

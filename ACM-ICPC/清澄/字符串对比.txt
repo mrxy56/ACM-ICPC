@@ -1,0 +1,25 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<cctype>
+using namespace std;
+int main(){ 
+    string s,t;
+	cin>>s>>t;
+	if(s.length()!=t.length()){ 
+	     printf("1\n");
+	}else if(s==t){ 
+	     printf("2\n");
+	}else{ 
+	     for(int i=0;i<s.length();i++)
+			 if(isupper(s[i]))
+				 s[i]=tolower(s[i]);
+	     for(int i=0;i<t.length();i++)
+			 if(isupper(t[i]))
+				 t[i]=tolower(t[i]);
+		 if(s==t) printf("3\n");
+		 else printf("4\n");
+	}
+	return 0;
+}

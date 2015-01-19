@@ -1,0 +1,22 @@
+#include<cstdio>
+using namespace std;
+const int mod=100003;
+long long power(long long x,long long base)
+{
+   if(x==0) return 1;
+   long long temp=power(x/2,base);
+   temp=temp*temp%mod;
+   if(x&1) temp=temp*base%mod;
+   return temp;
+}
+int main(){
+   long long m,n;
+   scanf("%lld%lld",&m,&n);
+   long long sum=power(n,m);
+   long long minus=power(n-1,m-1);
+   minus=minus*m%mod;
+   long long ans=sum-minus;
+   if(ans<0) ans+=mod;
+   printf("%lld\n",ans);
+   return 0;
+}   

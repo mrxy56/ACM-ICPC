@@ -1,0 +1,98 @@
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+#include<cstring>
+const int MAX=20010;
+using namespace std;
+int c,n,ls[MAX];
+struct node{ 
+    int l,r;
+	int c;
+}tree[MAX*4];
+struct ln{ 
+    int li,num;
+}line[MAX];
+int set[MAX][2];
+bool vis[MAX];
+int ans,tp;
+bool cmp(struct ln a,struct ln b){ 
+    return a.li<b.li;
+}
+void Inittree(int pos,int ll,int rr){ 
+    tree[pos].l=ll;
+	tree[pos].r=rr;
+	tree[pos].c=0;
+	if(ll!=rr){ 
+	    int mid=(ll+rr)/2;
+        Inittree(pos*2,ll,mid);
+		Inittree(pos*2+1,mid+1,rr);
+	}
+}
+void Insert(int pos,int ll,int rr,int color){ 
+    if(tree[pos].l>=ll&&tree[pos].r<=rr){
+		tree[pos].c=color;
+	    return;
+	}
+    if(tree[pos].c>0&&tree[pos].c!=color){ 
+	    tree[pos*2].c=tree[pos].c;
+		tree[pos*2+1].c=tree[pos].c;
+		tree[pos].c=0;
+	}
+	int mid=(tree[pos].l+tree[pos].r)/2;
+	if(rr<=mid){ 
+	    Insert(pos*2,ll,rr,color);
+	}else if(ll>mid){ 
+	    Insert(pos*2+1,ll,rr,color);
+	}else{ 
+	    Insert(pos*2,ll,mid,color);
+		Insert(pos*2+1,mid+1,rr,color);
+	}
+}
+void Search(int pos){
+	 if(pos>=4*tp) return;
+     if(tree[pos].c!=0){ 
+	     if(!vis[tree[pos].c]){
+			 vis[tree[pos].c]=true;
+		     ans++;
+		 }
+		 return;
+	 }
+	 Search(2*pos);
+	 Search(2*pos+1);
+}
+int main(){ 
+     scanf("%d",&c);
+	 while(c--){ 
+	     scanf("%d",&n);
+         for(int i=0;i<n;i++){
+			 scanf("%d%d",&set[i][0],&set[i][1]);
+		     line[2*i].li=set[i][0];
+		     line[2*i].num=-(i+1);
+		     line[2*i+1].li=set[i][1];
+             line[2*i+1].num=i+1;
+		 }
+		 sort(line,line+2*n,cmp);
+         int temp=line[0].li;
+		 tp=1;
+		 for(int i=0;i<2*n;i++){ 
+		     if(line[i].li!=temp){ 
+			     tp++;
+				 temp=line[i].li;
+			 }
+			 if(line[i].num<0){
+				 set[-line[i].num-1][0]=tp;
+             }
+			 else{
+			     set[line[i].num-1][1]=tp;
+		     }
+		 }
+		 Inittree(1,1,tp);
+         for(int i=0;i<n;i++)
+			 Insert(1,set[i][0],set[i][1],i+1);
+		 memset(vis,0,sizeof(vis));
+		 ans=0;
+		 Search(1);
+		 printf("%d\n",ans);
+	 }
+     return 0;
+}

@@ -1,0 +1,17 @@
+#include<cstdio>
+#include<iostream>
+using namespace std;
+int main(){
+    int n;
+    scanf("%d",&n);
+    for(int i=1;i<n*2;i+=2){
+	int j=i/2;
+	for(int k=j;k>=1;k--)
+	    printf("%c",'A'+k);
+	printf("A");
+	for(int k=1;k<=j;k++)
+	    printf("%c",'A'+k);
+        printf("\n");
+    }
+    return 0;
+}

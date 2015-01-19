@@ -1,0 +1,29 @@
+#include<cstdio>
+using namespace std;
+struct point{
+   int x,y;
+}a[55];
+int main()
+{
+    bool judge;
+    int x,y,n,left,right;
+    while(scanf("%d",&n)==1){
+        if(!n) break;
+        for(int i=0;i<2*n;i++){
+           scanf("%d%d",&a[i].x,&a[i].y);
+        }
+       for(int A=-500;A<=500;A++){
+           for(int B=-500;B<=500;B++){
+               left=right=0;judge=false;
+              for(int i=0;i<2*n;i++){
+                if(A*a[i].x+B*a[i].y==0) break;
+                else if(A*a[i].x+B*a[i].y>0) left++;
+                else if(A*a[i].x+B*a[i].y<0) right++;
+              }
+              if(left==right&&left+right==n*2) {printf("%d %d\n",A,B);judge=true;break;}
+           }
+           if(judge) break;
+       }
+    }
+    return 0;
+}

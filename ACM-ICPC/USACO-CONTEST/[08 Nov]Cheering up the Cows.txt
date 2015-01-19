@@ -1,0 +1,51 @@
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+const int MAXM=100010;
+const int MAXN=10010;
+struct edge{ 
+    int x,y,w;
+	edge(int x=0,int y=0,int w=0):x(x),y(y),w(w){ }
+}e[MAXM];
+int a[MAXN],fa[MAXN];
+int m,n,minnum;
+bool cmp(edge e1,edge e2){ 
+    return e1.w<e2.w;
+}
+int getfather(int x){ 
+    if(x==fa[x]) return x;
+	else return fa[x]=getfather(fa[x]);
+}
+int kruscal(){ 
+	int ans=0,cnt=n;
+    sort(e+1,e+m+1,cmp);
+	for(int i=1;i<=n;i++) fa[i]=i;
+	for(int i=1;i<=m;i++){ 
+	    int t1=getfather(e[i].x);
+		int t2=getfather(e[i].y);
+		if(t1!=t2){ 
+		    fa[t1]=t2;
+			ans+=e[i].w;
+			cnt--;
+			if(cnt==1) break;
+		}
+	}
+	return ans;
+}
+int main(){ 
+    while(scanf("%d%d",&n,&m)==2){
+		 minnum=MAXN;
+	     for(int i=1;i<=n;i++){
+			 scanf("%d",&a[i]);
+			 if(a[i]<minnum) minnum=a[i];
+		 }
+		 for(int i=1;i<=m;i++){
+                      scanf("%d%d%d",&e[i].x,&e[i].y,&e[i].w);
+                      e[i].w*=2;
+                      e[i].w+=a[e[i].x]+a[e[i].y];
+                 }
+         int temp=kruscal();
+		 printf("%d\n",temp+minnum);
+	}  
+	return 0;
+}

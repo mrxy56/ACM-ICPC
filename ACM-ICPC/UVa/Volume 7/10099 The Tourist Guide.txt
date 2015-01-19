@@ -1,0 +1,29 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+int G[110][110];
+int main(){
+    int n,r,x,y,p,temp,cnt=0;
+    while(scanf("%d%d",&n,&r)==2){
+        if(n==0&&r==0) break;
+        memset(G,0,sizeof(G));
+        for(int i=0;i<r;i++){
+           scanf("%d%d",&x,&y);
+           scanf("%d",&G[x][y]);
+           G[x][y]--;G[y][x]=G[x][y];
+        }
+        for(int k=1;k<=n;k++)
+           for(int i=1;i<=n;i++)
+              for(int j=1;j<=n;j++)
+                if(G[i][k]>0&&G[k][j]>0)
+                 G[i][j]=max(G[i][j],min(G[i][k],G[k][j]));
+        scanf("%d%d%d",&x,&y,&p);
+        temp=G[x][y];
+        printf("Scenario #%d\n",++cnt);
+        if(p%temp==0)
+           printf("Minimum Number of Trips = %d\n\n",p/temp);
+        else printf("Minimum Number of Trips = %d\n\n",p/temp+1);
+    }
+    return 0;
+}

@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <ctype.h>
+int n,ch,pre,i;
+double P=0.0,I=0.0,U=0.0;
+void trans(int p);
+int main(void)
+{
+    scanf("%d",&n);getchar();
+    for(i=1;i<=n;i++)
+    {
+        pre=getchar();
+        while((ch=getchar())!='\n')
+        {
+            if(ch=='=')
+                 trans(pre);
+            pre=ch;
+        }
+        printf("Problem #%d\n",i);
+        if(P&&I)
+        printf("U=%.2lfV\n\n",P/I);
+        if(P&&U)
+        printf("I=%.2lfA\n\n",P/U);
+        if(I&&U)
+        printf("P=%.2lfW\n\n",I*U);
+        P=0.0;I=0.0;U=0.0;
+    }
+    return 0;
+}
+void trans(int p)
+{
+    double temp=0.0;
+    int ch,count=10;
+    while(isdigit(ch=getchar()))
+    {
+         temp=temp*10+ch-'0';
+    }
+
+    if(ch=='.')
+        while(isdigit(ch=getchar()))
+        {
+           temp+=(double)(ch-'0')/count;
+           count*=10;
+        }
+    if(ch=='m') temp/=1000;
+    if(ch=='k') temp*=1000;
+    if(ch=='M') temp*=1000000;
+    switch(p)
+    {
+        case 'P':P=temp;break;
+        case 'I':I=temp;break;
+        case 'U':U=temp;break;
+    }
+}
+
+

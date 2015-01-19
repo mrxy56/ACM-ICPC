@@ -1,0 +1,64 @@
+/*
+ID:mrxy564
+PROG:fence
+LANG:C++
+*/
+#include<cstdio>
+#include<cstring>
+#include<vector>
+#include<algorithm>
+#include<iostream>
+using namespace std;
+int d[510];
+bool vis[1100];
+vector<int> path;
+typedef pair<int,int> pi;
+vector<pi > G[510];
+int Max=-1,Min=510,x,y;
+bool cmp(pi x,pi y){
+	return x.second<y.second;
+}
+void dfs(int node){
+    for(int i=0;i<G[node].size();i++){
+		if(!vis[G[node][i].first]){
+			vis[G[node][i].first]=true;
+			dfs(G[node][i].second);
+		}
+	}
+	path.push_back(node);
+}
+int main(){
+	freopen("fence.in","r",stdin);
+	freopen("fence.out","w",stdout);
+	int T,cnt=0;
+	scanf("%d",&T);
+	memset(G,0,sizeof(G));
+	memset(d,0,sizeof(d));
+    memset(vis,0,sizeof(vis));
+	for(int i=0;i<T;i++){
+		scanf("%d%d",&x,&y);
+		cnt++;
+		G[x].push_back(make_pair(cnt,y));
+		G[y].push_back(make_pair(cnt,x));
+		d[x]++;d[y]++;
+		if(x>Max) Max=x;
+		if(x<Min) Min=x;
+		if(y>Max) Max=y;
+		if(y<Min) Min=y;
+	}
+	for(int i=Min;i<=Max;i++)
+		sort(G[i].begin(),G[i].end(),cmp);
+	int temp=-1;
+	for(int i=Min;i<=Max;i++)
+		if(d[i]%2){
+			temp=i;
+			break;
+		}
+	if(temp==-1) temp=1;
+	dfs(temp);
+	reverse(path.begin(),path.end());
+	typedef vector<int>::iterator iter;
+	for(iter it=path.begin();it!=path.end();it++)
+		cout<<*it<<endl;
+	return 0;
+}

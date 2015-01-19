@@ -1,0 +1,28 @@
+#include<cstdio>
+#include<iostream>
+using namespace std;
+string a[60]={"zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen","twenty"};
+void Ans(int x){
+    a[30]="thirty";
+    a[40]="forty";
+    a[50]="fifty";
+    if(x<=20) cout<<a[x];
+    else{
+	int p,q;
+	p=x/10,q=x%10;
+	if(q!=0)
+	    cout<<a[p*10]<<" "<<a[q];
+	else cout<<a[p];
+    }
+    return;
+}
+int main(){
+    int x,y;
+    scanf("%d%d",&x,&y);
+    Ans(x);
+    cout<<" ";
+    if(y==0) cout<<"o'clock"<<endl;
+    else Ans(y);
+    cout<<endl;
+    return 0;
+}

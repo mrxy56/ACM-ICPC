@@ -1,0 +1,85 @@
+#include <cstdio>
+#include <cstring>
+using namespace std;
+char a[40][40][40];
+int count[40][40][40];
+int q[1000];
+int dir[6][3]={{1,0,0},{-1,0,0},{0,1,0},{0,-1,0},{0,0,1},{0,0,-1}};
+int L,R,C,i,j,k,l,r,c,ans;
+void init(void)
+{
+    memset(a,'\0',sizeof(a));
+    memset(count,0,sizeof(count));
+    memset(q,0,sizeof(q));
+    for(k=0;k<L;k++)
+    {
+        for(i=0;i<R;i++)
+        {
+            for(j=0;j<C;j++)
+                scanf("%c",&a[k][i][j]);
+            getchar();
+        }
+        getchar();
+    }
+}
+int bfs(int tL,int tR,int tC)
+{
+     int front=0,rear=0,u,v,d,nL,nR,nC;
+     u=tL*R*C+tR*C+tC;
+     a[tL][tR][tC]='#';
+     q[rear++]=u;
+     while(front<rear)
+     {
+         u=q[front++];
+         tL=u/(R*C);tR=(u%(R*C))/C;tC=(u%(R*C))%C;
+         for(d=0;d<6;d++)
+         {
+             nL=tL+dir[d][0];nR=tR+dir[d][1];nC=tC+dir[d][2];
+             if(nL>=0&&nL<L&&nR>=0&&nR<R&&nC>=0&&nC<C)
+                if(a[nL][nR][nC]=='.'||a[nL][nR][nC]=='E')
+                {
+                    v=nL*R*C+nR*C+nC;
+                    q[rear++]=v;
+                    a[nL][nR][nC]='#';
+                    count[nL][nR][nC]=count[tL][tR][tC]+1;
+                    if(nL==l&&nR==r&&nC==c)
+                        return count[nL][nR][nC];
+                }
+
+         }
+     }
+     return -1;
+}
+void print(void)
+{
+    if(ans==-1)
+       printf("Trapped!\n");
+    else
+       printf("Escaped in %d minute(s).\n",ans);
+}
+int main(void)
+{
+    //freopen("a.txt","r",stdin);
+    while(scanf("%d%d%d\n",&L,&R,&C)==3)
+    {
+        if(L==0&&R==0&&C==0) break;
+        init();
+        for(k=0;k<L;k++)
+           for(i=0;i<R;i++)
+             for(j=0;j<C;j++)
+                if(a[k][i][j]=='E')
+                {
+                    l=k;r=i;c=j;
+                }
+        for(k=0;k<L;k++)
+           for(i=0;i<R;i++)
+             for(j=0;j<C;j++)
+                if(a[k][i][j]=='S')
+                {
+                   ans=bfs(k,i,j);
+                   break;
+                }
+        print();
+    }
+    return 0;
+}

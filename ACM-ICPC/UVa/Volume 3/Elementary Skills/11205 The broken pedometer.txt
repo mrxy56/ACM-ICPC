@@ -1,0 +1,39 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+int p,n,end,a[105],c[105];
+int main(){
+   //freopen("a.txt","r",stdin);
+   int T,min,x;
+   scanf("%d",&T);
+   while(T--){
+      scanf("%d%d",&p,&n);
+      for(int i=0;i<n;i++){
+          int sum=0,temp;
+          for(int j=p-1;j>=0;j--){
+            scanf("%d",&temp);
+            sum+=(temp<<j);
+          }
+          a[i]=sum;
+      }
+      min=p;
+      for(int i=0;i<(1<<p);i++){
+          int num=0;
+          for(int j=1;j<(1<<p);j<<=1)
+             if(i&j) num++;
+          memcpy(c,a,sizeof(a));
+          for(int k=0;k<n;k++)
+             c[k]=a[k]&i;
+          sort(c,c+n);
+          for(x=0;x<n-1;x++)
+             if(c[x]==c[x+1]) break;
+          if(x==n-1){
+             if(min>num)
+                min=num;
+          }
+      }
+      printf("%d\n",min);
+   }
+   return 0;
+}

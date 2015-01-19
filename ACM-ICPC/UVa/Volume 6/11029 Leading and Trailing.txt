@@ -1,0 +1,27 @@
+#include<cstdio>
+#include<cmath>
+using namespace std;
+const int mod=1000;
+long long POW(long long x,long long n){
+     long long ret=1;
+     while(n){
+        if(n&1) ret=ret*x%mod;
+        x=x*x%mod;
+        n/=2;
+     }
+     return ret;
+}
+int main(){
+   double num;
+   long long n,k;
+   int T,temp;
+   scanf("%d",&T);
+   while(T--){
+       scanf("%I64d%I64d",&n,&k);
+       num=k*log10(n);
+       temp=(int)num;
+       num-=temp;
+       printf("%d...%03d\n",(int)(pow(10,num)*100),POW(n,k));
+   }
+   return 0;
+}

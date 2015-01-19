@@ -1,0 +1,51 @@
+#include<cstdio>
+#include<iostream>
+#include<stack>
+#include<queue>
+#include<cstdlib>
+#define REP(i,a,b) for(int i=a;i<=b;i++)
+using namespace std;
+const int maxn=200+10;
+const int di[]={-1,0,1,0},dj[]={0,1,0,-1};
+int map[maxn][maxn],n,m;
+bool mark[maxn][maxn]={0};
+struct node{ 
+    int x,y;
+	node(int x,int y):x(x),y(y){}
+	void show(){ 
+	    cout<<x<<" "<<y<<endl;
+	}
+};
+void Cant(){ 
+    cout<<"No solution"<<endl;
+    exit(0);
+}
+int main(){ 
+    cin>>n>>m;
+	queue<node> Q;
+	stack<node> S;
+	REP(i,0,n+1)REP(j,0,m+1) map[i][j]=10;
+    REP(i,1,n)REP(j,1,m){ 
+	     cin>>map[i][j];
+		 if(map[i][j]==1)
+			 Q.push(node(i,j));
+	}
+    while(Q.size()){ 
+	     node cur=Q.front();Q.pop();
+		 S.push(cur);
+		 mark[cur.x][cur.y]=true;
+		 REP(k,0,3){ 
+		      int t=di[k]+cur.x,u=dj[k]+cur.y;
+			  if(!mark[t][u]&&map[t][u]!=10){ 
+			      map[t][u]--;
+				  if(!map[t][u]) Cant();
+				  if(map[t][u]==1) Q.push(node(t,u));
+			  }
+		 }
+	}
+	if(S.size()!=n*m) Cant();
+	while(S.size()){ 
+	     S.top().show();S.pop();
+	}
+	return 0;
+}

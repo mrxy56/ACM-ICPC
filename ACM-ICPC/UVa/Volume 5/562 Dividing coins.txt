@@ -1,0 +1,27 @@
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+long long d[110][50010];
+int a[110];
+int main()
+{
+    int n,T,sum;
+    scanf("%d",&T);
+    while(T--){
+       memset(d,0,sizeof(d));
+       sum=0;
+       scanf("%d",&n);
+       for(int i=1;i<=n;i++){
+         scanf("%d",&a[i]);
+         sum+=a[i];
+       }
+        for(int i=n;i>=1;i--)
+        for(int j=0;j<=sum/2;j++){
+            d[i][j]=(i==n?0:d[i+1][j]);
+            if(j>=a[i]) d[i][j]=max(d[i][j],d[i+1][j-a[i]]+a[i]);
+        }
+        printf("%d\n",sum-2*d[1][sum/2]);
+    }
+    return 0;
+}

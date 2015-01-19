@@ -1,0 +1,33 @@
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+struct coin{ 
+    int p,w;
+}a[510];
+const int INF=5000010;
+int dp[50010];
+int E,F,n;
+void CompletePack(int cost,int weight){ 
+    for(int v=cost;v<=F-E;v++)
+		dp[v]=min(dp[v],dp[v-cost]+weight);
+}
+int main(){ 
+   int T;
+   scanf("%d",&T);
+   while(T--){ 
+       scanf("%d%d",&E,&F);
+       scanf("%d",&n);
+       for(int i=1;i<=n;i++)
+		   scanf("%d%d",&a[i].p,&a[i].w);
+	   dp[0]=0;
+	   for(int i=1;i<=F-E;i++)
+		   dp[i]=INF;
+       for(int i=1;i<=n;i++)
+		   CompletePack(a[i].w,a[i].p);
+	   if(dp[F-E]!=INF)
+	          printf("The minimum amount of money in the piggy-bank is %d.\n",dp[F-E]);
+	   else 
+		      printf("This is impossible.\n");
+   }
+   return 0;
+}

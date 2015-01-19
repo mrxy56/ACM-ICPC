@@ -1,0 +1,11 @@
+#include<stdio.h>
+#include<math.h>
+int main()
+{
+    long int a,b;
+    while(scanf("%ld %ld",&a,&b)==2)
+    {
+        printf("%ld\n",(long)fabs(b-a));
+    }
+    return 0;
+}

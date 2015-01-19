@@ -1,0 +1,126 @@
+/*
+ID:mrxy564
+PROG:castle
+LANG:C++
+*/
+
+#include<cstdio>
+using namespace std;
+struct node{ 
+    bool west,north,east,south,vis,sign;
+	int size;
+	int num;
+}a[55][55];
+struct Room{ 
+    int size;
+	int x,y;
+	char dir;
+}newroom;
+int n,m,temp,cnt,roomnum,maxroom,num;
+void init(){ 
+	scanf("%d%d",&m,&n);
+	roomnum=maxroom=0;
+	for(int i=0;i<n;i++)
+		for(int j=0;j<m;j++){
+			a[i][j].vis=false;
+			a[i][j].sign=false;
+		}
+    for(int i=0;i<n;i++)
+		for(int j=0;j<m;j++){ 
+		    scanf("%d",&temp);
+			int bit=1;
+			for(int k=0;k<4;k++){ 
+			    if((bit&temp)==0){ 
+				    switch(bit){ 
+						case 1:
+							a[i][j].west=true;
+							break;
+						case 2:
+							a[i][j].north=true;
+							break;
+						case 4:
+							a[i][j].east=true;
+							break;
+						case 8:
+							a[i][j].south=true;
+							break;
+					}
+				}
+				bit<<=1;
+			}
+		}
+	return;
+}
+bool is_valid(int x,int y){ 
+    if(x>=0 && x<n && y>=0 && y<m) return true;
+	return false;
+}
+void floodfill(int x,int y){ 
+    a[x][y].vis=true;
+	cnt++;
+	if(a[x][y].west&&is_valid(x,y-1)&&a[x][y-1].vis==false) floodfill(x,y-1);
+	if(a[x][y].north&&is_valid(x-1,y)&&a[x-1][y].vis==false) floodfill(x-1,y);
+    if(a[x][y].east&&is_valid(x,y+1)&&a[x][y+1].vis==false) floodfill(x,y+1);
+	if(a[x][y].south&&is_valid(x+1,y)&&a[x+1][y].vis==false) floodfill(x+1,y);
+	return;
+}
+void mark(int x,int y){ 
+    a[x][y].sign=true;
+	a[x][y].size=cnt;
+	a[x][y].num=num;
+	if(a[x][y].west&&is_valid(x,y-1)&&a[x][y-1].sign==false) mark(x,y-1);
+	if(a[x][y].north&&is_valid(x-1,y)&&a[x-1][y].sign==false) mark(x-1,y);
+    if(a[x][y].east&&is_valid(x,y+1)&&a[x][y+1].sign==false) mark(x,y+1);
+	if(a[x][y].south&&is_valid(x+1,y)&&a[x+1][y].sign==false) mark(x+1,y);
+}
+void print(){ 
+    printf("%d\n",roomnum);
+	printf("%d\n",maxroom);
+	printf("%d\n",newroom.size);
+	printf("%d %d %c\n",newroom.x,newroom.y,newroom.dir);
+}
+void make_new_room(){ 
+	int n_temp=0,n_max=0;
+    for(int j=0;j<m;j++)
+		for(int i=n-1;i>=0;i--){ 
+		    if(a[i][j].north==false&&is_valid(i-1,j)&&a[i][j].num!=a[i-1][j].num){ 
+				n_temp=a[i][j].size+a[i-1][j].size;
+				if(n_temp>n_max){ 
+				    n_max=n_temp;
+					newroom.size=n_max;
+					newroom.x=i+1;
+					newroom.y=j+1;
+					newroom.dir='N';
+				}
+			}
+			if(a[i][j].east==false&&is_valid(i,j+1)&&a[i][j].num!=a[i][j+1].num){ 
+				n_temp=a[i][j].size+a[i][j+1].size;
+				if(n_temp>n_max){ 
+				    n_max=n_temp;
+					newroom.size=n_max;
+					newroom.x=i+1;
+					newroom.y=j+1;
+					newroom.dir='E';
+				}
+			}
+		}
+}
+int main(){
+	freopen("castle.in","r",stdin);
+	freopen("castle.out","w",stdout);
+    init();
+	num=0;
+	for(int i=0;i<n;i++)
+		for(int j=0;j<m;j++)
+			if(!a[i][j].vis){
+				cnt=0;
+				roomnum++;
+                floodfill(i,j);
+				if(cnt>maxroom) maxroom=cnt;
+				num++;
+				mark(i,j);
+			}
+	make_new_room();
+    print();
+    return 0;
+}

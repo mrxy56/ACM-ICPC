@@ -1,0 +1,87 @@
+/*
+ID:mrxy564
+PROG:maze1
+LANG:C++
+*/
+#include<cstdio>
+#include<queue>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+const int INF=~0U>>1;
+struct node{ 
+    int x,y,cnt;
+    node(int _x,int _y,int _cnt):x(_x),y(_y),cnt(_cnt){}
+};
+int dx[4]={-1,0,1,0};
+int dy[4]={0,1,0,-1};
+queue<node> Q;
+char s[210][80];
+int ans=0,W,H;
+bool vis[210][80];
+void generate_move(int &x,int &y,int dir){ 
+     if(dir==0){
+		 if(s[x][y]==' ') x--;
+		   else x++;
+	 }
+	 else if(dir==1){ 
+	     if(s[x][y]==' ') y++;
+		   else y--;
+	 }
+	 else if(dir==2){
+		 if(s[x][y]==' ') x++;
+		   else x--;
+	 }
+	 else if(dir==3){ 
+	     if(s[x][y]==' ') y--;
+		   else y++;
+	 }
+	 return;
+}
+bool out_of_bound(int x,int y){ 
+     if(x>=1&&x<=2*H+1&&y>=1&&y<=2*W+1) return false;
+	 return true;
+}
+void bfs(node a){ 
+	int temp=INF;
+    memset(vis,0,sizeof(vis));
+	while(!Q.empty()) Q.pop();
+	Q.push(a);vis[a.x][a.y]=true;
+	while(!Q.empty()){ 
+	    node t=Q.front();
+		Q.pop();
+		for(int i=0;i<4;i++){ 
+		   int nx=t.x+dx[i],ny=t.y+dy[i];
+		       generate_move(nx,ny,i);
+			   if(!vis[nx][ny]){
+			     if(out_of_bound(nx,ny)){
+				   if(t.cnt+1<temp) temp=t.cnt+1;
+		         }
+			     else{ 
+				    Q.push(node(nx,ny,t.cnt+1));
+					vis[nx][ny]=true;
+				}
+			   }
+		}
+	}
+	if(temp>ans) ans=temp;
+    return;
+}
+int main(){
+	freopen("maze1.in","r",stdin);
+	freopen("maze1.out","w",stdout);
+	scanf("%d%d",&W,&H);
+	getchar();
+    for(int i=1;i<=2*H+1;i++){
+		for(int j=1;j<=2*W+1;j++)
+		  scanf("%c",&s[i][j]);
+		getchar();
+	}
+	for(int i=2;i<=2*H;i+=2)
+	    for(int j=2;j<=2*W;j+=2){
+			node t=node(i,j,0);
+		    bfs(t);
+		}
+	printf("%d\n",ans);
+	return 0;
+}

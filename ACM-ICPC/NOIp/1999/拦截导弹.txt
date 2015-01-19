@@ -1,0 +1,35 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+int a[100010],g[100010],d[100010];
+const int INF=30010;
+int cmp(const int x,const int y){
+	return x>y;
+}
+int main(){ 
+   int n=0,num;
+   while(scanf("%d",&num)==1) 
+       a[n++]=num;
+   memset(g,0,sizeof(g));
+   for(int i=0;i<n;i++){
+	   int k=upper_bound(g,g+n,a[i],cmp)-g;
+       d[i]=k+1;
+	   g[k]=a[i];
+   }
+   int ans=0;
+   for(int i=0;i<n;i++)
+	   if(d[i]>ans) ans=d[i];
+   printf("%d\n",ans);
+   for(int i=0;i<n;i++) g[i]=INF;
+   for(int i=0;i<n;i++){
+	   int k=lower_bound(g,g+n,a[i])-g;
+	   d[i]=k+1;
+	   g[k]=a[i];
+   }
+   ans=0;
+   for(int i=0;i<n;i++)
+	   if(d[i]>ans) ans=d[i];
+   printf("%d\n",ans);
+   return 0;
+}

@@ -1,0 +1,30 @@
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+int d[7500][5];
+int v[5]={50,25,10,5,1};
+int dp(int num,int pre){
+    int &ans=d[num][pre];
+    if(num==1) return ans=1;
+    if(ans>0) return ans;
+    for(int i=pre;i<5;i++){
+       if(num>v[i]&&dp(num-v[i],i))
+          ans+=d[num-v[i]][i];
+       if(num==v[i])
+          ans+=1;
+    }
+    return ans;
+}
+int main()
+{
+    int num;
+    memset(d,0,sizeof(d));
+    while(scanf("%d",&num)==1){
+        if(num==0) printf("1\n");
+        else{
+        printf("%d\n",dp(num,0));
+        }
+    }
+    return 0;
+}

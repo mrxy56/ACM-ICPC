@@ -1,0 +1,73 @@
+#include <cstdio>
+#include <cstring>
+#include <stack>
+using namespace std;
+struct node{
+   int x,y;
+};
+int G[55][55],d[55],vis[55];
+int n,num;
+stack<node> s;
+void dfs(int u){
+    vis[u]=1;
+       for(int v=1;v<=50;v++)
+         if(G[u][v]&&!vis[v])
+            dfs(v);
+    return;
+}
+void euler(int u){
+   for(int v=1;v<=50;v++) if(G[u][v]){
+      G[u][v]--;G[v][u]--;
+      euler(v);
+      node(temp);
+      temp.x=u;temp.y=v;
+      s.push(temp);
+   }
+   return;
+}
+int main()
+{
+    //freopen("a.txt","r",stdin);
+    int T,kase=0,x,y,j;
+    bool flag;
+    scanf("%d",&T);
+    while(T--){
+       printf("Case #%d\n",++kase);
+       scanf("%d\n",&n);
+       memset(G,0,sizeof(G));
+       memset(d,0,sizeof(d));
+       num=0;
+       for(int i=0;i<n;i++){
+         scanf("%d%d",&x,&y);
+         G[x][y]++;G[y][x]++;
+         if(!d[x]) num++;
+         if(!d[y]) num++;
+         if(x==y) num--;
+         d[x]++;d[y]++;
+        }
+         flag=true;
+           for(int i=1;i<=50;i++)
+               if(d[i]&1){flag=false;break;}
+           if(flag){
+              memset(vis,0,sizeof(vis));
+              for(j=1;j<=50;j++)
+                if(d[j]) break;
+              dfs(j);
+              for(int i=1;i<=50;i++)
+                if(d[i]&&!vis[i]) flag=false;
+           }
+           if(flag){
+             for(j=1;j<=50;j++)
+              if(d[j])break;
+              euler(j);
+            while(!s.empty()){
+               node temp=s.top();
+               printf("%d %d\n",temp.x,temp.y);
+               s.pop();
+            }
+           }
+           else printf("some beads may be lost\n");
+        if(T) printf("\n");
+    }
+    return 0;
+}

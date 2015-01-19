@@ -1,0 +1,27 @@
+#include<cstdio>
+int const mod=34943;
+int main(){
+   char s[1100];
+   int a[4];
+   while(fgets(s,1100,stdin)!=NULL){
+       if(s[0]=='#') break;
+       long long ans=0;
+       int i=0;
+       if(s[0]=='\n'){
+          printf("00 00\n");
+          continue;
+       }
+       while(s[i]!='\n'){
+          ans=((ans<<8)+s[i])%mod;
+          i++;
+       }
+       ans=(ans<<16)%mod;
+       ans=mod-ans;
+       for(int i=3;i>=0;i--){
+           a[i]=ans%16>=10?'A'+ans%16-10:'0'+ans%16;
+           ans>>=4;
+       }
+       printf("%c%c %c%c\n",a[0],a[1],a[2],a[3]);
+   }
+   return 0;
+}

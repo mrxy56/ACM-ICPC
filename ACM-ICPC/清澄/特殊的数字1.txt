@@ -1,0 +1,16 @@
+#include<cstdio>
+using namespace std;
+int main(){
+   int n,m,a,b,c,temp;
+      for(int i=100;i<=999;i++){
+            temp=i;
+            a=temp%10;
+            temp/=10;
+            b=temp%10;
+            temp/=10;
+            c=temp;
+            if(a*a*a+b*b*b+c*c*c==i)
+	         printf("%d\n",i);
+       }
+   return 0;
+}

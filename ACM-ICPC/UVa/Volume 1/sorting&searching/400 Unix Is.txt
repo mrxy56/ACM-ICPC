@@ -1,0 +1,65 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+int cmp_string(const void*_a,const void*_b);
+int main(void)
+{
+    int n,i,j,count,sum,temp,t;
+    char s[110][70]={""};
+    while(scanf("%d",&n)==1)
+    {
+        int max=-1,div=0,mod=0;
+        for(i=0;i<60;i++)
+         printf("-");
+         printf("\n");
+        for(i=0;i<n;i++)
+       {
+           scanf("%s",s[i]);
+           temp=strlen(s[i]);
+           if(temp>max)  max=temp;
+       }
+      qsort(s,i,sizeof(s[0]),cmp_string);
+        count=0;
+     for(;;)
+      {
+        sum=0;
+        sum=max+count*(max+2);
+        if(sum>60) break;
+        count++;
+      }
+     div=n/count;
+     mod=n%count;
+     if(mod!=0) div++;
+     for(i=0;i<div;i++)
+     {
+         int k;
+         t=i;
+         for(j=0;j<count;j++)
+         {
+            if(s[t][0]!='\0')
+            {
+                printf("%s",s[t]);
+               if(j!=count-1)
+               {
+                int temp_len;
+                temp_len=strlen(s[t]);
+                for(k=0;k<max+2-temp_len;k++)
+                   printf(" ");
+               }
+               s[t][0]='\0';
+            }
+            t+=div;
+        }
+         printf("\n");
+    }
+    memset(s,'\0',sizeof(s));
+    }
+    return 0;
+}
+int cmp_string(const void*_a,const void*_b)
+{
+    char*a=(char*)_a;
+    char*b=(char*)_b;
+    return strcmp(a,b);
+}
+

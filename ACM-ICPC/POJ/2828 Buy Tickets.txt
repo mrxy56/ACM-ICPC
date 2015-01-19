@@ -1,0 +1,37 @@
+#include<cstdio>
+using namespace std;
+const int maxn=200000;
+struct node{
+	int p,v;
+}t[maxn+10];
+int ans[maxn+10],blank[4*maxn+10];
+void build(int l,int r,int tr){
+    blank[tr]=r-l+1;
+	if(l==r) return;
+	int m=(l+r)/2;
+	build(l,m,tr*2);
+	build(m+1,r,tr*2+1);
+}
+int query(int p,int l,int r,int tr){
+	blank[tr]--;
+	if(l==r) return l;
+	int m=(l+r)/2;
+	if(p<=blank[tr*2]) query(p,l,m,tr*2);
+	else query(p-blank[tr*2],m+1,r,tr*2+1);
+}
+int main(){
+    int n;
+	while(scanf("%d",&n)==1){
+		for(int i=0;i<n;i++)
+			scanf("%d%d",&t[i].p,&t[i].v);
+		build(1,n,1);
+		for(int i=n-1;i>=0;i--){
+			int temp=query(t[i].p+1,1,n,1);
+			ans[temp]=t[i].v;
+        }
+		for(int i=1;i<=n;i++)
+			printf("%d%c",ans[i],i==n?'\n':' ');
+	}
+	return 0;
+}
+    

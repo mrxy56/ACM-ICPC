@@ -1,0 +1,33 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+int C[8],a[8][8],max=0;
+void dfs(int num,int sum){
+    if(num==8){
+        if(sum>max) max=sum;
+        return;
+    }
+    for(int i=0;i<8;i++){
+       bool flag=true;
+       C[num]=i;
+       for(int j=0;j<num;j++)
+          if(C[num]==C[j]||C[num]-num==C[j]-j||C[num]+num==C[j]+j)
+               flag=false;
+       if(flag) dfs(num+1,sum+a[num][i]);
+    }
+    return;
+}
+int main(){
+    //freopen("a.txt","r",stdin);
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        max=0;
+        for(int i=0;i<8;i++)
+           for(int j=0;j<8;j++)
+              scanf("%d",&a[i][j]);
+        dfs(0,0);
+        printf("%5d\n",max);
+    }
+    return 0;
+}

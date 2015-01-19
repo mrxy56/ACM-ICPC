@@ -1,0 +1,31 @@
+#include<cstdio>
+#include<stack>
+#include<cstring>
+using namespace std;
+stack<int> s;
+int main(){ 
+   long long a,k=0;
+   char str[10];
+   int f[10];
+   f[0]=1;
+   for(int i=1;i<=7;i++){ 
+       f[i]=16*f[i-1];
+   }
+   scanf("%s",str);
+   int len=strlen(str);
+   for(int i=0;i<=len-1;i++){
+	   if(str[i]>='0'&&str[i]<='9')
+		   a=str[i]-'0';
+	   else 
+		   a=str[i]-'A'+10;
+       s.push(a);
+   }
+   for(int i=0;i<len;i++){ 
+       a=s.top();
+       k+=f[i]*a;
+	   s.pop();
+   }
+   printf("%I64d\n",k);
+   return 0;
+}
+   

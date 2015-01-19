@@ -1,0 +1,41 @@
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+int n,m,cnt1=0,cnt2=0,cnt3=0;
+int a[1010],b[1010],c[1010],d[2010],e[1010];
+int main(){
+    scanf("%d",&n);
+    for(int i=0;i<n;i++) scanf("%d",&a[i]);
+    scanf("%d",&m);
+    for(int j=0;j<m;j++) scanf("%d",&b[j]);
+    sort(a,a+n);
+    sort(b,b+m);
+    for(int i=0;i<n;i++){
+	for(int j=0;j<m;j++)
+	    if(a[i]==b[j]){
+		c[cnt1++]=a[i];
+		break;
+	    }
+    }
+    for(int i=0;i<n;i++) d[cnt2++]=a[i];
+    for(int j=0;j<m;j++){
+	bool flag=false;
+	for(int i=0;i<n;i++)
+	    if(a[i]==b[j]) flag=true;
+	if(!flag) d[cnt2++]=b[j];
+    }
+    sort(d,d+cnt2);
+    for(int i=0;i<n;i++){
+	bool flag=true;
+	for(int j=0;j<m;j++)
+	    if(a[i]==b[j]) flag=false;
+        if(flag) e[cnt3++]=a[i]; 
+    }
+    for(int i=0;i<cnt1;i++) printf("%d%c",c[i],i==cnt1-1?'\n':' ');
+    for(int i=0;i<cnt2;i++) printf("%d%c",d[i],i==cnt2-1?'\n':' ');
+    for(int i=0;i<cnt3;i++) printf("%d%c",e[i],i==cnt3-1?'\n':' ');
+    return 0;
+}
+//注意并集数组应该开成原来的两倍。
+//KISS法则，O（n^2）算法能用，就不用想O（n）的算法。
+

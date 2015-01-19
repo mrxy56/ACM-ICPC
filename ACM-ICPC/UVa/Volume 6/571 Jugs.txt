@@ -1,0 +1,25 @@
+#include<cstdio>
+int main(){
+    int ca,cb,n,a,b;
+    while(scanf("%d%d%d",&ca,&cb,&n)==3){
+        a=b=0;
+        while(b!=n){
+            if(a==0){
+               a=ca;
+               printf("fill A\n");
+            }
+            if(b==cb){
+               b=0;
+               printf("empty B\n");
+            }
+            b+=a;a=0;
+            if(b>cb){
+               a=b-cb;
+               b=cb;
+            }
+            printf("pour A B\n");
+        }
+        printf("success\n");
+    }
+    return 0;
+}

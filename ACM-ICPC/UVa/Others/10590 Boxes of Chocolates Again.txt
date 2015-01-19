@@ -1,0 +1,19 @@
+import java.math.BigInteger;
+import java.util.Scanner;
+public class Main{
+	public static void main(String[] args){
+		Scanner cin=new Scanner(System.in);
+		BigInteger dp[]=new BigInteger[5010];
+		for(int i=0;i<=5000;i++)
+		    dp[i]=BigInteger.ZERO;
+		dp[0]=BigInteger.ONE;
+		for(int i=1;i<=5000;i++)
+			for(int j=i;j<=5000;j++){
+				dp[j]=dp[j].add(dp[j-i]);
+			}
+		while(cin.hasNextInt()){
+			int n=cin.nextInt();
+		    System.out.println(dp[n]);
+		}
+	}
+}

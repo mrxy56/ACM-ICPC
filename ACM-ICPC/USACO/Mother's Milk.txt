@@ -1,0 +1,67 @@
+/*
+ID:mrxy564
+PROG:milk3
+LANG:C++
+*/
+#include<cstdio>
+#include<cstring>
+using namespace std;
+struct node{
+    int v[3];
+};
+int vis[21][21];
+int cap[3],in[21];
+int front,rear,num=0;
+bool flag;
+node q[450];
+node pour(int i,int j,const node &now){
+     node next=now;
+     if(next.v[i]<=cap[j]-now.v[j]){
+          next.v[j]+=now.v[i];
+          next.v[i]=0;
+     }else{
+          next.v[i]-=cap[j]-now.v[j];
+          next.v[j]=cap[j];
+     }
+     return next;
+}
+void bfs(){
+    q[0].v[0]=0;q[0].v[1]=0;q[0].v[2]=cap[2];
+    vis[0][0]=1;in[cap[2]]=1;num++;
+    front=0;rear=1;
+    while(front<rear){
+        node &n=q[front];
+        for(int i=0;i<3;i++)
+           for(int j=0;j<3;j++)
+               if(i!=j){
+                  node& t=q[rear];
+                  node temp=pour(i,j,q[front]);
+                  if(!vis[temp.v[0]][temp.v[1]]){
+                      t=temp;
+                      rear++;
+                      if(!in[temp.v[2]]&&temp.v[0]==0){in[temp.v[2]]=1;num++;}
+                      vis[temp.v[0]][temp.v[1]]=1;
+                  }
+               }
+        front++;
+    }
+    return;
+}
+int main(){
+    freopen("milk3.in","r",stdin);
+    freopen("milk3.out","w",stdout);
+    memset(vis,0,sizeof(vis));
+    memset(in,0,sizeof(in));
+    for(int i=0;i<3;i++)
+        scanf("%d",&cap[i]);
+    bfs();
+    int i=0;
+    while(num--){
+        while(!in[i]) i++;
+        printf("%d",i);
+        i++;
+        if(num>0) printf(" ");
+        else printf("\n");
+    }
+    return 0;
+}

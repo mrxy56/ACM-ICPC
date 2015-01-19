@@ -1,0 +1,12 @@
+#include <stdio.h>
+int main(void)
+{
+    long long int m,n,count=1;
+    while(scanf("%lld%lld",&m,&n)==2)
+    {
+        if(m==0) break;
+        printf("Case %lld: %lld\n",count,m*(m-1)*n*(n-1)/4);
+        count++;
+    }
+    return 0;
+}

@@ -1,0 +1,25 @@
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+int main(){
+    int m,n,t,temp,cnt,nowt;
+    bool flag;
+    while(scanf("%d%d%d",&m,&n,&t)==3){
+         nowt=t;flag=false;
+         if(m>n) swap(m,n);
+         while(!flag){
+           temp=nowt;cnt=0;
+           while(temp>=0){
+              if(temp%m==0) {flag=true;break;}
+                else{temp-=n;cnt++;}
+           }
+           if(flag){
+               if(t==nowt)
+                  {printf("%d\n",cnt+temp/m);}
+               else printf("%d %d\n",cnt+temp/m,t-nowt);
+           }
+           else nowt--;
+         }
+    }
+    return 0;
+}

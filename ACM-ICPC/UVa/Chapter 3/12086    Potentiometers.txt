@@ -1,0 +1,51 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+int a[200010],b[200010];
+char s[20];
+int n;
+int lowbit(int x){
+    return x&-x;
+}
+int sum(int x){
+   int ret=0;
+   while(x>0){
+     ret+=a[x];x-=lowbit(x);
+   }
+   return ret;
+}
+void add(int x,int d){
+   while(x<=n){
+     a[x]+=d;x+=lowbit(x);
+   }
+}
+int main()
+{
+    //freopen("a.txt","r",stdin);
+    int x,y,kase=0;
+    bool flag=false;
+    while(scanf("%d",&n)==1&&n){
+        memset(a,0,sizeof(a));
+        if(flag) printf("\n");
+        printf("Case %d:\n",++kase);
+        for(int i=1;i<=n;i++){
+           scanf("%d",&b[i]);
+           add(i,b[i]);
+        }
+        getchar();
+        while(fgets(s,20,stdin)!=NULL){
+           if(s[0]=='E') break;
+           if(s[0]=='M'){
+             sscanf(s+2,"%d%d",&x,&y);
+             printf("%d\n",sum(y)-sum(x-1));
+           }
+           if(s[0]=='S'){
+             sscanf(s+2,"%d%d",&x,&y);
+             add(x,y-b[x]);
+             b[x]=y;
+           }
+        }
+        flag=true;
+    }
+    return 0;
+}

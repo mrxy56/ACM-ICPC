@@ -1,0 +1,70 @@
+#include<cstdio>
+#include<cstring>
+using namespace std;
+int n,m;
+const int MAXN=16;
+const int MAXM=16;
+struct Matrix{ 
+    int n,m;
+	int a[MAXN][MAXM];
+	void clear(){
+		 n=m=0;
+		memset(a,0,sizeof(a));
+	 }
+	 Matrix operator * (const Matrix &b) const{ 
+		Matrix temp;
+		temp.clear();
+		temp.n=n;temp.m=b.m;
+		for(int i=0;i<n;i++)
+        for(int j=0;j<b.m;j++)
+           for(int k=0;k<m;k++)
+                temp.a[i][j]+=a[i][k]*b.a[k][j];
+		return temp;
+     }
+	 Matrix operator % (const int mod) const{ 
+		 Matrix temp;
+		temp.n=n;temp.m=m;
+		for(int i=0;i<n;i++)
+			for(int j=0;j<m;j++)
+				temp.a[i][j]=a[i][j]%mod;
+	     return temp;
+     }
+};
+Matrix a,an;
+Matrix pow_mod(Matrix A,int i,int mod){ 
+    if(i==0){ 
+    Matrix u;
+    u.clear();
+    u.n=MAXN;u.m=MAXM;
+    for(int i=0;i<u.n;i++)
+		u.a[i][i]=1%mod;
+    return u;
+    }
+    Matrix temp=pow_mod(A,i>>1,mod);
+    temp=temp*temp%mod;
+    if(i&1) temp=temp*A%mod;
+    return temp;
+}
+void dfs(int now,int final,int bit){
+	if(bit>4) return;
+    if(bit==4) {a.a[now][final]=1;return;}
+	int temp=(1<<bit);
+	if(final&temp) dfs(now,final,bit+1);
+	else{ 
+	    dfs(now|temp,final,bit+1);
+		if((final&(temp<<1))==0) dfs(now,final,bit+2);
+	}
+    return;
+}
+int main(){ 
+	a.clear();
+	a.n=MAXN;a.m=MAXM;
+	for(int i=0;i<16;i++)
+		dfs(0,i,0);
+    while(scanf("%d%d",&n,&m)==2){ 
+	    if(n==0&&m==0) break;
+		an=pow_mod(a,n,m);
+		printf("%d\n",an.a[0][0]);
+	}
+    return 0;
+}

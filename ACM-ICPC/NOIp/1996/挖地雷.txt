@@ -1,0 +1,62 @@
+#include<cstdio>
+#include<vector>
+#include<cstring>
+using namespace std;
+int a[15],vis[15];
+vector<int> g[15];
+int n,ans,maxn,b[15],c[15],cnt;
+void dfs(int num,int depth){
+	b[depth]=num;
+	bool flag=false;
+	for(int i=0;i<g[num].size();i++)
+		 if(!vis[g[num][i]]) flag=true;
+    if(!flag){ 
+	     ans+=a[num];
+		 if(ans>maxn){ 
+			 maxn=ans;
+             for(int i=1;i<=depth;i++)
+				 c[i]=b[i];
+			 cnt=depth;
+		 }
+		 ans-=a[num];
+		 return;
+	}
+	for(int i=0;i<g[num].size();i++){
+		if(vis[g[num][i]]) continue;
+		ans+=a[num];
+		vis[g[num][i]]=1;
+		dfs(g[num][i],depth+1);
+		vis[g[num][i]]=0;
+		ans-=a[num];
+	}
+	return;
+}
+int main(){ 
+    int temp;
+	scanf("%d",&n);
+	for(int i=1;i<=n;i++) 
+	   scanf("%d",&a[i]);
+    for(int i=1;i<n;i++)
+       for(int j=i+1;j<=n;j++){
+		   scanf("%d",&temp);
+		   if(temp==1){
+			   g[i].push_back(j);
+			   g[j].push_back(i);
+		   }
+		   else continue;
+	   }
+	maxn=0;
+	memset(vis,0,sizeof(vis));
+	for(int i=1;i<=n;i++){
+		  ans=0;
+		  vis[i]=1;
+          dfs(i,1);
+		  vis[i]=0;
+    }
+	printf("%d",c[1]);
+    for(int i=2;i<=cnt;i++)
+		printf("-%d",c[i]);
+	printf("\n");
+	printf("MAX=%d\n",maxn);
+	return 0;
+}
